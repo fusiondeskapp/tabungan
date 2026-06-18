@@ -64,25 +64,20 @@
                         <label class="block text-sm font-medium mb-1">Username / ID Anggota</label>
                         <div class="relative">
                             <i class="ph ph-user absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                            <input type="text" id="login-user" class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-gray-800 focus:ring-2 focus:ring-primary focus:outline-none transition-all" placeholder="Cth: bendahara atau sitiaminah12" required>
+                            <input type="text" id="login-user" class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-gray-800 focus:ring-2 focus:ring-primary focus:outline-none transition-all" placeholder="Masukkan Username / ID" required>
                         </div>
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Password</label>
                         <div class="relative">
                             <i class="ph ph-lock absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                            <input type="password" id="login-pass" class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-gray-800 focus:ring-2 focus:ring-primary focus:outline-none transition-all" placeholder="Password default: 123456" required>
+                            <input type="password" id="login-pass" class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-gray-800 focus:ring-2 focus:ring-primary focus:outline-none transition-all" placeholder="Masukkan Password" required>
                         </div>
                     </div>
                     <button type="submit" id="btn-login" class="w-full bg-primary hover:bg-primary-dark text-white font-medium py-3 rounded-xl transition-colors shadow-md shadow-primary/30 mt-4 flex justify-center items-center gap-2">
                         <span>Masuk</span><i class="ph ph-arrow-right font-bold"></i>
                     </button>
                 </form>
-                <div class="mt-6 text-xs text-center bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-100 dark:border-gray-700">
-                    <p class="font-bold text-gray-600 dark:text-gray-300 mb-2">Akses Demo:</p>
-                    <p class="mb-1"><span class="font-medium text-primary">Bendahara:</span> Username: <b>bendahara</b> | Pass: 123456</p>
-                    <p><span class="font-medium text-primary">Anggota:</span> ID Anggota: <b>sitiaminah12</b> | Pass: 123456</p>
-                </div>
             </div>
         </div>
 
@@ -121,7 +116,7 @@
                     </div>
                     <div class="flex gap-1 flex-shrink-0">
                         <button onclick="navigate('pengaturan')" class="p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors admin-only"><i class="ph ph-gear text-xl"></i></button>
-                        <button onclick="toggleTheme()" class="p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"><i class="ph ph-moon text-xl dark:hidden"></i><i class="ph ph-sun text-xl hidden dark:block"></i></button>
+                        <button onclick="toggleTheme()" class="p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"><i class="ph ph-moon text-xl dark:hidden"></i><i class="ph ph-sun text-xl hidden dark:inline-block"></i></button>
                         <button onclick="handleLogout()" class="p-2 text-danger hover:bg-red-50 dark:hover:bg-red-900/30 rounded-full transition-colors"><i class="ph ph-sign-out text-xl"></i></button>
                     </div>
                 </header>
@@ -129,7 +124,7 @@
                 <!-- Desktop Topbar -->
                 <div class="hidden lg:flex justify-end px-8 pt-6 pb-2 w-full flex-shrink-0 gap-2">
                     <button onclick="navigate('pengaturan')" class="p-2.5 bg-white dark:bg-darkcard text-gray-500 shadow-sm border border-gray-100 dark:border-gray-700 rounded-full hover:text-primary transition-colors admin-only"><i class="ph ph-gear text-[22px]"></i></button>
-                    <button onclick="toggleTheme()" class="p-2.5 bg-white dark:bg-darkcard text-gray-500 shadow-sm border border-gray-100 dark:border-gray-700 rounded-full hover:text-primary transition-colors"><i class="ph ph-moon text-[22px] dark:hidden"></i><i class="ph ph-sun text-[22px] hidden dark:block"></i></button>
+                    <button onclick="toggleTheme()" class="p-2.5 bg-white dark:bg-darkcard text-gray-500 shadow-sm border border-gray-100 dark:border-gray-700 rounded-full hover:text-primary transition-colors"><i class="ph ph-moon text-[22px] dark:hidden"></i><i class="ph ph-sun text-[22px] hidden dark:inline-block"></i></button>
                     <button onclick="handleLogout()" class="p-2.5 bg-white dark:bg-darkcard text-danger shadow-sm border border-gray-100 dark:border-gray-700 rounded-full hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"><i class="ph ph-sign-out text-[22px]"></i></button>
                 </div>
 
@@ -137,7 +132,7 @@
                 <div class="flex-1 overflow-y-auto overflow-x-hidden p-4 lg:px-8 lg:pb-8 lg:pt-2 pb-24 w-full" id="content-area"></div>
             </main>
 
-            <!-- Bottom Navigation Mobile (5 Item Utama, Log dihapus) -->
+            <!-- Bottom Navigation Mobile -->
             <nav class="lg:hidden fixed bottom-0 left-0 right-0 w-full glass-nav border-t border-gray-200 dark:border-gray-700 z-30 shadow-[0_-5px_15px_-5px_rgba(0,0,0,0.1)] pb-safe">
                 <div class="flex justify-around items-center p-1.5 px-1">
                     <button class="nav-btn-mobile flex flex-col items-center justify-center p-2 text-primary flex-1 min-w-0" data-target="dashboard"><i class="ph ph-squares-four text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Home</span></button>
@@ -260,7 +255,7 @@
                 <div class="overflow-x-auto w-full flex-1">
                     <table class="w-full text-left text-sm whitespace-nowrap min-w-[600px]">
                         <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
-                            <tr><th class="p-4 w-36">Tanggal</th><th class="p-4">Anggota</th><th class="p-4">Jenis Transaksi</th><th class="p-4 text-right">Nominal</th></tr>
+                            <tr><th class="p-4 w-44">Tanggal</th><th class="p-4">Anggota</th><th class="p-4">Jenis Transaksi</th><th class="p-4 text-right">Nominal</th></tr>
                         </thead>
                         <tbody id="table-laporan" class="divide-y divide-gray-100 dark:divide-gray-800 bg-white dark:bg-darkcard"></tbody>
                     </table>
@@ -272,16 +267,18 @@
     <template id="tpl-buku">
         <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
             <h2 class="text-2xl font-bold hidden lg:block dark:text-white">Buku Tabungan Digital</h2>
+            
             <div class="bg-white dark:bg-darkcard p-3 md:p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800" id="buku-selector-wrapper">
-                <label class="block text-xs font-medium text-gray-500 mb-1">Cari & Pilih Nama Anggota:</label>
-                <select id="select-buku-anggota" class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 focus:ring-2 focus:ring-primary focus:outline-none bg-white font-medium text-sm" onchange="renderBukuTabungan()"><option value="">-- Silakan Pilih Anggota --</option></select>
+                <label class="block text-xs font-medium text-gray-500 mb-1">Pilih Nama Anggota:</label>
+                <select id="select-buku-anggota" class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none bg-white" onchange="renderBukuTabungan()"></select>
             </div>
+
             <div id="passbook-area" class="hidden flex-1 flex-col gap-4 min-w-0 w-full overflow-y-auto hide-scroll pb-10">
                 <div class="flex flex-col md:flex-row gap-4 w-full shrink-0">
                     <div class="bg-gradient-to-br from-primary to-primary-dark p-5 md:p-6 rounded-2xl shadow-md text-white flex-1 relative overflow-hidden h-36 md:h-44">
                         <div class="absolute -right-6 -top-6 opacity-10 pointer-events-none"><i class="ph ph-wallet" style="font-size: 140px;"></i></div>
                         <div class="relative z-10 flex flex-col h-full justify-between">
-                            <div><p class="text-white/80 text-[10px] uppercase tracking-wider mb-1 font-bold">Buku Tabungan RT</p><h3 class="text-xl md:text-2xl font-bold truncate pr-10" id="buku-nama">-</h3></div>
+                            <div><p class="text-white/80 text-[10px] uppercase font-bold tracking-wider mb-1">Buku Tabungan RT</p><h3 class="text-xl md:text-2xl font-bold truncate pr-10" id="buku-nama">-</h3></div>
                             <div class="grid grid-cols-2 gap-2 text-sm mt-auto">
                                 <div><p class="text-white/60 text-[10px]">ID Anggota</p><p class="font-medium font-mono text-xs md:text-sm truncate" id="buku-id">-</p></div>
                                 <div><p class="text-white/60 text-[10px]">No Rumah</p><p class="font-medium font-mono text-xs md:text-sm" id="buku-norumah">-</p></div>
@@ -291,118 +288,121 @@
                     <div class="bg-white dark:bg-darkcard p-5 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-[0.7] flex flex-col justify-center items-center h-36 md:h-44">
                         <p class="text-gray-500 dark:text-gray-400 text-xs font-medium mb-1 uppercase tracking-wide">Saldo Akhir</p>
                         <h2 class="text-2xl md:text-3xl font-bold text-primary mb-3 md:mb-4 truncate w-full text-center" id="buku-saldo">Rp 0</h2>
-                        <div class="w-full"><button onclick="cetakBukuTabunganPDF()" class="w-full bg-gray-50 hover:bg-gray-100 dark:bg-gray-700/50 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-white py-2 rounded-xl text-sm font-medium transition flex justify-center items-center gap-2"><i class="ph ph-file-pdf text-lg text-danger"></i> Unduh PDF</button></div>
+                        <div class="w-full"><button onclick="cetakBukuTabunganPDF()" class="w-full bg-gray-50 hover:bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-white py-2 rounded-xl text-sm font-medium transition flex justify-center items-center gap-2"><i class="ph ph-file-pdf text-lg text-danger"></i> Unduh PDF</button></div>
                     </div>
                 </div>
+
                 <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-hidden flex flex-col min-w-0" id="pdf-content">
-                    <div class="p-3 md:p-4 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 flex justify-between items-center"><h4 class="font-bold text-sm text-primary flex items-center gap-2"><i class="ph ph-list-bullets text-lg"></i> Tabel Riwayat Mutasi</h4></div>
+                    <div class="p-3 md:p-4 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
+                        <h4 class="font-bold text-sm text-primary flex items-center gap-2"><i class="ph ph-list-bullets text-lg"></i> Tabel Riwayat Mutasi</h4>
+                    </div>
                     <div class="overflow-x-auto w-full flex-1">
                         <table class="w-full text-left text-xs md:text-sm whitespace-nowrap min-w-[600px]">
                             <thead class="bg-white dark:bg-darkcard text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
-                                <tr><th class="p-3 font-medium">Waktu Transaksi</th><th class="p-3 font-medium">Jenis & Ket</th><th class="p-3 font-medium text-right">Debit (Masuk)</th><th class="p-3 font-medium text-right">Kredit (Keluar)</th><th class="p-3 font-medium text-right bg-gray-50 dark:bg-gray-800/30">Saldo</th></tr>
+                                <tr><th class="p-3 font-medium">Tanggal</th><th class="p-3 font-medium">Keterangan</th><th class="p-3 font-medium text-right">Debit (Masuk)</th><th class="p-3 font-medium text-right">Kredit (Keluar)</th><th class="p-3 font-medium text-right bg-gray-50 dark:bg-gray-800/30">Saldo</th></tr>
                             </thead>
                             <tbody id="table-buku" class="divide-y divide-gray-100 dark:divide-gray-800 font-mono bg-white dark:bg-darkcard"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            <div id="passbook-empty" class="flex-1 flex flex-col items-center justify-center text-gray-400 pb-10 text-center px-4"><i class="ph ph-book-open text-6xl mb-4 opacity-50 text-primary"></i><h3 class="font-bold text-gray-600 dark:text-gray-300 mb-1">Pilih Anggota Terlebih Dahulu</h3></div>
+            <div id="passbook-empty" class="flex-1 flex flex-col items-center justify-center text-gray-400 pb-10 text-center px-4"><i class="ph ph-book-open text-6xl mb-4 opacity-50 text-primary"></i><h3 class="font-bold text-gray-600 dark:text-gray-300 mb-1">Pilih Anggota Terlebih Dahulu</h3><p class="text-sm">Riwayat mutasi transaksi buku tabungan akan muncul di sini.</p></div>
         </div>
     </template>
 
     <!-- JS LOGIC -->
     <script>
-        // --- INIT MOCK DATA ---
+        // --- GLOBAL THEME TOGGLE FIX ---
+        window.toggleTheme = () => { 
+            const html = document.documentElement; 
+            html.classList.toggle('dark'); 
+            try { localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light'); } catch(e) {} 
+        };
+
         function initMockDB() {
             if(!localStorage.getItem('mock_anggota')) {
                 localStorage.setItem('mock_anggota', JSON.stringify([{"ID Anggota":"sitiaminah12", "Nama Lengkap":"Siti Aminah", "No Rumah":"12", "No HP":"08123456789", "Status":"Aktif"}]));
-                localStorage.setItem('mock_transaksi', JSON.stringify([{"ID Transaksi":"TRX-20260618-0001", "Tanggal": new Date().toISOString(), "ID Anggota":"sitiaminah12", "Nama Anggota":"Siti Aminah", "Jenis Transaksi":"Setoran", "Nominal":150000, "Keterangan":"Iuran Awal", "User Input":"Bendahara"}]));
-                localStorage.setItem('mock_logs', JSON.stringify([]));
+                localStorage.setItem('mock_transaksi', JSON.stringify([{"ID Transaksi":"TRX-2026-01", "Tanggal": new Date().toISOString(), "ID Anggota":"sitiaminah12", "Nama Anggota":"Siti Aminah", "Jenis Transaksi":"Setoran", "Nominal":150000, "Keterangan":"Iuran"}]));
             }
         }
         
-        let chartInstance = null; // Global chart var
-        const state = { user: null, data: { anggota: [], transaksi: [], logs: [] }, settings: { gasUrl: localStorage.getItem('gasUrl') || '', theme: localStorage.getItem('theme') || 'light' }, ui: { currentView: 'dashboard' } };
-        
         document.addEventListener('DOMContentLoaded', () => { 
-            initMockDB(); if(localStorage.getItem('theme')==='dark') document.documentElement.classList.add('dark'); 
+            initMockDB(); 
+            if(localStorage.getItem('theme')==='dark') document.documentElement.classList.add('dark'); 
             document.getElementById('login-form').addEventListener('submit', handleLogin); 
         });
 
+        let chartInstance = null;
+        const state = { user: null, data: { anggota: [], transaksi: [], logs: [] }, settings: { gasUrl: localStorage.getItem('gasUrl') || '', theme: localStorage.getItem('theme') || 'light' }, ui: { currentView: 'dashboard' } };
+        
         const formatRupiah = (angka) => 'Rp ' + Number(angka).toLocaleString('id-ID');
-        const formatDateTime = (iso) => iso ? new Date(iso).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour:'2-digit', minute:'2-digit' }) : '-';
-        const calculateSaldo = (id) => state.data.transaksi.filter(t=>t['ID Anggota']===id).reduce((sum, t) => t['Jenis Transaksi'] === 'Setoran' ? sum + Number(t['Nominal']) : sum - Number(t['Nominal']), 0);
+        
+        // --- UPDATED DATE FORMAT (dd-mm-yyyy hh:mm) ---
+        const formatDateTime = (iso) => {
+            if (!iso) return '-';
+            const d = new Date(iso);
+            const pad = (n) => n.toString().padStart(2, '0');
+            return `${pad(d.getDate())}-${pad(d.getMonth() + 1)}-${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        };
+
+        const calculateSaldo = (id) => state.data.transaksi.filter(t=>t['ID Anggota']===id).reduce((s, t) => t['Jenis Transaksi'] === 'Setoran' ? s + Number(t['Nominal']) : s - Number(t['Nominal']), 0);
 
         const showToast = (msg, type = 'success') => {
             const container = document.getElementById('toast-container'); const toast = document.createElement('div');
             const clrs = { success: 'bg-green-100 text-green-800 border-green-200', error: 'bg-red-100 text-red-800 border-red-200' };
-            const icons = { success: 'check-circle', error: 'x-circle' };
             toast.className = `flex items-center gap-3 p-3.5 rounded-xl border shadow-lg toast-enter pointer-events-auto backdrop-blur-md ${clrs[type]} w-full`;
-            toast.innerHTML = `<i class="ph ph-${icons[type]} text-xl flex-shrink-0"></i><span class="font-medium text-sm">${msg}</span>`;
+            toast.innerHTML = `<span class="font-medium text-sm">${msg}</span>`;
             container.appendChild(toast); setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
         };
 
-        // --- API LAYER ---
         async function fetchAPI(action, payload = {}) {
             if (state.settings.gasUrl) {
                 try {
-                    const res = await fetch(state.settings.gasUrl, { method: 'POST', body: JSON.stringify({ action, payload, user: state.user ? state.user.username : 'Guest' }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
+                    const res = await fetch(state.settings.gasUrl, {
+                        method: 'POST', body: JSON.stringify({ action, payload, user: state.user ? state.user.username : 'Guest' }),
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                    });
                     return await res.json();
-                } catch(e) { return { success: false, message: "Koneksi Google Script Gagal. Cek URL." }; }
+                } catch(e) { return { success: false, message: "Koneksi ke Server Google Gagal" }; }
             } else {
-                // Mock System Logic for Offline testing
                 return new Promise(resolve => {
                     setTimeout(() => {
                         let a = JSON.parse(localStorage.getItem('mock_anggota')), t = JSON.parse(localStorage.getItem('mock_transaksi')), l = JSON.parse(localStorage.getItem('mock_logs')||'[]');
-                        const addLog = (msg) => { l.unshift({"Waktu": new Date().toISOString(), "User": state.user?state.user.username:'Sys', "Aktivitas": msg}); localStorage.setItem('mock_logs', JSON.stringify(l)); };
-                        
                         if(action === 'login') {
                             if(payload.username.toLowerCase()==='bendahara' && payload.password==='123456') resolve({success:true, role:'admin', data:{'ID Anggota':'ADMIN', 'Nama Lengkap':'Bendahara'}});
-                            else { let u = a.find(x => x['ID Anggota'].toLowerCase() === payload.username.toLowerCase()); if(u && payload.password==='123456') resolve({success:true, role:'user', data:u}); else resolve({success:false, message:'Username atau Password salah'}); }
+                            else { let u = a.find(x => x['ID Anggota'].toLowerCase() === payload.username.toLowerCase()); if(u && payload.password==='123456') resolve({success:true, role:'user', data:u}); else resolve({success:false, message:'ID Anggota salah'}); }
                         } else if (action === 'get_all_data') {
                             if(payload.role === 'user') resolve({success: true, data: { anggota: a.filter(x=>x['ID Anggota']===payload.userId), transaksi: t.filter(x=>x['ID Anggota']===payload.userId), logs:[] }});
                             else resolve({success: true, data: { anggota: a, transaksi: t, logs: l }});
-                        } else if (action === 'save_anggota') {
-                            let id = payload.id || (payload.nama.toLowerCase().replace(/[^a-z]/g, '') + payload.noRumah.toLowerCase().replace(/[^a-z0-9]/g, ''));
-                            if(!payload.id) { a.push({"ID Anggota": id, "Nama Lengkap": payload.nama, "No Rumah": payload.noRumah, "No HP": payload.noHp, "Status": payload.status, "Tanggal Dibuat": new Date().toISOString()}); addLog(`Tambah Anggota: ${id}`); } 
-                            else { let i = a.findIndex(x => x['ID Anggota'] === id); if(i>-1) { a[i]['Nama Lengkap']=payload.nama; a[i]['No Rumah']=payload.noRumah; a[i]['No HP']=payload.noHp; a[i]['Status']=payload.status; addLog(`Edit Anggota: ${id}`); } }
-                            localStorage.setItem('mock_anggota', JSON.stringify(a)); resolve({success:true});
-                        } else if (action === 'save_transaksi') {
-                            if(!payload.idTrx) {
-                                let id = "TRX-" + new Date().toISOString().slice(0,10).replace(/-/g,'') + "-" + ("000"+(t.length+1)).slice(-4);
-                                t.push({"ID Transaksi": id, "Tanggal": new Date().toISOString(), "ID Anggota": payload.idAnggota, "Nama Anggota": payload.namaAnggota, "Jenis Transaksi": payload.jenis, "Nominal": payload.nominal, "Keterangan": payload.keterangan, "User Input": state.user.username});
-                                addLog(`Tambah TRX: ${id}`);
-                            } else {
-                                let i = t.findIndex(x => x['ID Transaksi'] === payload.idTrx);
-                                if(i>-1) { t[i]['ID Anggota'] = payload.idAnggota; t[i]['Nama Anggota'] = payload.namaAnggota; t[i]['Jenis Transaksi'] = payload.jenis; t[i]['Nominal'] = payload.nominal; t[i]['Keterangan'] = payload.keterangan; addLog(`Edit TRX: ${payload.idTrx}`); }
-                            }
-                            localStorage.setItem('mock_transaksi', JSON.stringify(t)); resolve({success:true});
-                        } else if (action === 'delete_anggota') {
-                            let filtered = a.filter(x => x['ID Anggota'] !== payload.id); localStorage.setItem('mock_anggota', JSON.stringify(filtered)); addLog(`Hapus Anggota: ${payload.id}`); resolve({success:true});
-                        } else if (action === 'delete_transaksi') {
-                            let filtered = t.filter(x => x['ID Transaksi'] !== payload.id); localStorage.setItem('mock_transaksi', JSON.stringify(filtered)); addLog(`Hapus TRX: ${payload.id}`); resolve({success:true});
                         }
                     }, 400);
                 });
             }
         }
 
-        async function loadData() {
-            const res = await fetchAPI('get_all_data', { role: state.user.role, userId: state.user['ID Anggota'] });
-            if(res.success) { state.data = res.data; renderCurrentView(); }
-        }
-
-        // --- AUTH ---
         async function handleLogin(e) {
-            e.preventDefault(); const u = document.getElementById('login-user').value.trim(), p = document.getElementById('login-pass').value;
+            e.preventDefault(); 
+            const u = document.getElementById('login-user').value.trim(); 
+            const p = document.getElementById('login-pass').value;
+            const btn = document.getElementById('btn-login');
+            btn.innerHTML = `<i class="ph ph-spinner animate-spin text-xl"></i> Memeriksa...`; btn.disabled = true;
+
             const res = await fetchAPI('login', { username: u, password: p });
+            btn.innerHTML = `<span>Masuk</span><i class="ph ph-arrow-right font-bold"></i>`; btn.disabled = false;
+
             if (res.success) {
                 state.user = { ...res.data, username: u, role: res.role };
-                document.getElementById('login-screen').classList.add('hidden'); document.getElementById('main-layout').classList.remove('hidden');
+                document.getElementById('login-screen').classList.add('hidden'); 
+                document.getElementById('main-layout').classList.remove('hidden');
                 document.getElementById('role-badge').innerText = state.user.role === 'admin' ? 'Bendahara' : 'Anggota';
                 document.body.setAttribute('data-role', state.user.role);
                 loadData(); showToast("Login berhasil");
             } else showToast(res.message, "error");
+        }
+
+        async function loadData() {
+            const res = await fetchAPI('get_all_data', { role: state.user.role, userId: state.user['ID Anggota'] });
+            if(res.success) { state.data = res.data; renderCurrentView(); }
         }
 
         function handleLogout() {
@@ -411,13 +411,10 @@
             navigate('dashboard');
         }
 
-        // --- NAVIGATION & RENDERING ---
         function navigate(viewName) {
             state.ui.currentView = viewName;
             document.querySelectorAll('.nav-btn, .nav-btn-mobile').forEach(btn => {
                 let isAktif = btn.dataset.target === viewName;
-                
-                // Perbaikan: Pertahankan class admin-only agar menu tidak bocor ke User Biasa
                 let isAdminOnly = btn.classList.contains('admin-only') ? ' admin-only' : '';
                 
                 if(btn.classList.contains('nav-btn')) {
@@ -445,141 +442,100 @@
 
         // --- MODAL UTILS ---
         window.closeAllModals = () => document.getElementById('modals').innerHTML = '';
-        window.openConfirmModal = (title, message, btnText, callback) => {
-            document.getElementById('modals').innerHTML = `
-            <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-                <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-sm modal-animate p-6 text-center shadow-2xl border border-gray-100 dark:border-gray-800">
-                    <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4"><i class="ph ph-warning-circle text-3xl"></i></div>
-                    <h3 class="font-bold text-lg dark:text-white mb-2">${title}</h3><p class="text-sm text-gray-500 mb-6">${message}</p>
-                    <div class="flex gap-3"><button onclick="closeAllModals()" class="flex-1 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 font-medium">Batal</button><button id="btn-confirm" class="flex-1 py-2.5 rounded-xl bg-danger text-white font-medium shadow-md">${btnText}</button></div>
-                </div>
-            </div>`;
-            document.getElementById('btn-confirm').onclick = () => { closeAllModals(); callback(); };
-        };
 
-        // --- DASHBOARD ---
         function renderDashboard() {
             if (state.user.role === 'user') {
                 const myId = state.user['ID Anggota']; const mySaldo = calculateSaldo(myId);
-                document.getElementById('profile-card').innerHTML = `
-                    <div class="bg-gradient-to-br from-primary to-primary-dark p-6 rounded-2xl shadow-md text-white relative overflow-hidden flex flex-col md:flex-row gap-6 mb-2 mt-2">
-                        <div class="absolute -right-10 -top-10 opacity-10"><i class="ph ph-user-circle" style="font-size: 200px;"></i></div>
-                        <div class="h-20 w-20 bg-white/20 rounded-full flex items-center justify-center text-4xl backdrop-blur-sm border border-white/30 z-10 shadow-lg"><i class="ph ph-user"></i></div>
+                let h = `
+                    <div class="bg-gradient-to-br from-primary to-primary-dark p-6 rounded-2xl shadow-md text-white relative overflow-hidden flex flex-col md:flex-row gap-4 mb-2 mt-2">
+                        <div class="absolute -right-6 -top-6 opacity-10"><i class="ph ph-user-circle" style="font-size: 150px;"></i></div>
                         <div class="flex-1 z-10 w-full">
-                            <p class="text-white/80 text-[10px] uppercase font-bold tracking-widest mb-1">Profil Tabungan Anda</p><h3 class="text-2xl font-bold mb-2">${state.user['Nama Lengkap']}</h3>
-                            <p class="text-sm opacity-90 font-mono mb-1">ID: ${state.user['ID Anggota']} | Rmh: ${state.user['No Rumah']}</p>
+                            <p class="text-white/80 text-[10px] uppercase font-bold">Profil Anda</p>
+                            <h3 class="text-2xl font-bold mb-2">${state.user['Nama Lengkap']}</h3>
+                            <p class="text-xs opacity-90"><i class="ph ph-identification-card"></i> ID: ${state.user['ID Anggota']}</p>
                         </div>
-                        <div class="bg-white text-gray-800 p-5 rounded-2xl shadow-lg text-center min-w-[180px] z-10 md:self-center border-[4px] border-white/20">
-                            <p class="text-[10px] font-bold text-gray-500 uppercase">Saldo Saat Ini</p><p class="text-2xl font-bold text-primary">${formatRupiah(mySaldo)}</p>
+                        <div class="bg-white text-gray-800 p-4 rounded-xl shadow-lg text-center min-w-[150px] z-10 self-start md:self-center">
+                            <p class="text-[10px] font-bold text-gray-500 uppercase">Total Saldo</p>
+                            <p class="text-xl font-bold text-primary">${formatRupiah(mySaldo)}</p>
                         </div>
                     </div>`;
-                document.getElementById('profile-card').classList.remove('hidden'); document.getElementById('dash-title').innerText = 'Beranda Anggota';
+                document.getElementById('profile-card').innerHTML = h; document.getElementById('profile-card').classList.remove('hidden');
+                document.getElementById('dash-title').innerText = 'Beranda Anggota';
             } else {
-                let saldo=0, setB=0, penB=0, now=new Date();
-                state.data.transaksi.forEach(t => {
-                    let amt = Number(t['Nominal']), isBulanIni = new Date(t['Tanggal']).getMonth() === now.getMonth() && new Date(t['Tanggal']).getFullYear() === now.getFullYear();
-                    if(t['Jenis Transaksi']==='Setoran') { saldo+=amt; if(isBulanIni) setB+=amt; } else { saldo-=amt; if(isBulanIni) penB+=amt; }
-                });
-                
+                let sal=0, st=0, pt=0; state.data.transaksi.forEach(t => { let n = Number(t['Nominal']); if(t['Jenis Transaksi']==='Setoran') { sal+=n; st+=n;} else { sal-=n; pt+=n; } });
                 document.getElementById('admin-stats').innerHTML = `
-                    <div class="bg-white dark:bg-darkcard p-3 md:p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"><div class="flex items-center gap-2 mb-2"><div class="p-1.5 bg-blue-100 text-blue-600 rounded-lg"><i class="ph ph-users text-lg"></i></div><p class="text-[10px] md:text-xs text-gray-500 font-medium">Total Anggota</p></div><h3 class="text-xl md:text-2xl font-bold dark:text-white">${state.data.anggota.length}</h3></div>
-                    <div class="bg-white dark:bg-darkcard p-3 md:p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"><div class="flex items-center gap-2 mb-2"><div class="p-1.5 bg-primary/10 text-primary rounded-lg"><i class="ph ph-wallet text-lg"></i></div><p class="text-[10px] md:text-xs text-gray-500 font-medium">Total Saldo</p></div><h3 class="text-base md:text-xl font-bold text-primary">${formatRupiah(saldo)}</h3></div>
-                    <div class="bg-white dark:bg-darkcard p-3 md:p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"><div class="flex items-center gap-2 mb-2"><div class="p-1.5 bg-success/10 text-success rounded-lg"><i class="ph ph-trend-up text-lg"></i></div><p class="text-[10px] md:text-xs text-gray-500 font-medium">Setoran Bln Ini</p></div><h3 class="text-base md:text-lg font-bold text-success">${formatRupiah(setB)}</h3></div>
-                    <div class="bg-white dark:bg-darkcard p-3 md:p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"><div class="flex items-center gap-2 mb-2"><div class="p-1.5 bg-danger/10 text-danger rounded-lg"><i class="ph ph-trend-down text-lg"></i></div><p class="text-[10px] md:text-xs text-gray-500 font-medium">Penarikan Bln Ini</p></div><h3 class="text-base md:text-lg font-bold text-danger">${formatRupiah(penB)}</h3></div>
+                    <div class="bg-white p-4 rounded-2xl border"><p class="text-xs text-gray-500">Anggota</p><h3 class="text-xl font-bold">${state.data.anggota.length}</h3></div>
+                    <div class="bg-white p-4 rounded-2xl border"><p class="text-xs text-gray-500">Total Saldo Kas</p><h3 class="text-xl font-bold text-primary">${formatRupiah(sal)}</h3></div>
                 `;
-                
-                let ctx = document.getElementById('chartTransaksi');
-                if(ctx) {
-                    if(chartInstance) chartInstance.destroy();
-                    chartInstance = new Chart(ctx, { type: 'bar', data: { labels: ['Jan','Feb','Mar','Apr','Mei', now.toLocaleDateString('id-ID', { month:'short' })], datasets: [ { label: 'Setoran', data: [0, 0, 0, 0, 0, setB], backgroundColor: '#14B8A6' }, { label: 'Penarikan', data: [0, 0, 0, 0, 0, penB], backgroundColor: '#DC2626' } ]}, options: { responsive: true, maintainAspectRatio: false }});
-                }
-                
-                let acts = '';
-                state.data.logs.slice(0, 5).forEach(l => { acts += `<div class="flex gap-3 text-sm border-b border-gray-100 dark:border-gray-800 pb-2 last:border-0"><div class="mt-1 h-2 w-2 rounded-full bg-primary shrink-0"></div><div><p class="text-gray-800 dark:text-gray-200">${l['Aktivitas']}</p><p class="text-xs text-gray-400">${formatDateTime(l['Waktu'])} • ${l['User']}</p></div></div>`; });
-                document.getElementById('recent-activities').innerHTML = acts || `<p class="text-sm text-gray-500">Belum ada log.</p>`;
             }
         }
 
-        // --- ANGGOTA ---
         function renderAnggota() {
-            const tb = document.getElementById('table-anggota');
-            const renderTb = (f='') => {
-                tb.innerHTML = '';
-                let d = state.data.anggota.filter(a => (a['Nama Lengkap']+a['ID Anggota']+a['No Rumah']).toLowerCase().includes(f.toLowerCase()));
-                if(d.length===0) tb.innerHTML=`<tr><td colspan="6" class="p-8 text-center text-gray-500">Data tidak ditemukan</td></tr>`;
-                d.forEach(a => {
-                    let sld = calculateSaldo(a['ID Anggota']), stat = a['Status'] === 'Aktif' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
-                    tb.innerHTML += `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-50 dark:border-gray-800/50">
-                        <td class="p-3 md:p-4 font-mono text-primary text-xs md:text-sm">${a['ID Anggota']}</td><td class="p-3 md:p-4 font-medium">${a['Nama Lengkap']}</td>
-                        <td class="p-3 md:p-4 text-center">${a['No Rumah']}</td><td class="p-3 md:p-4 font-bold text-gray-700 dark:text-gray-200">${formatRupiah(sld)}</td>
-                        <td class="p-3 md:p-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] md:text-xs font-bold uppercase ${stat}">${a['Status']}</span></td>
-                        <td class="p-3 md:p-4 text-center"><div class="flex gap-1 justify-center">
-                            <button onclick="showDetailAnggota('${a['ID Anggota']}')" class="p-1.5 text-blue-600 bg-blue-100 rounded-lg hover:bg-blue-200" title="Info/Riwayat"><i class="ph ph-info text-lg"></i></button>
-                            <button onclick="editAnggota('${a['ID Anggota']}')" class="p-1.5 text-orange-600 bg-orange-100 rounded-lg hover:bg-orange-200 admin-only" title="Edit"><i class="ph ph-pencil-simple text-lg"></i></button>
-                            <button onclick="reqDeleteAnggota('${a['ID Anggota']}')" class="p-1.5 text-red-600 bg-red-100 rounded-lg hover:bg-red-200 admin-only" title="Hapus"><i class="ph ph-trash text-lg"></i></button>
-                        </div></td></tr>`;
-                });
-            };
-            renderTb(); document.getElementById('search-anggota').addEventListener('input', e => renderTb(e.target.value));
-        }
-
-        // --- TRANSAKSI ---
-        function renderTransaksi(filter = 'Semua') {
-            const tb = document.getElementById('table-transaksi'); if(!tb) return; tb.innerHTML = '';
-            let d = state.data.transaksi; if(filter!=='Semua') d = d.filter(t=>t['Jenis Transaksi']===filter);
-            d.sort((a,b)=>new Date(b['Tanggal'])-new Date(a['Tanggal']));
-            if(d.length===0) tb.innerHTML=`<tr><td colspan="6" class="p-8 text-center text-gray-500">Belum ada transaksi</td></tr>`;
-            d.forEach(t => {
-                let c = t['Jenis Transaksi']==='Setoran' ? 'text-success' : 'text-danger', ic = t['Jenis Transaksi']==='Setoran' ? 'ph-arrow-down-left' : 'ph-arrow-up-right';
-                tb.innerHTML += `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-50 dark:border-gray-800/50">
-                    <td class="p-3 md:p-4 text-gray-500 text-xs">${formatDateTime(t['Tanggal'])}</td><td class="p-3 md:p-4 font-mono text-[10px] md:text-xs">${t['ID Transaksi']}</td>
-                    <td class="p-3 md:p-4 font-medium">${t['Nama Anggota']}</td><td class="p-3 md:p-4"><span class="flex items-center gap-1 text-xs font-bold ${c}"><i class="ph ${ic}"></i> ${t['Jenis Transaksi']}</span></td>
-                    <td class="p-3 md:p-4 font-bold ${c}">${formatRupiah(t['Nominal'])}</td>
-                    <td class="p-3 md:p-4 text-center"><div class="flex gap-1 justify-center">
-                        <button onclick="showInfoTrx('${t['ID Transaksi']}')" class="p-1.5 text-blue-600 bg-blue-100 rounded-lg hover:bg-blue-200"><i class="ph ph-info text-lg"></i></button>
-                        <button onclick="editTransaksi('${t['ID Transaksi']}')" class="p-1.5 text-orange-600 bg-orange-100 rounded-lg hover:bg-orange-200 admin-only"><i class="ph ph-pencil-simple text-lg"></i></button>
-                        <button onclick="reqDeleteTrx('${t['ID Transaksi']}')" class="p-1.5 text-red-600 bg-red-100 rounded-lg hover:bg-red-200 admin-only"><i class="ph ph-trash text-lg"></i></button>
-                    </div></td></tr>`;
+            const tb = document.getElementById('table-anggota'); tb.innerHTML = '';
+            state.data.anggota.forEach(a => {
+                tb.innerHTML += `<tr class="border-b border-gray-100">
+                    <td class="p-4 font-mono text-primary text-sm">${a['ID Anggota']}</td><td class="p-4 font-medium text-sm">${a['Nama Lengkap']}</td>
+                    <td class="p-4 text-sm">${a['No Rumah']}</td><td class="p-4 text-center"><span class="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-700">${a['Status']}</span></td>
+                    <td class="p-4 text-center"><button class="text-blue-500 hover:bg-blue-50 p-2 rounded-lg">Info</button></td></tr>`;
             });
         }
-        window.filterTrx = (val, btn) => {
-            document.querySelectorAll('#content-area button').forEach(b => { if(b.innerText.includes('Semua')||b.innerText.includes('Setoran')||b.innerText.includes('Penarikan')) b.className = 'px-4 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs sm:text-sm font-medium hover:bg-gray-200 whitespace-nowrap flex-shrink-0 transition-colors'; });
-            btn.className = 'px-4 py-1.5 rounded-full bg-primary text-white text-xs sm:text-sm font-medium whitespace-nowrap flex-shrink-0 transition-colors'; renderTransaksi(val);
+
+        // --- UPDATED UNDUH PDF BUKU TABUNGAN ---
+        window.cetakBukuTabunganPDF = function() {
+            const el = document.getElementById('passbook-area');
+            const isDark = document.documentElement.classList.contains('dark');
+            
+            // Nonaktifkan dark mode & overflow untuk rendering PDF yang bersih
+            if (isDark) document.documentElement.classList.remove('dark');
+            el.classList.remove('overflow-y-auto', 'flex-1', 'hide-scroll'); 
+            
+            setTimeout(() => { // beri waktu DOM merender ulang gaya CSS
+                html2pdf().set({ 
+                    margin: [10, 10, 10, 10], 
+                    filename: `Buku_Tabungan_${document.getElementById('buku-id').innerText}.pdf`, 
+                    html2canvas: { scale: 2, useCORS: true, logging: false }, 
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
+                }).from(el).save().then(() => {
+                    // Kembalikan style seperti semula
+                    el.classList.add('overflow-y-auto', 'flex-1', 'hide-scroll');
+                    if (isDark) document.documentElement.classList.add('dark');
+                });
+            }, 100);
         };
 
-        // --- DELETE & EDIT LOGIC (Global Sync) ---
-        window.reqDeleteAnggota = (id) => openConfirmModal("Hapus Anggota?", `Yakin menghapus <b>${id}</b>? Data yang terhapus tidak bisa dikembalikan.`, "Ya, Hapus", async () => { await fetchAPI('delete_anggota', {id}); showToast("Anggota dihapus"); loadData(); });
-        window.reqDeleteTrx = (id) => openConfirmModal("Hapus Transaksi?", `Yakin menghapus transaksi <b>${id}</b>? Saldo & buku tabungan akan terkalkulasi ulang secara otomatis.`, "Hapus Permanen", async () => { await fetchAPI('delete_transaksi', {id}); showToast("Transaksi dihapus"); loadData(); });
+        function setupBukuTabungan() {
+            let sel = document.getElementById('select-buku-anggota'); sel.innerHTML = '<option value="">-- Pilih Anggota --</option>';
+            if (state.user.role === 'user') {
+                sel.innerHTML = `<option value="${state.user['ID Anggota']}">${state.user['ID Anggota']} - ${state.user['Nama Lengkap']}</option>`;
+                sel.value = state.user['ID Anggota']; document.getElementById('buku-selector-wrapper').classList.add('hidden');
+                renderBukuTabungan();
+            } else {
+                document.getElementById('buku-selector-wrapper').classList.remove('hidden');
+                state.data.anggota.forEach(a => sel.innerHTML += `<option value="${a['ID Anggota']}">${a['ID Anggota']} - ${a['Nama Lengkap']}</option>`);
+            }
+        }
+        
+        window.renderBukuTabungan = () => {
+            let id = document.getElementById('select-buku-anggota').value;
+            let area = document.getElementById('passbook-area'), emp = document.getElementById('passbook-empty');
+            if(!id){ area.classList.add('hidden'); emp.classList.remove('hidden'); return; }
+            area.classList.remove('hidden'); emp.classList.add('hidden'); area.classList.add('flex');
+            
+            let a = state.data.anggota.find(x=>x['ID Anggota']===id);
+            document.getElementById('buku-nama').innerText=a['Nama Lengkap']; document.getElementById('buku-id').innerText=a['ID Anggota']; document.getElementById('buku-norumah').innerText=a['No Rumah']; document.getElementById('buku-saldo').innerText=formatRupiah(calculateSaldo(id));
+            
+            let tb = document.getElementById('table-buku'); tb.innerHTML='';
+            let trx = state.data.transaksi.filter(t=>t['ID Anggota']===id).sort((x,y)=>new Date(x['Tanggal'])-new Date(y['Tanggal']));
+            let sld = 0;
+            if(trx.length===0) tb.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-gray-500 italic">Belum ada mutasi</td></tr>`;
+            else trx.forEach(t => { let isS = t['Jenis Transaksi']==='Setoran'; let n = Number(t['Nominal']); sld += isS?n:-n;
+                tb.innerHTML+=`<tr class="border-b border-gray-100">
+                    <td class="p-3 text-xs text-gray-600 w-40">${formatDateTime(t['Tanggal'])}</td>
+                    <td class="p-3"><span class="text-[10px] font-bold uppercase ${isS?'text-success':'text-danger'}">${t['Jenis Transaksi']}</span><br><span class="text-xs truncate block max-w-[200px]">${t['Keterangan']||'-'}</span></td>
+                    <td class="p-3 text-right text-success text-sm">${isS?formatRupiah(n):'-'}</td><td class="p-3 text-right text-danger text-sm">${!isS?formatRupiah(n):'-'}</td><td class="p-3 text-right font-bold text-sm bg-gray-50">${formatRupiah(sld)}</td></tr>`;
+            });
+        };
 
-        window.editAnggota = (id) => { 
-            const a = state.data.anggota.find(x => x['ID Anggota'] === id); openModal('modal-anggota'); 
-            document.getElementById('m-anggota-title').innerText='Edit Anggota'; document.getElementById('f-a-id').value=a['ID Anggota']; document.getElementById('f-a-nama').value=a['Nama Lengkap']; document.getElementById('f-a-norumah').value=a['No Rumah']; document.getElementById('f-a-nohp').value=a['No HP']; document.getElementById('div-status').classList.remove('hidden'); document.getElementById('f-a-status').value=a['Status']; 
-        };
-        window.editTransaksi = (id) => {
-            const t = state.data.transaksi.find(x => x['ID Transaksi'] === id); openModal('modal-transaksi');
-            document.getElementById('m-trx-title').innerText='Edit Transaksi'; document.getElementById('f-t-id').value=t['ID Transaksi']; 
-            document.querySelector(`input[name="f-t-jenis"][value="${t['Jenis Transaksi']}"]`).checked = true;
-            document.getElementById('f-t-anggota').value=t['ID Anggota']; document.getElementById('f-t-nominal').value=t['Nominal']; document.getElementById('f-t-ket').value=t['Keterangan'];
-        };
-        window.showInfoTrx = (id) => {
-            const t = state.data.transaksi.find(x => x['ID Transaksi'] === id);
-            document.getElementById('modals').innerHTML = `
-            <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-                <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-sm modal-animate overflow-hidden shadow-2xl">
-                    <div class="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50"><h3 class="font-bold flex items-center gap-2"><i class="ph ph-receipt"></i> Detail Transaksi</h3><button onclick="closeAllModals()"><i class="ph ph-x text-lg"></i></button></div>
-                    <div class="p-6 space-y-3 text-sm">
-                        <div class="flex justify-between border-b pb-2 dark:border-gray-700"><span class="text-gray-500">ID TRX</span><span class="font-mono font-bold">${t['ID Transaksi']}</span></div>
-                        <div class="flex justify-between border-b pb-2 dark:border-gray-700"><span class="text-gray-500">Waktu</span><span>${formatDateTime(t['Tanggal'])}</span></div>
-                        <div class="flex justify-between border-b pb-2 dark:border-gray-700"><span class="text-gray-500">Anggota</span><span class="font-medium">${t['Nama Anggota']}</span></div>
-                        <div class="flex justify-between border-b pb-2 dark:border-gray-700"><span class="text-gray-500">Jenis</span><span class="font-bold ${t['Jenis Transaksi']==='Setoran'?'text-success':'text-danger'}">${t['Jenis Transaksi']}</span></div>
-                        <div class="flex justify-between border-b pb-2 dark:border-gray-700"><span class="text-gray-500">Nominal</span><span class="font-bold text-lg">${formatRupiah(t['Nominal'])}</span></div>
-                        <div class="flex justify-between border-b pb-2 dark:border-gray-700"><span class="text-gray-500">Keterangan</span><span>${t['Keterangan']||'-'}</span></div>
-                        <div class="flex justify-between"><span class="text-gray-500">Petugas Input</span><span>${t['User Input']}</span></div>
-                    </div>
-                </div></div>`;
-        };
-
-        // --- LAPORAN KEUANGAN ---
         window.renderLaporanData = () => {
             const filter = document.getElementById('filter-waktu').value, tb = document.getElementById('table-laporan'); tb.innerHTML = '';
             let tSetoran = 0, tPenarikan = 0;
@@ -589,123 +545,10 @@
             filtered.forEach(t => {
                 let isS = t['Jenis Transaksi'] === 'Setoran'; if(isS) tSetoran += Number(t['Nominal']); else tPenarikan += Number(t['Nominal']);
                 let c = isS ? 'text-success' : 'text-danger';
-                tb.innerHTML += `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-50 dark:border-gray-800/50"><td class="p-3 md:p-4 text-xs text-gray-500">${formatDateTime(t['Tanggal'])}</td><td class="p-3 md:p-4 font-medium">${t['Nama Anggota']}</td><td class="p-3 md:p-4 text-xs font-bold ${c}">${t['Jenis Transaksi']}</td><td class="p-3 md:p-4 font-bold text-right ${c}">${formatRupiah(t['Nominal'])}</td></tr>`;
+                tb.innerHTML += `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-50 dark:border-gray-800/50"><td class="p-3 md:p-4 text-xs text-gray-500 w-44">${formatDateTime(t['Tanggal'])}</td><td class="p-3 md:p-4 font-medium">${t['Nama Anggota']}</td><td class="p-3 md:p-4 text-xs font-bold ${c}">${t['Jenis Transaksi']}</td><td class="p-3 md:p-4 font-bold text-right ${c}">${formatRupiah(t['Nominal'])}</td></tr>`;
             });
             document.getElementById('lap-tot-setoran').innerText = formatRupiah(tSetoran); document.getElementById('lap-tot-penarikan').innerText = formatRupiah(tPenarikan);
         };
-
-        // --- BUKU TABUNGAN ---
-        function setupBukuTabungan() {
-            let sel = document.getElementById('select-buku-anggota'); sel.innerHTML = '<option value="">-- Silakan Pilih Anggota --</option>';
-            if (state.user.role === 'user') {
-                sel.innerHTML = `<option value="${state.user['ID Anggota']}">${state.user['ID Anggota']} - ${state.user['Nama Lengkap']}</option>`; sel.value = state.user['ID Anggota']; document.getElementById('buku-selector-wrapper').classList.add('hidden'); renderBukuTabungan();
-            } else {
-                document.getElementById('buku-selector-wrapper').classList.remove('hidden'); state.data.anggota.forEach(a => sel.innerHTML += `<option value="${a['ID Anggota']}">${a['ID Anggota']} - ${a['Nama Lengkap']}</option>`);
-            }
-        }
-        window.renderBukuTabungan = () => {
-            let id = document.getElementById('select-buku-anggota').value, area = document.getElementById('passbook-area'), emp = document.getElementById('passbook-empty');
-            if(!id){ area.classList.add('hidden'); emp.classList.remove('hidden'); return; }
-            area.classList.remove('hidden'); emp.classList.add('hidden'); area.classList.add('flex');
-            let a = state.data.anggota.find(x=>x['ID Anggota']===id);
-            document.getElementById('buku-nama').innerText=a['Nama Lengkap']; document.getElementById('buku-id').innerText=a['ID Anggota']; document.getElementById('buku-norumah').innerText=a['No Rumah']; document.getElementById('buku-saldo').innerText=formatRupiah(calculateSaldo(id));
-            let tb = document.getElementById('table-buku'); tb.innerHTML='';
-            let trx = state.data.transaksi.filter(t=>t['ID Anggota']===id).sort((x,y)=>new Date(x['Tanggal'])-new Date(y['Tanggal'])); let sld = 0;
-            if(trx.length === 0) tb.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-gray-500 font-sans italic">Belum ada mutasi transaksi</td></tr>`;
-            else trx.forEach(t => {
-                let isS = t['Jenis Transaksi']==='Setoran'; let n = Number(t['Nominal']); sld += isS ? n : -n; let color = isS ? 'text-success' : 'text-danger';
-                tb.innerHTML+=`<tr class="border-b border-gray-100 dark:border-gray-800 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-800/50"><td class="p-3 text-xs text-gray-600 dark:text-gray-400 font-sans">${formatDateTime(t['Tanggal'])}</td><td class="p-3"><span class="text-[10px] font-bold uppercase ${color} font-sans tracking-wide">${t['Jenis Transaksi']}</span><br><span class="text-xs truncate max-w-[150px] block font-sans">${t['Keterangan'] || '-'}</span></td><td class="p-3 text-right text-success text-xs md:text-sm">${isS?formatRupiah(n):'-'}</td><td class="p-3 text-right text-danger text-xs md:text-sm">${!isS?formatRupiah(n):'-'}</td><td class="p-3 text-right font-bold text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-800/30 text-xs md:text-sm">${formatRupiah(sld)}</td></tr>`;
-            });
-        };
-
-        // --- INFO & RIWAYAT ANGGOTA (DARI TABEL ANGGOTA) ---
-        window.showDetailAnggota = function(id) {
-            const a = state.data.anggota.find(x => x['ID Anggota'] === id), saldo = calculateSaldo(id);
-            let trx = state.data.transaksi.filter(t => t['ID Anggota'] === id).sort((x,y)=>new Date(y['Tanggal'])-new Date(x['Tanggal']));
-            let trHtml = '';
-            if(trx.length === 0) trHtml = `<tr><td colspan="3" class="p-6 text-center text-gray-500 text-sm italic">Belum ada mutasi transaksi</td></tr>`;
-            trx.forEach(t => { let isS = t['Jenis Transaksi'] === 'Setoran'; let c = isS ? 'text-success' : 'text-danger'; let icon = isS ? 'ph-arrow-down-left' : 'ph-arrow-up-right';
-                 trHtml += `<tr class="border-b border-gray-100 dark:border-gray-800 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-800"><td class="p-3 text-xs text-gray-500">${formatDateTime(t['Tanggal'])}<br><span class="text-gray-800 dark:text-gray-200 font-medium truncate max-w-[120px] block mt-0.5">${t['Keterangan']}</span></td><td class="p-3 text-xs font-bold ${c}"><i class="ph ${icon}"></i> ${t['Jenis Transaksi']}</td><td class="p-3 text-sm font-bold text-right ${c}">${formatRupiah(t['Nominal'])}</td></tr>`;
-            });
-            document.getElementById('modals').innerHTML = `
-            <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[90] flex items-center justify-center p-4">
-                <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-lg modal-animate overflow-hidden max-h-[90dvh] flex flex-col shadow-2xl">
-                    <div class="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50"><h3 class="font-bold flex items-center gap-2"><i class="ph ph-user text-primary text-xl"></i> Profil & Riwayat</h3><button onclick="closeAllModals()"><i class="ph ph-x text-lg"></i></button></div>
-                    <div class="overflow-y-auto p-0 hide-scroll flex-1">
-                        <div class="p-5 bg-gradient-to-br from-primary to-primary-dark text-white">
-                            <div class="flex justify-between items-start mb-4"><div><h2 class="text-xl font-bold mb-1">${a['Nama Lengkap']}</h2><p class="text-white/80 text-xs font-mono">${a['ID Anggota']} • HP: ${a['No HP'] || '-'}</p><p class="text-white/80 text-xs font-mono">Rumah No. ${a['No Rumah']}</p></div><span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${a['Status'] === 'Aktif' ? 'bg-white/20' : 'bg-red-500/50'}">${a['Status']}</span></div>
-                            <div class="bg-white/10 p-3 rounded-xl backdrop-blur-sm border border-white/20 flex justify-between items-center"><p class="text-white/80 text-[10px] uppercase font-bold">Total Saldo</p><p class="text-2xl font-bold">${formatRupiah(saldo)}</p></div>
-                        </div>
-                        <div class="p-0"><h4 class="font-bold p-4 pb-2 text-sm bg-gray-50 dark:bg-darkcard sticky top-0 border-b border-gray-100 dark:border-gray-800">Riwayat Mutasi Terakhir</h4><table class="w-full text-left"><tbody>${trHtml}</tbody></table></div>
-                    </div>
-                </div></div>`;
-        }
-
-        // --- PENGATURAN & LOG ---
-        function renderPengaturan(c){ 
-            c.innerHTML = `
-            <div class="space-y-4 w-full h-full flex flex-col animate-fade-in max-w-4xl mx-auto">
-                <h2 class="text-2xl font-bold dark:text-white mb-2">Pengaturan & Log Sistem</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-shrink-0">
-                    <div class="bg-white dark:bg-darkcard p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
-                        <h3 class="font-bold text-primary flex items-center gap-2 mb-2"><i class="ph ph-database text-lg"></i> Integrasi Google Sheets</h3>
-                        <p class="text-xs text-gray-500 mb-4">Pastikan URL Web App valid agar sinkronisasi Realtime berjalan.</p>
-                        <input type="text" id="setting-gas" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 focus:ring-primary focus:outline-none text-sm mb-4" placeholder="https://script.google.com/macros/s/..." value="${state.settings.gasUrl}">
-                        <button onclick="saveSettings()" class="w-full py-2.5 bg-primary text-white rounded-xl font-medium shadow-sm transition">Update Koneksi</button>
-                    </div>
-                </div>
-                <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-hidden flex flex-col min-w-0 mt-4">
-                    <div class="p-4 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50"><h3 class="font-bold flex items-center gap-2"><i class="ph ph-clock-counter-clockwise"></i> Log Aktivitas Terakhir</h3></div>
-                    <div class="overflow-y-auto p-4 flex-1">
-                        <div class="space-y-3" id="log-list"></div>
-                    </div>
-                </div>
-            </div>`; 
-            let logs = ''; state.data.logs.forEach(l => { logs += `<div class="flex gap-3 text-sm border-b border-gray-100 dark:border-gray-800 pb-3 last:border-0"><div class="mt-1 h-2 w-2 rounded-full bg-primary shrink-0"></div><div><p class="text-gray-800 dark:text-gray-200 font-medium">${l['Aktivitas']}</p><p class="text-xs text-gray-500">${formatDateTime(l['Waktu'])} • Oleh: ${l['User']}</p></div></div>`; });
-            document.getElementById('log-list').innerHTML = logs || `<p class="text-sm text-gray-500 text-center py-4">Belum ada log aktivitas.</p>`;
-        }
-        window.saveSettings = function() { state.settings.gasUrl = document.getElementById('setting-gas').value.trim(); localStorage.setItem('gasUrl', state.settings.gasUrl); showToast("Sistem diperbarui..."); loadData(); };
-
-        // --- SUBMIT MODALS ---
-        window.openModal = function(id) {
-            const con = document.getElementById('modals'); let content = '';
-            if(id === 'modal-anggota') {
-                content = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-md modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
-                        <div class="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50"><h3 class="font-bold" id="m-anggota-title">Tambah Anggota</h3><button onclick="closeAllModals()"><i class="ph ph-x text-lg"></i></button></div>
-                        <div class="overflow-y-auto p-4 md:p-6 hide-scroll">
-                            <form class="space-y-4" onsubmit="submitAnggota(event)">
-                                <input type="hidden" id="f-a-id">
-                                <div><label class="block text-xs font-medium mb-1">Nama Lengkap</label><input type="text" id="f-a-nama" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none" required></div>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="block text-xs font-medium mb-1">No Rmh</label><input type="text" id="f-a-norumah" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none" required></div><div><label class="block text-xs font-medium mb-1">No HP</label><input type="text" id="f-a-nohp" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none"></div></div>
-                                <div id="div-status" class="hidden"><label class="block text-xs font-medium mb-1">Status</label><select id="f-a-status" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none"><option value="Aktif">Aktif</option><option value="Nonaktif">Nonaktif</option></select></div>
-                                <div class="pt-2"><button type="submit" class="w-full py-3 rounded-xl bg-primary text-white font-medium text-sm shadow-md">Simpan Data</button></div>
-                            </form>
-                        </div></div></div>`;
-            } else if (id === 'modal-transaksi') {
-                let opts = `<option value="">-- Pilih Anggota --</option>`; state.data.anggota.forEach(a => opts += `<option value="${a['ID Anggota']}">${a['ID Anggota']} - ${a['Nama Lengkap']}</option>`);
-                content = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-md modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
-                        <div class="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50"><h3 class="font-bold" id="m-trx-title">Transaksi Baru</h3><button onclick="closeAllModals()"><i class="ph ph-x text-lg"></i></button></div>
-                        <div class="overflow-y-auto p-4 md:p-6 hide-scroll">
-                            <form class="space-y-4" onsubmit="submitTransaksi(event)">
-                                <input type="hidden" id="f-t-id">
-                                <div class="flex p-1 bg-gray-100 dark:bg-gray-800 rounded-xl"><label class="flex-1 text-center"><input type="radio" name="f-t-jenis" value="Setoran" class="peer sr-only" checked><div class="py-2 rounded-lg text-sm font-medium peer-checked:bg-white peer-checked:text-success shadow-sm">Uang Masuk</div></label><label class="flex-1 text-center"><input type="radio" name="f-t-jenis" value="Penarikan" class="peer sr-only"><div class="py-2 rounded-lg text-sm font-medium peer-checked:bg-white peer-checked:text-danger shadow-sm">Uang Keluar</div></label></div>
-                                <div><label class="block text-xs font-medium mb-1">Anggota</label><select id="f-t-anggota" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none" required>${opts}</select></div>
-                                <div><label class="block text-xs font-medium mb-1">Nominal (Rp)</label><input type="number" id="f-t-nominal" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 font-bold text-lg text-right focus:ring-primary focus:outline-none" required></div>
-                                <div><label class="block text-xs font-medium mb-1">Keterangan</label><input type="text" id="f-t-ket" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none" placeholder="Cth: Iuran Juli"></div>
-                                <div class="pt-2"><button type="submit" class="w-full py-3 rounded-xl bg-primary text-white font-medium text-sm shadow-md">Simpan Transaksi</button></div>
-                            </form>
-                        </div></div></div>`;
-            }
-            con.innerHTML = content;
-        }
-
-        window.submitAnggota = async (e) => { e.preventDefault(); await fetchAPI('save_anggota', { id: document.getElementById('f-a-id').value, nama: document.getElementById('f-a-nama').value, noRumah: document.getElementById('f-a-norumah').value, noHp: document.getElementById('f-a-nohp').value, status: document.getElementById('f-a-status')?document.getElementById('f-a-status').value:'Aktif' }); showToast("Anggota tersimpan"); closeAllModals(); loadData(); };
-        window.submitTransaksi = async (e) => { e.preventDefault(); let idA = document.getElementById('f-t-anggota').value; await fetchAPI('save_transaksi', { idTrx: document.getElementById('f-t-id').value, idAnggota: idA, namaAnggota: state.data.anggota.find(a=>a['ID Anggota']===idA)['Nama Lengkap'], jenis: document.querySelector('input[name="f-t-jenis"]:checked').value, nominal: Number(document.getElementById('f-t-nominal').value), keterangan: document.getElementById('f-t-ket').value }); showToast("Transaksi disinkronisasi"); closeAllModals(); loadData(); };
-
-        window.exportLaporanPDF = function() { const div = document.createElement('div'); div.style.padding = '20px'; div.style.background = 'white'; div.style.color = 'black'; let setoran = document.getElementById('lap-tot-setoran').innerText, penarikan = document.getElementById('lap-tot-penarikan').innerText, filter = document.getElementById('filter-waktu').value; div.innerHTML = ` <h2 style="text-align:center; font-family:sans-serif; margin-bottom: 5px;">LAPORAN TABUNGAN IBU-IBU RT</h2> <p style="text-align:center; font-family:sans-serif; color:#666; margin-bottom: 20px;">Periode: ${filter} | Tanggal Cetak: ${formatDateTime(new Date())}</p> <table style="width:100%; border-collapse:collapse; font-family:sans-serif; margin-bottom:20px;"> <tr> <td style="border:1px solid #ccc; padding:10px; text-align:center;"><b>Total Setoran:</b><br><span style="color:green; font-size:16px;">${setoran}</span></td> <td style="border:1px solid #ccc; padding:10px; text-align:center;"><b>Total Penarikan:</b><br><span style="color:red; font-size:16px;">${penarikan}</span></td> </tr> </table> <h3 style="font-family:sans-serif; font-size:14px;">Rekap Saldo Seluruh Anggota</h3> <table style="width:100%; border-collapse:collapse; font-family:sans-serif; font-size:12px;"> <tr style="background:#eee;"><th style="border:1px solid #ccc; padding:8px;">ID Anggota</th><th style="border:1px solid #ccc; padding:8px;">Nama Lengkap</th><th style="border:1px solid #ccc; padding:8px;">Saldo Akhir</th></tr> ${state.data.anggota.map(a => `<tr><td style="border:1px solid #ccc; padding:8px;">${a['ID Anggota']}</td><td style="border:1px solid #ccc; padding:8px;">${a['Nama Lengkap']}</td><td style="border:1px solid #ccc; padding:8px; text-align:right;">${formatRupiah(calculateSaldo(a['ID Anggota']))}</td></tr>`).join('')} </table> `; html2pdf().set({ margin: 10, filename: `Laporan_${new Date().getTime()}.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(div).save(); };
-        window.exportExcel = function() { const wb = XLSX.utils.book_new(); const agt = state.data.anggota.map(a => ({ ...a, "Saldo Akhir": calculateSaldo(a['ID Anggota']) })); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(agt), "Anggota"); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(state.data.transaksi), "Transaksi"); XLSX.writeFile(wb, `Tabungan_RT_${new Date().toISOString().slice(0,10)}.xlsx`); showToast("Excel berhasil diunduh"); };
     </script>
 </body>
 </html>
