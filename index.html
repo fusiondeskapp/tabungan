@@ -532,30 +532,64 @@
 
         // --- API LAYER ---
         async function fetchAPI(action, payload = {}) {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    let a = JSON.parse(localStorage.getItem('mock_anggota')), t = JSON.parse(localStorage.getItem('mock_transaksi')), l = JSON.parse(localStorage.getItem('mock_logs'));
-                    if (action === 'get_all_data') resolve({ success: true, data: { anggota: a, transaksi: t, logs: l } });
-                    else if (action === 'save_anggota') {
-                        let id = payload.id || payload.nama.toUpperCase().replace(/[^A-Z]/g, '') + '-' + payload.noRumah;
-                        if(!payload.id) { a.push({"ID Anggota": id, "Nama Lengkap": payload.nama, "No Rumah": payload.noRumah, "No HP": payload.noHp, "Status": payload.status, "Tanggal Dibuat": new Date().toISOString()}); } 
-                        else { let i = a.findIndex(x => x['ID Anggota'] === id); if(i>-1) { a[i]['Nama Lengkap']=payload.nama; a[i]['No Rumah']=payload.noRumah; a[i]['No HP']=payload.noHp; a[i]['Status']=payload.status; } }
-                        localStorage.setItem('mock_anggota', JSON.stringify(a)); resolve({success:true});
-                    } else if (action === 'save_transaksi') {
-                        let id = "TRX-" + new Date().toISOString().slice(0,10).replace(/-/g,'') + "-" + ("000"+(t.length+1)).slice(-4);
-                        t.push({"ID Transaksi": id, "Tanggal": new Date().toISOString(), "ID Anggota": payload.idAnggota, "Nama Anggota": payload.namaAnggota, "Jenis Transaksi": payload.jenis, "Nominal": payload.nominal, "Keterangan": payload.keterangan, "User Input": state.user.username});
-                        localStorage.setItem('mock_transaksi', JSON.stringify(t)); resolve({success:true});
+            // Jika ada URL GAS di pengaturan, kirim data aktual ke Google Sheets
+            if (state.settings.gasUrl) {
+                try {
+                    const response = await fetch(state.settings.gasUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify({ action, payload, user: state.user ? state.user.username : 'Unknown' })
+                    });
+                    
+                    const textRes = await response.text();
+                    try {
+                        return JSON.parse(textRes);
+                    } catch(err) {
+                        console.error("Format respon GAS salah:", textRes);
+                        if(textRes.toLowerCase().includes("<html")) {
+                            return { success: false, message: "Akses ditolak! Pastikan deploy Apps Script di-set Akses: 'Siapa Saja' (Anyone)." };
+                        }
+                        return { success: false, message: "Error dari server Google Script." };
                     }
-                }, 300);
-            });
+                } catch (e) {
+                    console.error("Koneksi Error:", e);
+                    return { success: false, message: "Koneksi terputus. Pastikan URL Google Script benar." };
+                }
+            } 
+            // Jika URL kosong, gunakan Mock DB Lokal (Untuk test UI)
+            else {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        let a = JSON.parse(localStorage.getItem('mock_anggota') || '[]');
+                        let t = JSON.parse(localStorage.getItem('mock_transaksi') || '[]');
+                        let l = JSON.parse(localStorage.getItem('mock_logs') || '[]');
+                        if (action === 'get_all_data') resolve({ success: true, data: { anggota: a, transaksi: t, logs: l } });
+                        else if (action === 'save_anggota') {
+                            let id = payload.id || payload.nama.toUpperCase().replace(/[^A-Z]/g, '') + '-' + payload.noRumah;
+                            if(!payload.id) { a.push({"ID Anggota": id, "Nama Lengkap": payload.nama, "No Rumah": payload.noRumah, "No HP": payload.noHp, "Status": payload.status, "Tanggal Dibuat": new Date().toISOString()}); } 
+                            else { let i = a.findIndex(x => x['ID Anggota'] === id); if(i>-1) { a[i]['Nama Lengkap']=payload.nama; a[i]['No Rumah']=payload.noRumah; a[i]['No HP']=payload.noHp; a[i]['Status']=payload.status; } }
+                            localStorage.setItem('mock_anggota', JSON.stringify(a)); resolve({success:true});
+                        } else if (action === 'save_transaksi') {
+                            let id = "TRX-" + new Date().toISOString().slice(0,10).replace(/-/g,'') + "-" + ("000"+(t.length+1)).slice(-4);
+                            t.push({"ID Transaksi": id, "Tanggal": new Date().toISOString(), "ID Anggota": payload.idAnggota, "Nama Anggota": payload.namaAnggota, "Jenis Transaksi": payload.jenis, "Nominal": payload.nominal, "Keterangan": payload.keterangan, "User Input": state.user ? state.user.username : 'admin'});
+                            localStorage.setItem('mock_transaksi', JSON.stringify(t)); resolve({success:true});
+                        }
+                    }, 300);
+                });
+            }
         }
 
         async function loadData() {
             const res = await fetchAPI('get_all_data');
-            if(res.success) { state.data = res.data; renderCurrentView(); }
+            if(res.success) { 
+                state.data = res.data; 
+                renderCurrentView(); 
+            } else {
+                if(res.message) showToast(res.message, 'error'); // Tampilkan error jika koneksi GAS gagal
+            }
         }
 
-        // --- STREAMING_CHUNK:Auth & Navigation Logic... ---
+        // --- AUTH ---
         function handleLogin(e) {
             e.preventDefault(); 
             const u = document.getElementById('login-user').value.trim(); 
