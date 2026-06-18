@@ -1,0 +1,189 @@
+/**
+ * BACKEND GOOGLE APPS SCRIPT - TABUNGAN IBU-IBU RT
+ * Cara Install:
+ * 1. Buka Google Sheets baru, beri nama "Database Tabungan RT".
+ * 2. Klik Ekstensi > Apps Script.
+ * 3. Hapus kode yang ada, paste seluruh kode ini.
+ * 4. Klik Terapkan > Deployment Baru > Pilih jenis "Aplikasi Web".
+ * 5. Akses: "Siapa saja" (Anyone), lalu klik Terapkan.
+ * 6. Copy URL Web App yang dihasilkan, lalu masukkan di menu Pengaturan pada aplikasi Frontend.
+ */
+
+const SHEET_ANGGOTA = "Anggota";
+const SHEET_TRANSAKSI = "Transaksi";
+const SHEET_LOG = "Log Aktivitas";
+
+// Inisialisasi Sheet saat pertama kali dijalankan
+function initSetup() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  if (!ss.getSheetByName(SHEET_ANGGOTA)) {
+    const sheet = ss.insertSheet(SHEET_ANGGOTA);
+    sheet.appendRow(["ID Anggota", "Nama Lengkap", "No Rumah", "No HP", "Status", "Tanggal Dibuat"]);
+    sheet.getRange("A1:F1").setFontWeight("bold").setBackground("#0F766E").setFontColor("white");
+  }
+  if (!ss.getSheetByName(SHEET_TRANSAKSI)) {
+    const sheet = ss.insertSheet(SHEET_TRANSAKSI);
+    sheet.appendRow(["ID Transaksi", "Tanggal", "ID Anggota", "Nama Anggota", "Jenis Transaksi", "Nominal", "Keterangan", "User Input"]);
+    sheet.getRange("A1:H1").setFontWeight("bold").setBackground("#0F766E").setFontColor("white");
+  }
+  if (!ss.getSheetByName(SHEET_LOG)) {
+    const sheet = ss.insertSheet(SHEET_LOG);
+    sheet.appendRow(["Waktu", "User", "Aktivitas"]);
+    sheet.getRange("A1:C1").setFontWeight("bold").setBackground("#0F766E").setFontColor("white");
+  }
+}
+
+// Endpoint GET (Untuk tes apakah web app aktif)
+function doGet(e) {
+  return ContentService.createTextOutput("Backend Tabungan RT Aktif").setMimeType(ContentService.MimeType.TEXT);
+}
+
+// Endpoint POST (Menerima request dari Frontend)
+function doPost(e) {
+  try {
+    const lock = LockService.getScriptLock();
+    // Menunggu maksimal 10 detik agar transaksi bersamaan tidak bentrok
+    lock.waitLock(10000); 
+    
+    const request = JSON.parse(e.postData.contents);
+    const action = request.action;
+    const payload = request.payload;
+    const user = request.user || "Unknown";
+    
+    let result = { success: false, message: "Aksi tidak ditemukan" };
+    
+    if (action === "get_all_data") {
+      result = {
+        success: true,
+        data: {
+          anggota: getData(SHEET_ANGGOTA),
+          transaksi: getData(SHEET_TRANSAKSI),
+          logs: getData(SHEET_LOG)
+        }
+      };
+    } else if (action === "save_anggota") {
+      result = saveAnggota(payload, user);
+    } else if (action === "save_transaksi") {
+      result = saveTransaksi(payload, user);
+    } else if (action === "delete_anggota") {
+      result = deleteRowByCol(SHEET_ANGGOTA, 0, payload.id, user, "Menghapus anggota " + payload.id);
+    } else if (action === "log_activity") {
+      logActivity(user, payload.aktivitas);
+      result = { success: true };
+    }
+    
+    lock.releaseLock();
+    return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+    
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({ success: false, message: error.message })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+// Helpers
+function getData(sheetName) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+  if (!sheet) return [];
+  const data = sheet.getDataRange().getValues();
+  if (data.length <= 1) return [];
+  
+  const headers = data[0];
+  const rows = [];
+  for (let i = 1; i < data.length; i++) {
+    let obj = {};
+    for (let j = 0; j < headers.length; j++) {
+      obj[headers[j]] = data[i][j];
+    }
+    rows.push(obj);
+  }
+  return rows;
+}
+
+function saveAnggota(payload, user) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_ANGGOTA);
+  let idAnggota = payload.id;
+  let isNew = !idAnggota;
+  
+  if (isNew) {
+    // Generate ID: NAMA-NORUMAH
+    let baseName = payload.nama.toUpperCase().replace(/[^A-Z]/g, '');
+    let baseId = baseName + "-" + payload.noRumah;
+    idAnggota = baseId;
+    
+    // Check duplicate
+    const data = sheet.getDataRange().getValues();
+    let counter = 1;
+    let exists = true;
+    while(exists && data.length > 1) {
+      exists = false;
+      for(let i=1; i<data.length; i++) {
+        if(data[i][0] === idAnggota) {
+          exists = true;
+          idAnggota = baseId + "-" + counter;
+          counter++;
+          break;
+        }
+      }
+    }
+    
+    sheet.appendRow([
+      idAnggota, payload.nama, payload.noRumah, payload.noHp, "Aktif", new Date().toISOString()
+    ]);
+    logActivity(user, "Menambah anggota baru: " + idAnggota);
+  } else {
+    // Update
+    const data = sheet.getDataRange().getValues();
+    for(let i=1; i<data.length; i++) {
+      if(data[i][0] === idAnggota) {
+        sheet.getRange(i+1, 2).setValue(payload.nama);
+        sheet.getRange(i+1, 3).setValue(payload.noRumah);
+        sheet.getRange(i+1, 4).setValue(payload.noHp);
+        sheet.getRange(i+1, 5).setValue(payload.status);
+        break;
+      }
+    }
+    logActivity(user, "Mengubah data anggota: " + idAnggota);
+  }
+  return { success: true, message: "Data anggota tersimpan", id: idAnggota };
+}
+
+function saveTransaksi(payload, user) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_TRANSAKSI);
+  
+  // Generate TRX ID
+  const today = new Date();
+  const dateStr = Utilities.formatDate(today, "Asia/Jakarta", "yyyyMMdd");
+  
+  const data = sheet.getDataRange().getValues();
+  let countToday = 0;
+  for(let i=1; i<data.length; i++) {
+    if(String(data[i][0]).includes(dateStr)) countToday++;
+  }
+  
+  const seq = ("0000" + (countToday + 1)).slice(-4);
+  const idTrx = "TRX-" + dateStr + "-" + seq;
+  
+  sheet.appendRow([
+    idTrx, new Date().toISOString(), payload.idAnggota, payload.namaAnggota, 
+    payload.jenis, payload.nominal, payload.keterangan, user
+  ]);
+  
+  logActivity(user, `Menambah transaksi ${payload.jenis} sejumlah ${payload.nominal} untuk ${payload.idAnggota}`);
+  return { success: true, message: "Transaksi berhasil disimpan", id: idTrx };
+}
+
+function logActivity(user, activity) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_LOG);
+  if(sheet) {
+    sheet.appendRow([new Date().toISOString(), user, activity]);
+  }
+}
+
+// Trigger Otomatis Backup (Atur trigger harian di Apps Script)
+function backupOtomatis() {
+  const file = DriveApp.getFileById(SpreadsheetApp.getActive().getId());
+  const dateStr = Utilities.formatDate(new Date(), "Asia/Jakarta", "yyyy-MM-dd");
+  const folder = file.getParents().next(); // Backup di folder yang sama
+  file.makeCopy("BACKUP_TABUNGAN_RT_" + dateStr, folder);
+}
