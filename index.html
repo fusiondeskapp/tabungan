@@ -328,7 +328,7 @@
 
         function initMockDB() {
             if(!localStorage.getItem('mock_anggota')) {
-                localStorage.setItem('mock_anggota', JSON.stringify([{"ID Anggota":"sitiaminah12", "Nama Lengkap":"Siti Aminah", "No Rumah":"12", "No HP":"08123456789", "Status":"Aktif"}]));
+                localStorage.setItem('mock_anggota', JSON.stringify([{"ID Anggota":"sitiaminah12", "Password":"123456", "Nama Lengkap":"Siti Aminah", "No Rumah":"12", "No HP":"08123456789", "Status":"Aktif"}]));
                 localStorage.setItem('mock_transaksi', JSON.stringify([{"ID Transaksi":"TRX-2026-01", "Tanggal": new Date().toISOString(), "ID Anggota":"sitiaminah12", "Nama Anggota":"Siti Aminah", "Jenis Transaksi":"Setoran", "Nominal":150000, "Keterangan":"Iuran"}]));
             }
         }
@@ -359,6 +359,11 @@
         };
 
         const calculateSaldo = (id) => state.data.transaksi.filter(t=>String(t['ID Anggota'])===String(id)).reduce((s, t) => t['Jenis Transaksi'] === 'Setoran' ? s + toNumber(t['Nominal']) : s - toNumber(t['Nominal']), 0);
+        const withoutPassword = (anggota) => {
+            const data = { ...anggota };
+            delete data.Password;
+            return data;
+        };
 
         const showToast = (msg, type = 'success') => {
             const container = document.getElementById('toast-container'); const toast = document.createElement('div');
@@ -418,15 +423,15 @@
                     
                     if(action === 'login') {
                         if(payload.username.toLowerCase()==='bendahara' && payload.password==='123456') resolve({success:true, role:'admin', data:{'ID Anggota':'ADMIN', 'Nama Lengkap':'Bendahara'}});
-                        else { let u = a.find(x => String(x['ID Anggota']).toLowerCase() === String(payload.username).toLowerCase()); if(u && payload.password==='123456') resolve({success:true, role:'user', data:u}); else resolve({success:false, message:'Username / Password salah!'}); }
+                        else { let u = a.find(x => String(x['ID Anggota']).toLowerCase() === String(payload.username).toLowerCase()); if(u && payload.password===(u.Password || '123456')) resolve({success:true, role:'user', data:withoutPassword(u)}); else resolve({success:false, message:'Username / Password salah!'}); }
                     } else if (action === 'get_all_data') {
-                        if(payload.role === 'user') resolve({success: true, data: { anggota: a.filter(x=>String(x['ID Anggota'])===String(payload.userId)), transaksi: t.filter(x=>String(x['ID Anggota'])===String(payload.userId)), logs:[] }});
-                        else resolve({success: true, data: { anggota: a, transaksi: t, logs: l }});
+                        if(payload.role === 'user') resolve({success: true, data: { anggota: a.filter(x=>String(x['ID Anggota'])===String(payload.userId)).map(withoutPassword), transaksi: t.filter(x=>String(x['ID Anggota'])===String(payload.userId)), logs:[] }});
+                        else resolve({success: true, data: { anggota: a.map(withoutPassword), transaksi: t, logs: l }});
                     } else if (action === 'save_anggota') {
                         if(!payload.nama || !payload.noRumah) { resolve({success:false, message:'Nama dan nomor rumah wajib diisi.'}); return; }
                         let id = payload.id || (payload.nama.toLowerCase().replace(/[^a-z]/g, '') + payload.noRumah);
-                        if(!payload.id) { a.push({"ID Anggota": id, "Nama Lengkap": payload.nama, "No Rumah": payload.noRumah, "No HP": payload.noHp, "Status": payload.status, "Tanggal Dibuat": new Date().toISOString()}); } 
-                        else { let i = a.findIndex(x => String(x['ID Anggota']) === String(id)); if(i>-1) { a[i]['Nama Lengkap']=payload.nama; a[i]['No Rumah']=payload.noRumah; a[i]['No HP']=payload.noHp; a[i]['Status']=payload.status; } else { resolve({success:false, message:'Anggota tidak ditemukan.'}); return; } }
+                        if(!payload.id) { a.push({"ID Anggota": id, "Password": payload.password || '123456', "Nama Lengkap": payload.nama, "No Rumah": payload.noRumah, "No HP": payload.noHp, "Status": payload.status, "Tanggal Dibuat": new Date().toISOString()}); } 
+                        else { let i = a.findIndex(x => String(x['ID Anggota']) === String(id)); if(i>-1) { if(payload.password) a[i]['Password']=payload.password; a[i]['Nama Lengkap']=payload.nama; a[i]['No Rumah']=payload.noRumah; a[i]['No HP']=payload.noHp; a[i]['Status']=payload.status; } else { resolve({success:false, message:'Anggota tidak ditemukan.'}); return; } }
                         localStorage.setItem('mock_anggota', JSON.stringify(a)); resolve({success:true});
                     } else if (action === 'save_transaksi') {
                         const anggota = a.find(x => String(x['ID Anggota']) === String(payload.idAnggota));
@@ -848,6 +853,7 @@
                         <div class="overflow-y-auto p-4 md:p-6 hide-scroll">
                             <form class="space-y-4" onsubmit="submitAnggota(event)">
                                 <input type="hidden" id="f-a-id">
+                                <div><label class="block text-xs font-medium mb-1">Password Login</label><input type="password" id="f-a-password" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none" autocomplete="new-password" placeholder="Kosongkan untuk default / tidak diubah"></div>
                                 <div><label class="block text-xs font-medium mb-1">Nama Lengkap</label><input type="text" id="f-a-nama" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none" required></div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div><label class="block text-xs font-medium mb-1">No Rmh</label><input type="text" id="f-a-norumah" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none" required></div>
@@ -888,6 +894,7 @@
             e.preventDefault();
             const res = await fetchAPI('save_anggota', {
                 id: document.getElementById('f-a-id').value,
+                password: document.getElementById('f-a-password').value,
                 nama: document.getElementById('f-a-nama').value,
                 noRumah: document.getElementById('f-a-norumah').value,
                 noHp: document.getElementById('f-a-nohp').value,
@@ -930,7 +937,7 @@
             if(!a) { showToast("Anggota tidak ditemukan", "error"); return; }
             openModal('modal-anggota'); 
             document.getElementById('m-anggota-title').innerText='Edit Anggota'; 
-            document.getElementById('f-a-id').value=a['ID Anggota']; document.getElementById('f-a-nama').value=a['Nama Lengkap']; document.getElementById('f-a-norumah').value=a['No Rumah']; document.getElementById('f-a-nohp').value=a['No HP']; document.getElementById('div-status').classList.remove('hidden'); document.getElementById('f-a-status').value=a['Status']; 
+            document.getElementById('f-a-id').value=a['ID Anggota']; document.getElementById('f-a-password').value=''; document.getElementById('f-a-nama').value=a['Nama Lengkap']; document.getElementById('f-a-norumah').value=a['No Rumah']; document.getElementById('f-a-nohp').value=a['No HP']; document.getElementById('div-status').classList.remove('hidden'); document.getElementById('f-a-status').value=a['Status']; 
         };
 
         window.deleteAnggota = async (id) => {
