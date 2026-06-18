@@ -129,14 +129,14 @@
                 </header>
 
                 <!-- Desktop Topbar -->
-                <div class="hidden lg:flex justify-end p-4 absolute right-0 top-0 z-10 pointer-events-none gap-2">
-                    <button onclick="navigate('pengaturan')" class="p-2.5 bg-white dark:bg-darkcard text-gray-500 shadow-md border border-gray-100 dark:border-gray-700 rounded-full pointer-events-auto hover:text-primary transition-colors admin-only"><i class="ph ph-gear text-[22px]"></i></button>
-                    <button onclick="toggleTheme()" class="p-2.5 bg-white dark:bg-darkcard text-gray-500 shadow-md border border-gray-100 dark:border-gray-700 rounded-full pointer-events-auto hover:text-primary transition-colors"><i class="ph ph-moon text-[22px] dark:hidden"></i><i class="ph ph-sun text-[22px] hidden dark:block"></i></button>
-                    <button onclick="handleLogout()" class="p-2.5 bg-white dark:bg-darkcard text-danger shadow-md border border-gray-100 dark:border-gray-700 rounded-full pointer-events-auto hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"><i class="ph ph-sign-out text-[22px]"></i></button>
+                <div class="hidden lg:flex justify-end px-8 pt-6 pb-2 w-full flex-shrink-0 gap-2">
+                    <button onclick="navigate('pengaturan')" class="p-2.5 bg-white dark:bg-darkcard text-gray-500 shadow-sm border border-gray-100 dark:border-gray-700 rounded-full pointer-events-auto hover:text-primary transition-colors admin-only"><i class="ph ph-gear text-[22px]"></i></button>
+                    <button onclick="toggleTheme()" class="p-2.5 bg-white dark:bg-darkcard text-gray-500 shadow-sm border border-gray-100 dark:border-gray-700 rounded-full pointer-events-auto hover:text-primary transition-colors"><i class="ph ph-moon text-[22px] dark:hidden"></i><i class="ph ph-sun text-[22px] hidden dark:block"></i></button>
+                    <button onclick="handleLogout()" class="p-2.5 bg-white dark:bg-darkcard text-danger shadow-sm border border-gray-100 dark:border-gray-700 rounded-full pointer-events-auto hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"><i class="ph ph-sign-out text-[22px]"></i></button>
                 </div>
 
                 <!-- Content Views -->
-                <div class="flex-1 overflow-y-auto overflow-x-hidden p-4 lg:p-8 pb-24 lg:pb-8 w-full" id="content-area"></div>
+                <div class="flex-1 overflow-y-auto overflow-x-hidden p-4 lg:px-8 lg:pb-8 lg:pt-2 pb-24 w-full" id="content-area"></div>
             </main>
 
             <!-- Bottom Navigation (Mobile) - Admin & User dibedakan pakai css admin-only -->
@@ -224,16 +224,111 @@
         </div>
     </template>
 
-    <!-- (TPL Anggota, Transaksi, Laporan Template dihilangkan dari HTML murni untuk singkatan penulisan, mereka dirender otomatis oleh Vanilla JS seperti sebelumnya) -->
-    <!-- Template Anggota -->
     <template id="tpl-anggota">
         <div class="space-y-4 flex flex-col w-full h-full animate-fade-in">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <h2 class="text-2xl font-bold dark:text-white">Daftar Anggota</h2>
-                <button class="bg-primary hover:bg-primary-dark text-white px-4 py-2.5 rounded-xl font-medium" onclick="openModal('modal-anggota')">+ Tambah Anggota</button>
+                <div class="flex flex-col sm:flex-row w-full sm:w-auto gap-2">
+                    <div class="relative w-full sm:w-64">
+                        <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="search-anggota" placeholder="Cari anggota..." class="w-full pl-10 pr-4 py-2.5 sm:py-2 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:ring-2 focus:ring-primary focus:outline-none bg-white text-sm">
+                    </div>
+                    <button class="bg-primary hover:bg-primary-dark text-white px-4 py-2.5 sm:py-2 rounded-xl flex items-center justify-center gap-2 shadow-sm whitespace-nowrap admin-only font-medium w-full sm:w-auto transition-colors" onclick="openModal('modal-anggota')">
+                        <i class="ph ph-plus-circle text-lg"></i> <span>Tambah Anggota</span>
+                    </button>
+                </div>
             </div>
             <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-hidden relative">
-                <div class="overflow-x-auto w-full h-full"><table class="w-full text-left text-sm whitespace-nowrap min-w-[700px]"><thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 border-b border-gray-200 dark:border-gray-700"><tr><th class="p-4">ID</th><th class="p-4">Nama Lengkap</th><th class="p-4">No Rmh</th><th class="p-4 text-center">Status</th><th class="p-4 text-center">Aksi</th></tr></thead><tbody id="table-anggota" class="divide-y divide-gray-100 dark:divide-gray-800 bg-white dark:bg-darkcard"></tbody></table></div>
+                <div class="overflow-x-auto w-full h-full"><table class="w-full text-left text-sm whitespace-nowrap min-w-[700px]"><thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 border-b border-gray-200 dark:border-gray-700"><tr><th class="p-4">ID</th><th class="p-4">Nama Lengkap</th><th class="p-4">No Rmh</th><th class="p-4">Saldo</th><th class="p-4 text-center">Status</th><th class="p-4 text-center">Aksi</th></tr></thead><tbody id="table-anggota" class="divide-y divide-gray-100 dark:divide-gray-800 bg-white dark:bg-darkcard"></tbody></table></div>
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-transaksi">
+        <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <h2 class="text-2xl font-bold hidden lg:block dark:text-white">Riwayat Transaksi Umum</h2>
+                <button class="bg-primary hover:bg-primary-dark text-white px-4 py-2.5 sm:py-2 rounded-xl flex items-center gap-2 shadow-sm whitespace-nowrap admin-only w-full sm:w-auto justify-center font-medium transition-colors" onclick="openModal('modal-transaksi')">
+                    <i class="ph ph-plus-circle text-lg"></i> <span>Transaksi Baru</span>
+                </button>
+            </div>
+
+            <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-hidden flex flex-col min-w-0 w-full relative">
+                <div class="p-3 border-b border-gray-100 dark:border-gray-800 flex gap-2 overflow-x-auto hide-scroll w-full">
+                    <button class="px-4 py-1.5 rounded-full bg-primary text-white text-xs sm:text-sm font-medium whitespace-nowrap flex-shrink-0 transition-colors" onclick="filterTrx('Semua', this)">Semua Transaksi</button>
+                    <button class="px-4 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs sm:text-sm font-medium hover:bg-gray-200 whitespace-nowrap flex-shrink-0 transition-colors" onclick="filterTrx('Setoran', this)">Setoran Masuk</button>
+                    <button class="px-4 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs sm:text-sm font-medium hover:bg-gray-200 whitespace-nowrap flex-shrink-0 transition-colors" onclick="filterTrx('Penarikan', this)">Penarikan</button>
+                </div>
+                <div class="overflow-x-auto w-full flex-1">
+                    <table class="w-full text-left text-sm whitespace-nowrap min-w-[750px]">
+                        <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
+                            <tr>
+                                <th class="p-3 md:p-4 font-medium w-36">Waktu</th>
+                                <th class="p-3 md:p-4 font-medium">ID Trx</th>
+                                <th class="p-3 md:p-4 font-medium">Nama Anggota</th>
+                                <th class="p-3 md:p-4 font-medium">Jenis</th>
+                                <th class="p-3 md:p-4 font-medium">Nominal</th>
+                                <th class="p-3 md:p-4 font-medium w-48">Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-transaksi" class="divide-y divide-gray-100 dark:divide-gray-800 bg-white dark:bg-darkcard">
+                            <!-- Injected -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-laporan">
+        <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <h2 class="text-2xl font-bold hidden lg:block dark:text-white">Laporan Keuangan</h2>
+                <div class="flex gap-2 w-full sm:w-auto">
+                    <button onclick="exportLaporanPDF()" class="flex-1 sm:flex-none bg-danger hover:bg-red-700 text-white px-4 py-2.5 sm:py-2 rounded-xl flex items-center justify-center gap-2 shadow-sm font-medium transition"><i class="ph ph-file-pdf text-lg"></i> PDF</button>
+                    <button onclick="exportExcel()" class="flex-1 sm:flex-none bg-success hover:bg-green-700 text-white px-4 py-2.5 sm:py-2 rounded-xl flex items-center justify-center gap-2 shadow-sm font-medium transition"><i class="ph ph-file-xls text-lg"></i> Excel</button>
+                </div>
+            </div>
+            
+            <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row gap-4 sm:items-end">
+                <div class="w-full sm:w-56">
+                    <label class="block text-xs font-medium mb-1">Filter Periode Waktu</label>
+                    <select id="filter-waktu" class="w-full p-2.5 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-2 focus:ring-primary focus:outline-none" onchange="renderLaporanData()">
+                        <option value="Bulan Ini">Bulan Ini</option>
+                        <option value="Minggu Ini">Minggu Ini</option>
+                        <option value="Hari Ini">Hari Ini</option>
+                        <option value="Tahun Ini">Tahun Ini</option>
+                        <option value="Semua">Semua Waktu</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-3 w-full sm:flex-1">
+                    <div class="p-3 bg-success/10 border border-success/20 rounded-xl">
+                        <p class="text-[10px] text-success font-bold uppercase mb-0.5">Total Setoran</p>
+                        <p class="font-bold text-success text-lg md:text-xl truncate" id="lap-tot-setoran">Rp 0</p>
+                    </div>
+                    <div class="p-3 bg-danger/10 border border-danger/20 rounded-xl">
+                        <p class="text-[10px] text-danger font-bold uppercase mb-0.5">Total Penarikan</p>
+                        <p class="font-bold text-danger text-lg md:text-xl truncate" id="lap-tot-penarikan">Rp 0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-hidden flex flex-col min-w-0 w-full relative">
+                <div class="overflow-x-auto w-full flex-1">
+                    <table class="w-full text-left text-sm whitespace-nowrap min-w-[600px]">
+                        <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
+                            <tr>
+                                <th class="p-3 md:p-4 font-medium w-36">Tanggal</th>
+                                <th class="p-3 md:p-4 font-medium">Anggota</th>
+                                <th class="p-3 md:p-4 font-medium">Jenis Transaksi</th>
+                                <th class="p-3 md:p-4 font-medium text-right">Nominal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-laporan" class="divide-y divide-gray-100 dark:divide-gray-800 bg-white dark:bg-darkcard">
+                            <!-- Injected -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </template>
@@ -285,6 +380,15 @@
                         } else if (action === 'get_all_data') {
                             if(payload.role === 'user') resolve({success: true, data: { anggota: a.filter(x=>x['ID Anggota']===payload.userId), transaksi: t.filter(x=>x['ID Anggota']===payload.userId), logs:[] }});
                             else resolve({success: true, data: { anggota: a, transaksi: t, logs: l }});
+                        } else if (action === 'save_anggota') {
+                            let id = payload.id || payload.nama.toUpperCase().replace(/[^A-Z]/g, '') + '-' + payload.noRumah;
+                            if(!payload.id) { a.push({"ID Anggota": id, "Nama Lengkap": payload.nama, "No Rumah": payload.noRumah, "No HP": payload.noHp, "Status": payload.status, "Tanggal Dibuat": new Date().toISOString()}); } 
+                            else { let i = a.findIndex(x => x['ID Anggota'] === id); if(i>-1) { a[i]['Nama Lengkap']=payload.nama; a[i]['No Rumah']=payload.noRumah; a[i]['No HP']=payload.noHp; a[i]['Status']=payload.status; } }
+                            localStorage.setItem('mock_anggota', JSON.stringify(a)); resolve({success:true});
+                        } else if (action === 'save_transaksi') {
+                            let id = "TRX-" + new Date().toISOString().slice(0,10).replace(/-/g,'') + "-" + ("000"+(t.length+1)).slice(-4);
+                            t.push({"ID Transaksi": id, "Tanggal": new Date().toISOString(), "ID Anggota": payload.idAnggota, "Nama Anggota": payload.namaAnggota, "Jenis Transaksi": payload.jenis, "Nominal": payload.nominal, "Keterangan": payload.keterangan, "User Input": state.user ? state.user.username : 'Unknown'});
+                            localStorage.setItem('mock_transaksi', JSON.stringify(t)); resolve({success:true});
                         }
                     }, 400);
                 });
@@ -339,8 +443,12 @@
             const a = document.getElementById('content-area'); a.innerHTML = ''; const v = state.ui.currentView;
             if(v==='dashboard'){ a.appendChild(document.getElementById('tpl-dashboard').content.cloneNode(true)); renderDashboard(); }
             else if(v==='anggota'){ a.appendChild(document.getElementById('tpl-anggota').content.cloneNode(true)); renderAnggota(); }
+            else if(v==='transaksi'){ a.appendChild(document.getElementById('tpl-transaksi').content.cloneNode(true)); renderTransaksi(); }
+            else if(v==='laporan'){ a.appendChild(document.getElementById('tpl-laporan').content.cloneNode(true)); renderLaporanData(); }
             else if(v==='buku'){ a.appendChild(document.getElementById('tpl-buku').content.cloneNode(true)); setupBukuTabungan(); }
-            else { a.innerHTML = `<div class="p-6 text-center text-gray-500 mt-10">Tampilan ${v} dirender dengan Vanilla JS (Cek source murni).</div>`; }
+            else if(v==='aktivitas'){ renderAktivitas(a); }
+            else if(v==='pengaturan'){ renderPengaturan(a); }
+            else { a.innerHTML = `<div class="p-6 text-center text-gray-500 mt-10">Tampilan ${v} tidak ditemukan.</div>`; }
         }
 
         // --- DASHBOARD (Dinamis: User vs Admin) ---
@@ -369,19 +477,124 @@
                     <div class="bg-white p-4 rounded-2xl border"><p class="text-xs text-gray-500">Anggota</p><h3 class="text-xl font-bold">${state.data.anggota.length}</h3></div>
                     <div class="bg-white p-4 rounded-2xl border"><p class="text-xs text-gray-500">Total Saldo Kas</p><h3 class="text-xl font-bold text-primary">${formatRupiah(sal)}</h3></div>
                 `;
+                let ctx = document.getElementById('chartTransaksi');
+                if(ctx) {
+                    new Chart(ctx, { type: 'bar', data: { labels: ['Jan','Feb','Mar','Apr','Mei', new Date().toLocaleDateString('id-ID', { month:'short' })], datasets: [
+                        { label: 'Setoran', data: [0, 0, 0, 0, 0, st], backgroundColor: '#14B8A6' }, { label: 'Penarikan', data: [0, 0, 0, 0, 0, pt], backgroundColor: '#DC2626' }
+                    ]}, options: { responsive: true, maintainAspectRatio: false }});
+                }
+                document.getElementById('recent-activities').innerHTML = `<p class="text-sm text-gray-500">Berjalan normal. Sistem tersinkronisasi.</p>`;
             }
         }
 
-        // --- ANGGOTA (Only Admin) ---
+        // --- ANGGOTA ---
         function renderAnggota() {
-            const tb = document.getElementById('table-anggota'); tb.innerHTML = '';
-            state.data.anggota.forEach(a => {
-                tb.innerHTML += `<tr class="border-b border-gray-100">
-                    <td class="p-4 font-mono text-primary text-sm">${a['ID Anggota']}</td><td class="p-4 font-medium text-sm">${a['Nama Lengkap']}</td>
-                    <td class="p-4 text-sm">${a['No Rumah']}</td><td class="p-4 text-center"><span class="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-700">${a['Status']}</span></td>
-                    <td class="p-4 text-center"><button class="text-blue-500 hover:bg-blue-50 p-2 rounded-lg">Info</button></td></tr>`;
+            const tb = document.getElementById('table-anggota');
+            const renderTb = (f='') => {
+                tb.innerHTML = '';
+                let d = state.data.anggota.filter(a => (a['Nama Lengkap']+a['ID Anggota']+a['No Rumah']).toLowerCase().includes(f.toLowerCase()));
+                if(d.length===0) tb.innerHTML=`<tr><td colspan="6" class="p-8 text-center text-gray-500">Data tidak ditemukan</td></tr>`;
+                d.forEach(a => {
+                    let sld = calculateSaldo(a['ID Anggota']);
+                    let stat = a['Status'] === 'Aktif' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
+                    tb.innerHTML += `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-50 dark:border-gray-800/50">
+                        <td class="p-3 md:p-4 font-mono text-primary text-xs md:text-sm">${a['ID Anggota']}</td><td class="p-3 md:p-4 font-medium">${a['Nama Lengkap']}</td>
+                        <td class="p-3 md:p-4 text-center">${a['No Rumah']}</td>
+                        <td class="p-3 md:p-4 font-bold text-gray-700 dark:text-gray-200">${formatRupiah(sld)}</td>
+                        <td class="p-3 md:p-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] md:text-xs font-bold uppercase ${stat}">${a['Status']}</span></td>
+                        <td class="p-3 md:p-4 text-center">
+                            <button onclick="showDetailAnggota('${a['ID Anggota']}')" class="text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-lg text-xs font-bold inline-flex items-center gap-1 transition-colors"><i class="ph ph-info text-base"></i> Info</button>
+                        </td></tr>`;
+                });
+            };
+            renderTb();
+            document.getElementById('search-anggota').addEventListener('input', e => renderTb(e.target.value));
+        }
+
+        // --- TRANSAKSI ---
+        function renderTransaksi(filter = 'Semua') {
+            const tb = document.getElementById('table-transaksi'); if(!tb) return; tb.innerHTML = '';
+            let d = state.data.transaksi; if(filter!=='Semua') d = d.filter(t=>t['Jenis Transaksi']===filter);
+            d.sort((a,b)=>new Date(b['Tanggal'])-new Date(a['Tanggal']));
+            if(d.length===0) tb.innerHTML=`<tr><td colspan="6" class="p-8 text-center text-gray-500">Belum ada transaksi</td></tr>`;
+            d.forEach(t => {
+                let c = t['Jenis Transaksi']==='Setoran' ? 'text-success' : 'text-danger';
+                let ic = t['Jenis Transaksi']==='Setoran' ? 'ph-arrow-down-left' : 'ph-arrow-up-right';
+                tb.innerHTML += `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-50 dark:border-gray-800/50">
+                    <td class="p-3 md:p-4 text-gray-500 text-xs">${formatDateTime(t['Tanggal'])}</td><td class="p-3 md:p-4 font-mono text-[10px] md:text-xs">${t['ID Transaksi']}</td>
+                    <td class="p-3 md:p-4 font-medium">${t['Nama Anggota']}</td><td class="p-3 md:p-4"><span class="flex items-center gap-1 text-xs font-bold ${c}"><i class="ph ${ic}"></i> ${t['Jenis Transaksi']}</span></td>
+                    <td class="p-3 md:p-4 font-bold ${c}">${formatRupiah(t['Nominal'])}</td><td class="p-3 md:p-4 text-xs text-gray-500 max-w-xs truncate">${t['Keterangan']}</td></tr>`;
             });
         }
+        window.filterTrx = (val, btn) => {
+            document.querySelectorAll('#content-area button').forEach(b => { if(b.innerText.includes('Semua')||b.innerText.includes('Setoran')||b.innerText.includes('Penarikan')) b.className = 'px-4 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs sm:text-sm font-medium hover:bg-gray-200 whitespace-nowrap flex-shrink-0 transition-colors'; });
+            btn.className = 'px-4 py-1.5 rounded-full bg-primary text-white text-xs sm:text-sm font-medium whitespace-nowrap flex-shrink-0 transition-colors';
+            renderTransaksi(val);
+        };
+
+        // --- LAPORAN KEUANGAN ---
+        window.renderLaporanData = () => {
+            const filter = document.getElementById('filter-waktu').value;
+            const tb = document.getElementById('table-laporan');
+            tb.innerHTML = '';
+            let tSetoran = 0, tPenarikan = 0;
+            
+            let filtered = state.data.transaksi.filter(t => {
+                let d = new Date(t['Tanggal']), now = new Date();
+                if (filter === 'Hari Ini') return d.toDateString() === now.toDateString();
+                if (filter === 'Minggu Ini') { let fd = new Date(now.setDate(now.getDate() - now.getDay())); return d >= fd; }
+                if (filter === 'Bulan Ini') return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+                if (filter === 'Tahun Ini') return d.getFullYear() === now.getFullYear();
+                return true; 
+            });
+
+            filtered.sort((a,b)=>new Date(b['Tanggal'])-new Date(a['Tanggal']));
+            if(filtered.length === 0) tb.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-gray-500">Tidak ada transaksi pada periode ini</td></tr>`;
+
+            filtered.forEach(t => {
+                let isS = t['Jenis Transaksi'] === 'Setoran';
+                if(isS) tSetoran += Number(t['Nominal']); else tPenarikan += Number(t['Nominal']);
+                let c = isS ? 'text-success' : 'text-danger';
+                tb.innerHTML += `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-50 dark:border-gray-800/50">
+                    <td class="p-3 md:p-4 text-xs text-gray-500">${formatDateTime(t['Tanggal'])}</td>
+                    <td class="p-3 md:p-4 font-medium">${t['Nama Anggota']}</td>
+                    <td class="p-3 md:p-4 text-xs font-bold ${c}">${t['Jenis Transaksi']}</td>
+                    <td class="p-3 md:p-4 font-bold text-right ${c}">${formatRupiah(t['Nominal'])}</td>
+                </tr>`;
+            });
+            document.getElementById('lap-tot-setoran').innerText = formatRupiah(tSetoran);
+            document.getElementById('lap-tot-penarikan').innerText = formatRupiah(tPenarikan);
+        };
+
+        window.exportLaporanPDF = function() {
+            const div = document.createElement('div');
+            div.style.padding = '20px'; div.style.background = 'white'; div.style.color = 'black';
+            let setoran = document.getElementById('lap-tot-setoran').innerText, penarikan = document.getElementById('lap-tot-penarikan').innerText, filter = document.getElementById('filter-waktu').value;
+            div.innerHTML = `
+                <h2 style="text-align:center; font-family:sans-serif; margin-bottom: 5px;">LAPORAN TABUNGAN IBU-IBU RT</h2>
+                <p style="text-align:center; font-family:sans-serif; color:#666; margin-bottom: 20px;">Periode: ${filter} | Tanggal Cetak: ${formatDateTime(new Date())}</p>
+                <table style="width:100%; border-collapse:collapse; font-family:sans-serif; margin-bottom:20px;">
+                    <tr>
+                        <td style="border:1px solid #ccc; padding:10px; text-align:center;"><b>Total Setoran:</b><br><span style="color:green; font-size:16px;">${setoran}</span></td>
+                        <td style="border:1px solid #ccc; padding:10px; text-align:center;"><b>Total Penarikan:</b><br><span style="color:red; font-size:16px;">${penarikan}</span></td>
+                    </tr>
+                </table>
+                <h3 style="font-family:sans-serif; font-size:14px;">Rekap Saldo Seluruh Anggota</h3>
+                <table style="width:100%; border-collapse:collapse; font-family:sans-serif; font-size:12px;">
+                    <tr style="background:#eee;"><th style="border:1px solid #ccc; padding:8px;">ID Anggota</th><th style="border:1px solid #ccc; padding:8px;">Nama Lengkap</th><th style="border:1px solid #ccc; padding:8px;">Saldo Akhir</th></tr>
+                    ${state.data.anggota.map(a => `<tr><td style="border:1px solid #ccc; padding:8px;">${a['ID Anggota']}</td><td style="border:1px solid #ccc; padding:8px;">${a['Nama Lengkap']}</td><td style="border:1px solid #ccc; padding:8px; text-align:right;">${formatRupiah(calculateSaldo(a['ID Anggota']))}</td></tr>`).join('')}
+                </table>
+            `;
+            html2pdf().set({ margin: 10, filename: `Laporan_${new Date().getTime()}.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(div).save();
+        };
+
+        window.exportExcel = function() {
+            const wb = XLSX.utils.book_new();
+            const agt = state.data.anggota.map(a => ({ ...a, "Saldo Akhir": calculateSaldo(a['ID Anggota']) }));
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(agt), "Anggota");
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(state.data.transaksi), "Transaksi");
+            XLSX.writeFile(wb, `Tabungan_RT_${new Date().toISOString().slice(0,10)}.xlsx`); showToast("Excel berhasil diunduh");
+        };
 
         // --- BUKU TABUNGAN ---
         function setupBukuTabungan() {
@@ -410,11 +623,154 @@
             let sld = 0;
             if(trx.length===0) tb.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-gray-500 italic">Belum ada mutasi</td></tr>`;
             else trx.forEach(t => { let isS = t['Jenis Transaksi']==='Setoran'; let n = Number(t['Nominal']); sld += isS?n:-n;
-                tb.innerHTML+=`<tr class="border-b border-gray-100">
-                    <td class="p-3 text-xs text-gray-600">${formatDateTime(t['Tanggal'])}</td>
+                tb.innerHTML+=`<tr class="border-b border-gray-100 dark:border-gray-800">
+                    <td class="p-3 text-xs text-gray-600 dark:text-gray-400">${formatDateTime(t['Tanggal'])}</td>
                     <td class="p-3"><span class="text-[10px] font-bold uppercase ${isS?'text-success':'text-danger'}">${t['Jenis Transaksi']}</span><br><span class="text-xs truncate block">${t['Keterangan']}</span></td>
-                    <td class="p-3 text-right text-success text-sm">${isS?formatRupiah(n):'-'}</td><td class="p-3 text-right text-danger text-sm">${!isS?formatRupiah(n):'-'}</td><td class="p-3 text-right font-bold text-sm bg-gray-50">${formatRupiah(sld)}</td></tr>`;
+                    <td class="p-3 text-right text-success text-sm">${isS?formatRupiah(n):'-'}</td><td class="p-3 text-right text-danger text-sm">${!isS?formatRupiah(n):'-'}</td><td class="p-3 text-right font-bold text-sm bg-gray-50 dark:bg-gray-800/30">${formatRupiah(sld)}</td></tr>`;
             });
+        };
+
+        window.cetakBukuTabunganPDF = function() {
+            const el = document.getElementById('passbook-area');
+            html2pdf().set({ margin: 10, filename: `Buku_Tabungan.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(el).save();
+        };
+
+        // --- AKTIVITAS & PENGATURAN ---
+        function renderAktivitas(c){ c.innerHTML = `<div class="p-4 md:p-6 bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"><h3 class="font-bold mb-4">Log Aktivitas</h3><p class="text-sm text-gray-500">Tidak ada log tercatat untuk sesi ini.</p></div>`; }
+        function renderPengaturan(c){ 
+            c.innerHTML = `
+            <div class="space-y-4 max-w-xl">
+                <h2 class="text-2xl font-bold dark:text-white mb-4">Pengaturan Sistem</h2>
+                <div class="p-4 md:p-6 bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+                    <h3 class="font-bold text-primary flex items-center gap-2 mb-2"><i class="ph ph-database text-lg"></i> Integrasi Database</h3>
+                    <p class="text-xs text-gray-500 mb-4">Masukkan URL Google Apps Script Web App untuk menghubungkan dengan Google Sheets.</p>
+                    <input type="text" id="setting-gas" class="w-full p-3 rounded-xl border dark:border-gray-700 dark:bg-gray-900 focus:ring-primary focus:outline-none text-sm mb-4" placeholder="https://script.google.com/macros/s/..." value="${state.settings.gasUrl}">
+                    <button onclick="saveSettings()" class="w-full py-2.5 bg-primary text-white rounded-xl font-medium shadow-sm transition">Simpan Pengaturan</button>
+                </div>
+            </div>`; 
+        }
+        window.saveSettings = function() {
+            const url = document.getElementById('setting-gas').value.trim();
+            state.settings.gasUrl = url; localStorage.setItem('gasUrl', url);
+            showToast("Pengaturan disimpan. Memuat ulang..."); loadData();
+        };
+
+        // --- INFO & RIWAYAT ANGGOTA ---
+        window.showDetailAnggota = function(id) {
+            const a = state.data.anggota.find(x => x['ID Anggota'] === id);
+            const saldo = calculateSaldo(id);
+            let trx = state.data.transaksi.filter(t => t['ID Anggota'] === id).sort((x,y)=>new Date(y['Tanggal'])-new Date(x['Tanggal']));
+
+            let trHtml = '';
+            if(trx.length === 0) trHtml = `<tr><td colspan="3" class="p-6 text-center text-gray-500 text-sm italic">Belum ada mutasi transaksi</td></tr>`;
+            trx.forEach(t => {
+                 let isS = t['Jenis Transaksi'] === 'Setoran';
+                 let c = isS ? 'text-success' : 'text-danger';
+                 let icon = isS ? 'ph-arrow-down-left' : 'ph-arrow-up-right';
+                 trHtml += `<tr class="border-b border-gray-100 dark:border-gray-800 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                    <td class="p-3 text-xs text-gray-500">${formatDateTime(t['Tanggal'])}<br><span class="text-gray-800 dark:text-gray-200 font-medium truncate max-w-[120px] block mt-0.5">${t['Keterangan']}</span></td>
+                    <td class="p-3 text-xs font-bold ${c}"><i class="ph ${icon}"></i> ${t['Jenis Transaksi']}</td>
+                    <td class="p-3 text-sm font-bold text-right ${c}">${formatRupiah(t['Nominal'])}</td>
+                 </tr>`;
+            });
+
+            const content = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-lg modal-animate overflow-hidden max-h-[90dvh] flex flex-col shadow-2xl">
+                    <div class="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
+                        <h3 class="font-bold flex items-center gap-2"><i class="ph ph-user text-primary text-xl"></i> Profil & Riwayat</h3>
+                        <button onclick="closeAllModals()"><i class="ph ph-x text-lg"></i></button>
+                    </div>
+                    
+                    <div class="overflow-y-auto p-0 hide-scroll flex-1">
+                        <div class="p-5 bg-gradient-to-br from-primary to-primary-dark text-white">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h2 class="text-xl font-bold mb-1">${a['Nama Lengkap']}</h2>
+                                    <p class="text-white/80 text-xs font-mono">${a['ID Anggota']} • HP: ${a['No HP'] || '-'}</p>
+                                    <p class="text-white/80 text-xs font-mono">Rumah No. ${a['No Rumah']}</p>
+                                </div>
+                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${a['Status'] === 'Aktif' ? 'bg-white/20' : 'bg-red-500/50'}">${a['Status']}</span>
+                            </div>
+                            <div class="bg-white/10 p-3 rounded-xl backdrop-blur-sm border border-white/20 flex justify-between items-center">
+                                <p class="text-white/80 text-[10px] uppercase font-bold">Total Saldo</p>
+                                <p class="text-2xl font-bold">${formatRupiah(saldo)}</p>
+                            </div>
+                        </div>
+
+                        <div class="p-0">
+                            <h4 class="font-bold p-4 pb-2 text-sm bg-gray-50 dark:bg-darkcard sticky top-0 border-b border-gray-100 dark:border-gray-800">Riwayat Mutasi Terakhir</h4>
+                            <table class="w-full text-left">
+                                <tbody>${trHtml}</tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-darkcard flex gap-2 admin-only" style="display:${state.user.role==='admin'?'':'none'}">
+                        <button onclick="editAnggota('${a['ID Anggota']}')" class="w-full py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 font-medium text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center gap-2 transition-colors"><i class="ph ph-pencil-simple text-lg text-primary"></i> Edit Data Anggota</button>
+                    </div>
+                </div>
+            </div>`;
+            document.getElementById('modals').innerHTML = content;
+        }
+
+        // --- MODALS (Tambah/Edit/Transaksi) ---
+        window.openModal = function(id) {
+            const con = document.getElementById('modals'); let content = '';
+            if(id === 'modal-anggota') {
+                content = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-md modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
+                        <div class="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
+                            <h3 class="font-bold" id="m-anggota-title">Tambah Anggota</h3>
+                            <button onclick="closeAllModals()"><i class="ph ph-x text-lg"></i></button>
+                        </div>
+                        <div class="overflow-y-auto p-4 md:p-6 hide-scroll">
+                            <form class="space-y-4" onsubmit="submitAnggota(event)">
+                                <input type="hidden" id="f-a-id">
+                                <div><label class="block text-xs font-medium mb-1">Nama Lengkap</label><input type="text" id="f-a-nama" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none" required></div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div><label class="block text-xs font-medium mb-1">No Rmh</label><input type="text" id="f-a-norumah" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none" required></div>
+                                    <div><label class="block text-xs font-medium mb-1">No HP</label><input type="text" id="f-a-nohp" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none"></div>
+                                </div>
+                                <div id="div-status" class="hidden"><label class="block text-xs font-medium mb-1">Status</label>
+                                    <select id="f-a-status" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none"><option value="Aktif">Aktif</option><option value="Nonaktif">Nonaktif</option></select>
+                                </div>
+                                <div class="pt-2"><button type="submit" class="w-full py-3 rounded-xl bg-primary text-white font-medium text-sm">Simpan Data</button></div>
+                            </form>
+                        </div>
+                    </div></div>`;
+            } else if (id === 'modal-transaksi') {
+                let opts = `<option value="">-- Pilih Anggota --</option>`; state.data.anggota.forEach(a => opts += `<option value="${a['ID Anggota']}">${a['ID Anggota']} - ${a['Nama Lengkap']}</option>`);
+                content = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-md modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
+                        <div class="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
+                            <h3 class="font-bold">Transaksi Baru</h3><button onclick="closeAllModals()"><i class="ph ph-x text-lg"></i></button>
+                        </div>
+                        <div class="overflow-y-auto p-4 md:p-6 hide-scroll">
+                            <form class="space-y-4" onsubmit="submitTransaksi(event)">
+                                <div class="flex p-1 bg-gray-100 dark:bg-gray-800 rounded-xl">
+                                    <label class="flex-1 text-center"><input type="radio" name="f-t-jenis" value="Setoran" class="peer sr-only" checked><div class="py-2 rounded-lg text-sm font-medium peer-checked:bg-white peer-checked:text-success shadow-sm">Uang Masuk</div></label>
+                                    <label class="flex-1 text-center"><input type="radio" name="f-t-jenis" value="Penarikan" class="peer sr-only"><div class="py-2 rounded-lg text-sm font-medium peer-checked:bg-white peer-checked:text-danger shadow-sm">Uang Keluar</div></label>
+                                </div>
+                                <div><label class="block text-xs font-medium mb-1">Anggota</label><select id="f-t-anggota" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none" required>${opts}</select></div>
+                                <div><label class="block text-xs font-medium mb-1">Nominal (Rp)</label><input type="number" id="f-t-nominal" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 font-bold text-lg text-right focus:ring-primary focus:outline-none" required></div>
+                                <div><label class="block text-xs font-medium mb-1">Keterangan</label><input type="text" id="f-t-ket" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none" placeholder="Cth: Iuran Juli"></div>
+                                <div class="pt-2"><button type="submit" class="w-full py-3 rounded-xl bg-primary text-white font-medium text-sm">Proses Transaksi</button></div>
+                            </form>
+                        </div>
+                    </div></div>`;
+            }
+            con.innerHTML = content;
+        }
+        window.closeAllModals = () => document.getElementById('modals').innerHTML = '';
+
+        window.submitAnggota = async (e) => { e.preventDefault(); await fetchAPI('save_anggota', { id: document.getElementById('f-a-id').value, nama: document.getElementById('f-a-nama').value, noRumah: document.getElementById('f-a-norumah').value, noHp: document.getElementById('f-a-nohp').value, status: document.getElementById('f-a-status')?document.getElementById('f-a-status').value:'Aktif' }); showToast("Berhasil tersimpan"); closeAllModals(); loadData(); };
+        window.submitTransaksi = async (e) => { e.preventDefault(); let idA = document.getElementById('f-t-anggota').value; await fetchAPI('save_transaksi', { idAnggota: idA, namaAnggota: state.data.anggota.find(a=>a['ID Anggota']===idA)['Nama Lengkap'], jenis: document.querySelector('input[name="f-t-jenis"]:checked').value, nominal: Number(document.getElementById('f-t-nominal').value), keterangan: document.getElementById('f-t-ket').value }); showToast("Transaksi Berhasil"); closeAllModals(); loadData(); };
+        
+        window.editAnggota = (id) => { 
+            const a = state.data.anggota.find(x => x['ID Anggota'] === id);
+            openModal('modal-anggota'); 
+            document.getElementById('m-anggota-title').innerText='Edit Anggota'; 
+            document.getElementById('f-a-id').value=a['ID Anggota']; document.getElementById('f-a-nama').value=a['Nama Lengkap']; document.getElementById('f-a-norumah').value=a['No Rumah']; document.getElementById('f-a-nohp').value=a['No HP']; document.getElementById('div-status').classList.remove('hidden'); document.getElementById('f-a-status').value=a['Status']; 
         };
 
         window.toggleTheme = () => { let h = document.documentElement; h.classList.toggle('dark'); localStorage.setItem('theme', h.classList.contains('dark')?'dark':'light'); };
