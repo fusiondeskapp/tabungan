@@ -41,7 +41,6 @@
     @keyframes slideInDown { from { transform:translateY(-100%); opacity:0; } to { transform:translateY(0); opacity:1; } }
     .hide-scroll::-webkit-scrollbar { display:none; }
     .hide-scroll { -ms-overflow-style:none; scrollbar-width:none; }
-    body[data-role="user"] .admin-only { display:none !important; }
     .profile-avatar-img { object-fit:cover; }
   </style>
 </head>
@@ -90,16 +89,16 @@
           <span id="role-badge" class="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold uppercase tracking-wide">Admin</span>
         </div>
       </div>
-      <nav class="flex-1 px-4 space-y-1 overflow-y-auto hide-scroll pb-4">
+      <nav class="flex-1 px-4 space-y-1 overflow-y-auto hide-scroll pb-4" id="desktop-nav">
         <button class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-primary bg-primary/10 font-medium" data-target="dashboard"><i class="ph ph-squares-four text-xl"></i> Dashboard</button>
-        <button class="nav-btn admin-only w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium" data-target="warga"><i class="ph ph-identification-badge text-xl"></i> Warga</button>
-        <button class="nav-btn admin-only w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium" data-target="transaksi"><i class="ph ph-arrows-left-right text-xl"></i> Transaksi</button>
-        <div class="h-px bg-gray-100 dark:bg-gray-800 my-2 admin-only"></div>
-        <button class="nav-btn admin-only w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium" data-target="pembayaran"><i class="ph ph-credit-card text-xl"></i> Pembayaran</button>
-        <button class="nav-btn admin-only w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium" data-target="kas"><i class="ph ph-book-open text-xl"></i> Buku Kas</button>
+        <button class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium" data-target="warga"><i class="ph ph-identification-badge text-xl"></i> Warga</button>
+        <button class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium" data-target="transaksi"><i class="ph ph-arrows-left-right text-xl"></i> Transaksi</button>
+        <div class="h-px bg-gray-100 dark:bg-gray-800 my-2"></div>
+        <button class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium" data-target="pembayaran"><i class="ph ph-credit-card text-xl"></i> Pembayaran</button>
+        <button class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium" data-target="kas"><i class="ph ph-book-open text-xl"></i> Buku Kas</button>
         <div class="h-px bg-gray-100 dark:bg-gray-800 my-2"></div>
         <button class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium" data-target="buku"><i class="ph ph-book-bookmark text-xl"></i> Buku Tabungan</button>
-        <button class="nav-btn admin-only w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium" data-target="pengaturan"><i class="ph ph-gear text-xl"></i> Pengaturan</button>
+        <button class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium" data-target="pengaturan"><i class="ph ph-gear text-xl"></i> Pengaturan</button>
       </nav>
     </aside>
 
@@ -111,14 +110,14 @@
           <h1 class="font-bold text-lg dark:text-white truncate" id="mobile-header-title">Dashboard</h1>
         </div>
         <div class="flex gap-1 flex-shrink-0">
-          <button onclick="navigate('pengaturan')" class="p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors admin-only"><i class="ph ph-gear text-xl"></i></button>
+          <button onclick="navigate('pengaturan')" class="p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"><i class="ph ph-gear text-xl"></i></button>
           <button onclick="toggleTheme()" class="p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"><i class="ph ph-moon text-xl dark:hidden"></i><i class="ph ph-sun text-xl hidden dark:inline-block"></i></button>
           <button onclick="handleLogout()" class="p-2 text-danger hover:bg-red-50 dark:hover:bg-red-900/30 rounded-full transition-colors"><i class="ph ph-sign-out text-xl"></i></button>
         </div>
       </header>
 
       <div class="hidden lg:flex justify-end px-8 pt-6 pb-2 w-full flex-shrink-0 gap-2">
-        <button onclick="navigate('pengaturan')" class="p-2.5 bg-white dark:bg-darkcard text-gray-500 shadow-sm border border-gray-100 dark:border-gray-700 rounded-full hover:text-primary transition-colors admin-only"><i class="ph ph-gear text-[22px]"></i></button>
+        <button onclick="navigate('pengaturan')" class="p-2.5 bg-white dark:bg-darkcard text-gray-500 shadow-sm border border-gray-100 dark:border-gray-700 rounded-full hover:text-primary transition-colors"><i class="ph ph-gear text-[22px]"></i></button>
         <button onclick="toggleTheme()" class="p-2.5 bg-white dark:bg-darkcard text-gray-500 shadow-sm border border-gray-100 dark:border-gray-700 rounded-full hover:text-primary transition-colors"><i class="ph ph-moon text-[22px] dark:hidden"></i><i class="ph ph-sun text-[22px] hidden dark:inline-block"></i></button>
         <button onclick="handleLogout()" class="p-2.5 bg-white dark:bg-darkcard text-danger shadow-sm border border-gray-100 dark:border-gray-700 rounded-full hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"><i class="ph ph-sign-out text-[22px]"></i></button>
       </div>
@@ -128,12 +127,12 @@
 
     <!-- Bottom Navigation Mobile -->
     <nav class="lg:hidden fixed bottom-0 left-0 right-0 w-full glass-nav border-t border-gray-200 dark:border-gray-700 z-30 shadow-[0_-5px_15px_-5px_rgba(0,0,0,0.1)] pb-safe">
-      <div class="flex justify-around items-center p-1.5 px-1">
+      <div class="flex justify-around items-center p-1.5 px-1" id="mobile-nav">
         <button class="nav-btn-mobile flex flex-col items-center justify-center p-2 text-primary flex-1 min-w-0" data-target="dashboard"><i class="ph ph-squares-four text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Home</span></button>
-        <button class="nav-btn-mobile admin-only flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0" data-target="warga"><i class="ph ph-identification-badge text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Warga</span></button>
-        <button class="nav-btn-mobile admin-only flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0" data-target="transaksi"><i class="ph ph-arrows-left-right text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Trx</span></button>
+        <button class="nav-btn-mobile flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0" data-target="warga"><i class="ph ph-identification-badge text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Warga</span></button>
+        <button class="nav-btn-mobile flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0" data-target="transaksi"><i class="ph ph-arrows-left-right text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Trx</span></button>
         <button class="nav-btn-mobile flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0" data-target="buku"><i class="ph ph-book-bookmark text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Buku</span></button>
-        <button class="nav-btn-mobile admin-only flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0" data-target="kas"><i class="ph ph-book-open text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Kas</span></button>
+        <button class="nav-btn-mobile flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0" data-target="kas"><i class="ph ph-book-open text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Kas</span></button>
       </div>
     </nav>
   </div>
@@ -154,7 +153,7 @@
   <div class="space-y-4 md:space-y-6 animate-fade-in w-full">
     <h2 class="text-2xl font-bold hidden lg:block dark:text-white" id="dash-title">Dashboard</h2>
     <div id="profile-card" class="hidden"></div>
-    <div id="admin-container" class="admin-only space-y-4 md:space-y-6">
+    <div id="admin-container" class="space-y-4 md:space-y-6" style="display:none;">
       <div id="dashboard-stats" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 w-full"></div>
       <div id="admin-charts" class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mt-4 w-full">
         <div class="bg-white dark:bg-darkcard p-4 md:p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 w-full min-w-0">
@@ -174,9 +173,7 @@
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
       <h2 class="text-2xl font-bold dark:text-white">Data Warga</h2>
-      <button class="admin-only bg-primary hover:bg-primary-dark text-white px-4 py-2.5 rounded-xl flex items-center gap-2" onclick="window.ekas.warga.openModal()">
-        <i class="ph ph-plus-circle text-lg"></i> Tambah Warga
-      </button>
+      <span id="warga-add-btn"></span>
     </div>
     <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-hidden relative w-full">
       <div class="overflow-x-auto w-full h-full">
@@ -184,7 +181,7 @@
           <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
             <tr>
               <th class="p-4">ID</th><th class="p-4">Suami</th><th class="p-4">Istri</th><th class="p-4">Rumah</th>
-              <th class="p-4">Iuran/Arisan</th><th class="p-4">Saldo Tabungan</th><th class="p-4 admin-only text-center">Aksi</th>
+              <th class="p-4">Iuran/Arisan</th><th class="p-4">Saldo Tabungan</th><th class="p-4 text-center">Aksi</th>
             </tr>
           </thead>
           <tbody id="table-warga" class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
@@ -198,9 +195,7 @@
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
       <h2 class="text-2xl font-bold dark:text-white">Riwayat Transaksi</h2>
-      <button class="bg-primary hover:bg-primary-dark text-white px-4 py-2.5 sm:py-2 rounded-xl flex items-center gap-2 shadow-sm whitespace-nowrap w-full sm:w-auto justify-center font-medium transition-colors" onclick="openModal('modal-transaksi')">
-        <i class="ph ph-plus-circle text-lg"></i> <span>Transaksi Baru</span>
-      </button>
+      <span id="trx-add-btn"></span>
     </div>
     <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-hidden flex flex-col min-w-0 w-full relative">
       <div class="p-3 border-b border-gray-100 dark:border-gray-800 flex gap-2 overflow-x-auto hide-scroll w-full">
@@ -242,7 +237,7 @@
             <div class="flex justify-between text-sm text-gray-700 dark:text-gray-300"><span>Biaya Tambahan</span> <span id="pay-tambahan-val" class="font-medium text-warning">Rp0</span></div>
             <div class="border-t border-blue-200 dark:border-blue-800 pt-3 flex justify-between font-bold text-xl text-primary"><span>TOTAL</span> <span id="pay-total-val">Rp0</span></div>
           </div>
-          <button type="submit" id="btn-save-pay" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl transition-all shadow-md admin-only disabled:opacity-50 mt-2">Simpan Pembayaran</button>
+          <button type="submit" id="btn-save-pay" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl transition-all shadow-md disabled:opacity-50 mt-2">Simpan Pembayaran</button>
         </form>
       </div>
       <div class="lg:col-span-2 bg-white dark:bg-darkcard rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden flex flex-col h-fit">
@@ -250,7 +245,7 @@
         <div class="overflow-x-auto">
           <table class="w-full text-left text-sm whitespace-nowrap">
             <thead class="border-b border-gray-200 dark:border-gray-800 text-gray-500 bg-gray-50/50 dark:bg-gray-900/20">
-              <tr><th class="px-5 py-4">Warga</th><th class="px-5 py-4">Periode</th><th class="px-5 py-4">Rincian</th><th class="px-5 py-4">Total</th><th class="px-5 py-4 admin-only text-right">Aksi</th></tr>
+              <tr><th class="px-5 py-4">Warga</th><th class="px-5 py-4">Periode</th><th class="px-5 py-4">Rincian</th><th class="px-5 py-4">Total</th><th class="px-5 py-4 text-right">Aksi</th></tr>
             </thead>
             <tbody id="table-pembayaran" class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
           </table>
@@ -264,11 +259,7 @@
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
       <h2 class="text-2xl font-bold dark:text-white">Buku Kas</h2>
-      <div class="flex gap-2 sm:gap-3">
-        <button onclick="window.ekas.kas.openModal('Pemasukan')" class="bg-success hover:bg-green-700 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-medium flex items-center shadow-md transition-colors"><i class="ph ph-plus-circle text-lg sm:mr-2"></i> <span class="hidden sm:block">Pemasukan</span></button>
-        <button onclick="window.ekas.kas.openModal('Pengeluaran')" class="bg-danger hover:bg-red-700 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-medium flex items-center shadow-md transition-colors"><i class="ph ph-minus-circle text-lg sm:mr-2"></i> <span class="hidden sm:block">Pengeluaran</span></button>
-        <button onclick="window.ekas.kas.cetakPDF()" class="bg-gray-800 hover:bg-gray-900 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-medium flex items-center shadow-md transition-colors"><i class="ph ph-printer text-lg sm:mr-2"></i> <span class="hidden sm:block">Cetak</span></button>
-      </div>
+      <div class="flex gap-2 sm:gap-3" id="kas-action-btns"></div>
     </div>
     <div class="flex gap-2 items-end bg-white dark:bg-darkcard p-3 rounded-xl border">
       <div><label class="text-xs font-medium">Dari</label><input type="date" id="kas-dari" class="w-full p-2 rounded-lg border dark:bg-gray-800 text-sm" onchange="window.ekas.kas.render()"></div>
@@ -279,7 +270,7 @@
       <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-x-auto">
         <table class="w-full text-left text-sm whitespace-nowrap">
           <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 border-b border-gray-200 dark:border-gray-700">
-            <tr><th class="px-6 py-4">Tanggal</th><th class="px-6 py-4">Kategori</th><th class="px-6 py-4">Keterangan</th><th class="px-6 py-4 text-right">Nominal</th><th class="px-6 py-4 admin-only text-right">Aksi</th></tr>
+            <tr><th class="px-6 py-4">Tanggal</th><th class="px-6 py-4">Kategori</th><th class="px-6 py-4">Keterangan</th><th class="px-6 py-4 text-right">Nominal</th><th class="px-6 py-4 text-right">Aksi</th></tr>
           </thead>
           <tbody id="table-kas" class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
         </table>
@@ -304,12 +295,12 @@
       <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden flex flex-col h-fit">
         <div class="p-5 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
           <h3 class="font-bold text-lg flex items-center"><i class="ph ph-receipt text-warning text-xl mr-2"></i> Biaya Tambahan</h3>
-          <button onclick="window.ekas.biaya.openModal()" class="admin-only bg-warning hover:bg-amber-600 text-white p-2 rounded-lg font-medium shadow-sm transition-colors"><i class="ph ph-plus text-lg"></i></button>
+          <span id="biaya-add-btn"></span>
         </div>
         <div class="overflow-x-auto max-h-[400px] overflow-y-auto">
           <table class="w-full text-left text-sm whitespace-nowrap">
             <thead class="bg-gray-50/50 dark:bg-gray-900/20 text-gray-500 sticky top-0 backdrop-blur-md">
-              <tr><th class="px-5 py-3">Warga</th><th class="px-5 py-3">Nama Biaya</th><th class="px-5 py-3 text-right">Nominal</th><th class="px-5 py-3 admin-only text-right">Aksi</th></tr>
+              <tr><th class="px-5 py-3">Warga</th><th class="px-5 py-3">Nama Biaya</th><th class="px-5 py-3 text-right">Nominal</th><th class="px-5 py-3 text-right">Aksi</th></tr>
             </thead>
             <tbody id="table-biaya" class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
           </table>
@@ -363,7 +354,33 @@
 <!-- JS LOGIC -->
 <script>
   const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbxcuUe9qO2PyallWSn7vu2UiiKTnMqirKbocdI_VI8uWnYyjYYvRsv_DUpGIV2GSWiuqQ/exec';
-  const ADMIN_VIEWS = new Set(['warga','transaksi','pembayaran','kas','pengaturan']);
+  
+  // --- ROLE PERMISSIONS ---
+  const ROLE_PERMISSIONS = {
+    dashboard: ['superadmin', 'admin_istri', 'admin_suami', 'user'],
+    warga: ['superadmin', 'admin_istri', 'admin_suami'],
+    transaksi: ['superadmin', 'admin_istri'],
+    pembayaran: ['superadmin', 'admin_suami'],
+    kas: ['superadmin', 'admin_istri', 'admin_suami', 'user'],
+    buku: ['superadmin', 'admin_istri', 'admin_suami', 'user'],
+    pengaturan: ['superadmin']
+  };
+
+  function canAccess(viewName) {
+    const role = state.user?.role || 'user';
+    return (ROLE_PERMISSIONS[viewName] || []).includes(role);
+  }
+
+  function updateNavigationVisibility() {
+    document.querySelectorAll('.nav-btn[data-target], .nav-btn-mobile[data-target]').forEach(btn => {
+      const target = btn.dataset.target;
+      if (!canAccess(target)) {
+        btn.classList.add('hidden');
+      } else {
+        btn.classList.remove('hidden');
+      }
+    });
+  }
 
   const readStorage = (key, fallback = '') => { try { return localStorage.getItem(key) || fallback; } catch(e) { return fallback; } };
   const writeStorage = (key, value) => { try { localStorage.setItem(key, value); } catch(e) {} };
@@ -383,7 +400,7 @@
   };
   
   const getGasUrl = () => (state.settings.gasUrl || DEFAULT_GAS_URL || '').trim();
-  const normalizeRole = (role) => String(role || 'user').toLowerCase() === 'admin' ? 'admin' : 'user';
+  const normalizeRole = (role) => String(role || 'user').toLowerCase() === 'admin' ? 'admin' : 'user'; // untuk kompatibilitas
   const toNumber = (value) => { const n = Number(value); return Number.isFinite(n) ? n : 0; };
   const formatRupiah = (angka) => 'Rp ' + toNumber(angka).toLocaleString('id-ID');
   const formatDateTime = (iso) => {
@@ -457,8 +474,9 @@
       state.user = session.user;
       document.getElementById('login-screen').classList.add('hidden');
       document.getElementById('main-layout').classList.remove('hidden');
-      document.getElementById('role-badge').innerText = state.user.role === 'admin' ? 'Admin' : 'Warga';
+      document.getElementById('role-badge').innerText = state.user.role === 'superadmin' ? 'Superadmin' : (state.user.role === 'admin_istri' ? 'Admin Istri' : (state.user.role === 'admin_suami' ? 'Admin Suami' : 'Warga'));
       document.body.setAttribute('data-role', state.user.role);
+      updateNavigationVisibility();
       navigate('dashboard');
       const loaded = await loadData();
       if (!loaded) { clearSession(); state.user = null; document.body.removeAttribute('data-role'); document.getElementById('login-screen').classList.remove('hidden'); document.getElementById('main-layout').classList.add('hidden'); return false; }
@@ -475,12 +493,13 @@
     const res = await fetchAPI('login', { username: u, password: p });
     btn.innerHTML = `<span>Masuk</span><i class="ph ph-arrow-right font-bold"></i>`; btn.disabled = false;
     if (res.success) {
-      state.user = { ...res.data, username: u, role: normalizeRole(res.role || res.data?.Role), token: res.token || '' };
+      state.user = { ...res.data, username: u, role: res.role || 'user', token: res.token || '' };
       persistSession();
       document.getElementById('login-screen').classList.add('hidden'); 
       document.getElementById('main-layout').classList.remove('hidden');
-      document.getElementById('role-badge').innerText = state.user.role === 'admin' ? 'Bendahara' : 'Warga';
+      document.getElementById('role-badge').innerText = state.user.role === 'superadmin' ? 'Superadmin' : (state.user.role === 'admin_istri' ? 'Admin Istri' : (state.user.role === 'admin_suami' ? 'Admin Suami' : 'Warga'));
       document.body.setAttribute('data-role', state.user.role);
+      updateNavigationVisibility();
       navigate('dashboard');
       const loaded = await loadData();
       showToast(loaded ? "Login berhasil" : "Login berhasil, tapi data belum termuat", loaded ? "success" : "error");
@@ -527,16 +546,17 @@
 
   function navigate(viewName) {
     if (!state.user) return;
-    if (state.user.role !== 'admin' && ADMIN_VIEWS.has(viewName)) viewName = 'dashboard';
+    if (!canAccess(viewName)) viewName = 'dashboard';
     state.ui.currentView = viewName;
     document.querySelectorAll('.nav-btn, .nav-btn-mobile').forEach(btn => {
       let isAktif = btn.dataset.target === viewName;
-      let isAdminOnly = btn.classList.contains('admin-only') ? ' admin-only' : '';
       if(btn.classList.contains('nav-btn')) {
-        btn.className = isAktif ? 'nav-btn'+isAdminOnly+' w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-primary bg-primary/10 font-medium' : 'nav-btn'+isAdminOnly+' w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium';
+        btn.className = isAktif ? 'nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-primary bg-primary/10 font-medium' : 'nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium';
       } else {
-        btn.className = isAktif ? 'nav-btn-mobile'+isAdminOnly+' flex flex-col items-center justify-center p-2 text-primary flex-1 min-w-0' : 'nav-btn-mobile'+isAdminOnly+' flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0';
+        btn.className = isAktif ? 'nav-btn-mobile flex flex-col items-center justify-center p-2 text-primary flex-1 min-w-0' : 'nav-btn-mobile flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0';
       }
+      if (!canAccess(btn.dataset.target)) btn.classList.add('hidden');
+      else btn.classList.remove('hidden');
     });
     const tMap = { dashboard:'Dashboard', warga:'Warga', transaksi:'Transaksi', pembayaran:'Pembayaran', kas:'Buku Kas', buku:'Buku Tabungan', pengaturan:'Pengaturan' };
     document.getElementById('mobile-header-title').innerText = tMap[viewName] || 'Aplikasi';
@@ -547,7 +567,7 @@
 
   function renderCurrentView() {
     if (!state.user) return;
-    if (state.user.role !== 'admin' && ADMIN_VIEWS.has(state.ui.currentView)) state.ui.currentView = 'dashboard';
+    if (!canAccess(state.ui.currentView)) state.ui.currentView = 'dashboard';
     const a = document.getElementById('content-area'); a.innerHTML = ''; const v = state.ui.currentView;
     if(v==='dashboard'){ a.appendChild(document.getElementById('tpl-dashboard').content.cloneNode(true)); renderDashboard(); }
     else if(v==='warga'){ a.appendChild(document.getElementById('tpl-warga').content.cloneNode(true)); window.ekas.warga.render(); }
@@ -563,7 +583,7 @@
     if (!state.user) return;
     const myId = state.user['ID Warga'];
     const mySaldo = calculateSaldo(myId);
-    const roleLabel = state.user.role === 'admin' ? 'Admin' : 'Warga';
+    const roleLabel = state.user.role === 'superadmin' ? 'Superadmin' : (state.user.role === 'admin_istri' ? 'Admin Istri' : (state.user.role === 'admin_suami' ? 'Admin Suami' : 'Warga'));
     const profileHtml = `
       <div class="bg-gradient-to-br from-primary to-primary-dark p-5 md:p-6 rounded-2xl shadow-md text-white relative overflow-hidden flex flex-col sm:flex-row gap-4 mb-2 mt-2">
         <div class="absolute -right-6 -top-6 opacity-10"><i class="ph ph-user-circle" style="font-size: 150px;"></i></div>
@@ -590,14 +610,11 @@
       </div>`;
     document.getElementById('profile-card').innerHTML = profileHtml;
     document.getElementById('profile-card').classList.remove('hidden');
-    document.getElementById('dash-title').innerText = state.user.role === 'admin' ? 'Dashboard Admin' : 'Beranda Warga';
+    document.getElementById('dash-title').innerText = state.user.role === 'superadmin' ? 'Dashboard Superadmin' : (state.user.role === 'admin_istri' ? 'Dashboard Admin Istri' : (state.user.role === 'admin_suami' ? 'Dashboard Admin Suami' : 'Beranda Warga'));
 
-    if (state.user.role !== 'admin') {
-      document.getElementById('admin-container').classList.add('hidden');
-      if(chartInstance) { chartInstance.destroy(); chartInstance = null; }
-      if(chartEkasInstance) { chartEkasInstance.destroy(); chartEkasInstance = null; }
-    } else {
-      document.getElementById('admin-container').classList.remove('hidden');
+    const adminContainer = document.getElementById('admin-container');
+    if (state.user.role === 'superadmin') {
+      adminContainer.style.display = 'block';
       let saldoKas=0, masuk=0, keluar=0;
       const now = new Date();
       const chartKasMasuk = Array(12).fill(0), chartKasKeluar = Array(12).fill(0);
@@ -634,6 +651,10 @@
           { label: 'Pengeluaran', data: chartKasKeluar, borderColor: '#DC2626', backgroundColor: 'rgba(220,38,38,0.1)', tension: 0.3, fill: true }
         ] }, options: { responsive: true, maintainAspectRatio: false } });
       }
+    } else {
+      adminContainer.style.display = 'none';
+      if(chartInstance) { chartInstance.destroy(); chartInstance = null; }
+      if(chartEkasInstance) { chartEkasInstance.destroy(); chartEkasInstance = null; }
     }
   }
 
@@ -643,12 +664,19 @@
       render() {
         const tb = document.getElementById('table-warga'); if(!tb) return;
         const data = state.data.warga || [];
+        document.getElementById('warga-add-btn').innerHTML = state.user.role === 'superadmin' ? 
+          `<button class="bg-primary hover:bg-primary-dark text-white px-4 py-2.5 rounded-xl flex items-center gap-2" onclick="window.ekas.warga.openModal()"><i class="ph ph-plus-circle text-lg"></i> Tambah Warga</button>` : '';
         if(data.length===0) { tb.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-gray-500">Belum ada data warga.</td></tr>'; return; }
         tb.innerHTML = data.map(w => {
           const saldo = calculateSaldo(w['ID Warga']);
           const iuran = w['Bayar Iuran?'] || 'TIDAK';
           const arisan = w['Ikut Arisan?'] || 'TIDAK';
           const slot = w['Slot Arisan'] || '0';
+          const aksi = state.user.role === 'superadmin' ? `
+            <div class="flex justify-center items-center gap-1">
+              <button onclick="window.ekas.warga.openModal('${w['ID Warga']}')" class="text-blue-500 bg-blue-50 hover:bg-blue-100 p-2 rounded-lg"><i class="ph ph-pencil-simple"></i></button>
+              <button onclick="window.ekas.warga.delete('${w['ID Warga']}')" class="text-danger bg-red-50 hover:bg-red-100 p-2 rounded-lg"><i class="ph ph-trash"></i></button>
+            </div>` : '';
           return `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-50 dark:border-gray-800/50">
             <td class="p-3 md:p-4 text-xs font-mono text-primary">${w['ID Warga']}</td>
             <td class="p-3 md:p-4 font-medium">${w['Nama Suami']}</td>
@@ -656,16 +684,12 @@
             <td class="p-3 md:p-4">${w['No Rumah']}</td>
             <td class="p-3 md:p-4 text-xs">Iuran: <span class="${iuran==='YA'?'text-success':'text-danger'} font-bold">${iuran}</span><br>Arisan: <span class="text-primary">${arisan==='YA'? slot+' Slot' : 'TIDAK'}</span></td>
             <td class="p-3 md:p-4 font-bold text-gray-700 dark:text-gray-200">${formatRupiah(saldo)}</td>
-            <td class="p-3 md:p-4 admin-only text-center">
-              <div class="flex justify-center items-center gap-1">
-                <button onclick="window.ekas.warga.openModal('${w['ID Warga']}')" class="text-blue-500 bg-blue-50 hover:bg-blue-100 p-2 rounded-lg"><i class="ph ph-pencil-simple"></i></button>
-                <button onclick="window.ekas.warga.delete('${w['ID Warga']}')" class="text-danger bg-red-50 hover:bg-red-100 p-2 rounded-lg"><i class="ph ph-trash"></i></button>
-              </div>
-            </td>
+            <td class="p-3 md:p-4 text-center">${aksi}</td>
           </tr>`;
         }).join('');
       },
       openModal(id = null) {
+        if (state.user.role !== 'superadmin') return;
         const w = id ? state.data.warga.find(x=>x['ID Warga']===id) : null;
         let html = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-md modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
@@ -689,7 +713,12 @@
                 </div>
                 <div><label class="block text-xs font-medium mb-1">Slot Arisan</label><input type="number" id="w-slot" value="${w?w['Slot Arisan']:'1'}" min="0" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm"></div>
                 <div><label class="block text-xs font-medium mb-1">Password (kosongkan jika tidak diubah)</label><input type="password" id="w-password" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" placeholder="Password baru"></div>
-                <div><label class="block text-xs font-medium mb-1">Role</label><select id="w-role" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm"><option value="user" ${w&&normalizeRole(w.Role)==='user'?'selected':''}>User</option><option value="admin" ${w&&normalizeRole(w.Role)==='admin'?'selected':''}>Admin</option></select></div>
+                <div><label class="block text-xs font-medium mb-1">Role</label><select id="w-role" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm">
+                  <option value="user" ${w&&w['Role']==='user'?'selected':''}>User</option>
+                  <option value="admin_istri" ${w&&w['Role']==='admin_istri'?'selected':''}>Admin Istri</option>
+                  <option value="admin_suami" ${w&&w['Role']==='admin_suami'?'selected':''}>Admin Suami</option>
+                  <option value="superadmin" ${w&&w['Role']==='superadmin'?'selected':''}>Superadmin</option>
+                </select></div>
                 <div id="div-status" class="${id?'':'hidden'}"><label class="block text-xs font-medium mb-1">Status</label><select id="w-status" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm"><option value="Aktif" ${w&&w.Status==='Aktif'?'selected':''}>Aktif</option><option value="Nonaktif" ${w&&w.Status==='Nonaktif'?'selected':''}>Nonaktif</option></select></div>
                 <div class="pt-4"><button type="submit" class="w-full py-3 rounded-xl bg-primary text-white font-medium text-sm">Simpan</button></div>
               </form>
@@ -699,6 +728,7 @@
       },
       async submit(e) {
         e.preventDefault();
+        if (state.user.role !== 'superadmin') return;
         const payload = {
           id: document.getElementById('w-id').value,
           namaSuami: document.getElementById('w-suami').value,
@@ -720,6 +750,7 @@
         else showToast(res.message, 'error');
       },
       async delete(id) {
+        if (state.user.role !== 'superadmin') return;
         if(!confirm('Hapus warga ini?')) return;
         showLoading();
         const res = await fetchAPI('delete_warga', { id });
@@ -735,6 +766,12 @@
         sel.innerHTML = '<option value="">-- Pilih Warga --</option>' + state.data.warga.map(w => `<option value="${w['ID Warga']}">${w['Nama Istri']} (${w['No Rumah']})</option>`).join('');
         const tb = document.getElementById('table-pembayaran');
         let pay = [...(state.data.pembayaran||[])].sort((a,b)=>new Date(b.Tanggal)-new Date(a.Tanggal));
+        const canEdit = (state.user.role === 'superadmin' || state.user.role === 'admin_suami');
+        const saveBtn = document.getElementById('btn-save-pay');
+        if (saveBtn) {
+          saveBtn.disabled = !canEdit;
+          saveBtn.classList.toggle('opacity-50', !canEdit);
+        }
         if(pay.length===0) { tb.innerHTML = '<tr><td colspan="5" class="px-5 py-10 text-center text-gray-500">Belum ada pembayaran.</td></tr>'; return; }
         tb.innerHTML = pay.map(p => {
           const wName = state.data.warga.find(w=>w['ID Warga']===p.WargaID)?.['Nama Istri'] || p.WargaID;
@@ -743,9 +780,11 @@
             <td class="px-5 py-3">${p.Bulan} ${p.Tahun}</td>
             <td class="px-5 py-3 text-xs">Iur:${p.Iuran} Ars:${p.Arisan} Tmb:${p.Tambahan}</td>
             <td class="px-5 py-3 font-black text-success">${formatRupiah(p.Total)}</td>
-            <td class="px-5 py-3 admin-only text-right space-x-1">
-              <button onclick="window.ekas.pembayaran.openEdit('${p.PayID}')" class="text-blue-500 bg-blue-50 p-2 rounded-lg"><i class="ph ph-pencil-simple"></i></button>
-              <button onclick="window.ekas.pembayaran.delete('${p.PayID}')" class="text-danger bg-red-50 p-2 rounded-lg"><i class="ph ph-trash"></i></button>
+            <td class="px-5 py-3 text-right space-x-1">
+              ${canEdit ? `
+                <button onclick="window.ekas.pembayaran.openEdit('${p.PayID}')" class="text-blue-500 bg-blue-50 p-2 rounded-lg"><i class="ph ph-pencil-simple"></i></button>
+                <button onclick="window.ekas.pembayaran.delete('${p.PayID}')" class="text-danger bg-red-50 p-2 rounded-lg"><i class="ph ph-trash"></i></button>
+              ` : ''}
             </td>
           </tr>`;
         }).join('');
@@ -825,6 +864,12 @@
         if (dari) kas = kas.filter(k => new Date(k.Tanggal) >= new Date(dari));
         if (sampai) kas = kas.filter(k => new Date(k.Tanggal) <= new Date(sampai + 'T23:59:59'));
         kas.sort((a,b)=>new Date(b.Tanggal)-new Date(a.Tanggal));
+        const canEdit = (state.user.role === 'superadmin' || state.user.role === 'admin_suami');
+        document.getElementById('kas-action-btns').innerHTML = canEdit ? `
+          <button onclick="window.ekas.kas.openModal('Pemasukan')" class="bg-success hover:bg-green-700 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-medium flex items-center shadow-md transition-colors"><i class="ph ph-plus-circle text-lg sm:mr-2"></i> <span class="hidden sm:block">Pemasukan</span></button>
+          <button onclick="window.ekas.kas.openModal('Pengeluaran')" class="bg-danger hover:bg-red-700 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-medium flex items-center shadow-md transition-colors"><i class="ph ph-minus-circle text-lg sm:mr-2"></i> <span class="hidden sm:block">Pengeluaran</span></button>
+          <button onclick="window.ekas.kas.cetakPDF()" class="bg-gray-800 hover:bg-gray-900 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-medium flex items-center shadow-md transition-colors"><i class="ph ph-printer text-lg sm:mr-2"></i> <span class="hidden sm:block">Cetak</span></button>
+        ` : '';
         if(kas.length===0) { tb.innerHTML = '<tr><td colspan="5" class="px-6 py-10 text-center text-gray-500">Belum ada transaksi.</td></tr>'; }
         else {
           tb.innerHTML = kas.map(k => {
@@ -834,52 +879,31 @@
               <td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-xs font-bold ${isMasuk?'bg-emerald-100 text-success':'bg-red-100 text-danger'}">${k.Kategori}</span></td>
               <td class="px-6 py-4 text-sm font-medium">${k.Keterangan}</td>
               <td class="px-6 py-4 text-right font-black ${isMasuk?'text-success':'text-danger'}">${isMasuk?'+':'-'}${formatRupiah(k.Nominal)}</td>
-              <td class="px-6 py-4 admin-only text-right space-x-1">
-                <button onclick="window.ekas.kas.openModal(null,'${k.KasID}')" class="text-blue-500 bg-blue-50 p-2 rounded-lg"><i class="ph ph-pencil-simple"></i></button>
-                <button onclick="window.ekas.kas.delete('${k.KasID}')" class="text-danger bg-red-50 p-2 rounded-lg"><i class="ph ph-trash"></i></button>
+              <td class="px-6 py-4 text-right space-x-1">
+                ${canEdit ? `
+                  <button onclick="window.ekas.kas.openModal(null,'${k.KasID}')" class="text-blue-500 bg-blue-50 p-2 rounded-lg"><i class="ph ph-pencil-simple"></i></button>
+                  <button onclick="window.ekas.kas.delete('${k.KasID}')" class="text-danger bg-red-50 p-2 rounded-lg"><i class="ph ph-trash"></i></button>
+                ` : ''}
               </td>
             </tr>`;
           }).join('');
         }
         let totalMasuk = 0, totalKeluar = 0;
-        kas.forEach(k => {
-          const nom = Number(k.Nominal)||0;
-          if (k.Jenis === 'Pemasukan') totalMasuk += nom;
-          else totalKeluar += nom;
-        });
+        kas.forEach(k => { const nom = Number(k.Nominal)||0; if (k.Jenis === 'Pemasukan') totalMasuk += nom; else totalKeluar += nom; });
         const surplus = totalMasuk - totalKeluar;
         let saldoAkhir = 0;
         const sampaiDate = sampai ? new Date(sampai + 'T23:59:59') : new Date();
-        state.data.kas.forEach(k => {
-          if(!k.Tanggal) return;
-          const t = new Date(k.Tanggal);
-          if (t <= sampaiDate) {
-            const nom = Number(k.Nominal)||0;
-            saldoAkhir += (k.Jenis === 'Pemasukan' ? nom : -nom);
-          }
-        });
+        state.data.kas.forEach(k => { if(!k.Tanggal) return; const t = new Date(k.Tanggal); if (t <= sampaiDate) { const nom = Number(k.Nominal)||0; saldoAkhir += (k.Jenis === 'Pemasukan' ? nom : -nom); } });
         document.getElementById('kas-summary').innerHTML = `
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex justify-between items-center">
-              <span class="text-sm font-medium text-gray-500">Total Pemasukan</span>
-              <span class="text-lg font-bold text-success">${formatRupiah(totalMasuk)}</span>
-            </div>
-            <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex justify-between items-center">
-              <span class="text-sm font-medium text-gray-500">Total Pengeluaran</span>
-              <span class="text-lg font-bold text-danger">${formatRupiah(totalKeluar)}</span>
-            </div>
-            <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex justify-between items-center">
-              <span class="text-sm font-medium text-gray-500">Surplus / Defisit</span>
-              <span class="text-lg font-bold ${surplus>=0?'text-success':'text-danger'}">${formatRupiah(surplus)}</span>
-            </div>
-            <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex justify-between items-center">
-              <span class="text-sm font-medium text-gray-500">Total Saldo Kas Akhir</span>
-              <span class="text-lg font-bold text-primary">${formatRupiah(saldoAkhir)}</span>
-            </div>
-          </div>
-        `;
+            <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border flex justify-between"><span>Total Pemasukan</span><span class="font-bold text-success">${formatRupiah(totalMasuk)}</span></div>
+            <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border flex justify-between"><span>Total Pengeluaran</span><span class="font-bold text-danger">${formatRupiah(totalKeluar)}</span></div>
+            <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border flex justify-between"><span>Surplus/Defisit</span><span class="font-bold ${surplus>=0?'text-success':'text-danger'}">${formatRupiah(surplus)}</span></div>
+            <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border flex justify-between"><span>Saldo Akhir</span><span class="font-bold text-primary">${formatRupiah(saldoAkhir)}</span></div>
+          </div>`;
       },
       openModal(jenis, id=null) {
+        if (state.user.role !== 'superadmin' && state.user.role !== 'admin_suami') return;
         const k = id ? state.data.kas.find(x=>x.KasID===id) : null;
         let html = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-md modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
@@ -952,6 +976,8 @@
     biaya: {
       render() {
         const tb = document.getElementById('table-biaya');
+        const canEdit = (state.user.role === 'superadmin' || state.user.role === 'admin_suami');
+        document.getElementById('biaya-add-btn').innerHTML = canEdit ? `<button onclick="window.ekas.biaya.openModal()" class="bg-warning hover:bg-amber-600 text-white p-2 rounded-lg font-medium shadow-sm transition-colors"><i class="ph ph-plus text-lg"></i></button>` : '';
         if(state.data.biaya.length===0) { tb.innerHTML = '<tr><td colspan="4" class="px-5 py-8 text-center text-gray-500">Belum ada biaya tambahan.</td></tr>'; return; }
         tb.innerHTML = state.data.biaya.map(b => {
           const wName = state.data.warga.find(w=>w['ID Warga']===b.WargaID)?.['Nama Istri'] || b.WargaID;
@@ -959,14 +985,17 @@
             <td class="px-5 py-3 font-bold">${wName}</td>
             <td class="px-5 py-3">${b.NamaBiaya}</td>
             <td class="px-5 py-3 text-right font-bold">${formatRupiah(b.Nominal)}</td>
-            <td class="px-5 py-3 admin-only text-right space-x-1">
-              <button onclick="window.ekas.biaya.openModal('${b.BiayaID}')" class="text-blue-500 bg-blue-50 p-2 rounded-lg"><i class="ph ph-pencil-simple"></i></button>
-              <button onclick="window.ekas.biaya.delete('${b.BiayaID}')" class="text-danger bg-red-50 p-2 rounded-lg"><i class="ph ph-trash"></i></button>
+            <td class="px-5 py-3 text-right space-x-1">
+              ${canEdit ? `
+                <button onclick="window.ekas.biaya.openModal('${b.BiayaID}')" class="text-blue-500 bg-blue-50 p-2 rounded-lg"><i class="ph ph-pencil-simple"></i></button>
+                <button onclick="window.ekas.biaya.delete('${b.BiayaID}')" class="text-danger bg-red-50 p-2 rounded-lg"><i class="ph ph-trash"></i></button>
+              ` : ''}
             </td>
           </tr>`;
         }).join('');
       },
       openModal(id = null) {
+        if (state.user.role !== 'superadmin' && state.user.role !== 'admin_suami') return;
         const b = id ? state.data.biaya.find(x=>x.BiayaID===id) : null;
         let opts = state.data.warga.map(w => `<option value="${w['ID Warga']}" ${b && b.WargaID===w['ID Warga']?'selected':''}>${w['Nama Istri']} (${w['No Rumah']})</option>`).join('');
         document.getElementById('modals').innerHTML = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -1014,6 +1043,10 @@
     setting: {
       async save(e) {
         e.preventDefault();
+        if (state.user.role !== 'superadmin') {
+          showToast("Akses ditolak", "error");
+          return;
+        }
         const payload = {
           'Iuran Wajib': Number(document.getElementById('set-iuran').value),
           'Arisan Per Slot': Number(document.getElementById('set-arisan').value)
@@ -1030,6 +1063,8 @@
   // ===================== TRANSAKSI & BUKU TABUNGAN =====================
   function renderTransaksi(filter = 'Semua') {
     const tb = document.getElementById('table-transaksi'); if(!tb) return; tb.innerHTML = '';
+    const canEdit = (state.user.role === 'superadmin' || state.user.role === 'admin_istri');
+    document.getElementById('trx-add-btn').innerHTML = canEdit ? `<button class="bg-primary hover:bg-primary-dark text-white px-4 py-2.5 sm:py-2 rounded-xl flex items-center gap-2 shadow-sm whitespace-nowrap w-full sm:w-auto justify-center font-medium transition-colors" onclick="openModal('modal-transaksi')"><i class="ph ph-plus-circle text-lg"></i> <span>Transaksi Baru</span></button>` : '';
     let d = state.data.transaksi; if(filter!=='Semua') d = d.filter(t=>t['Jenis Transaksi']===filter);
     d.sort((a,b)=>new Date(b['Tanggal'])-new Date(a['Tanggal']));
     if(d.length===0) tb.innerHTML=`<tr><td colspan="6" class="p-8 text-center text-gray-500">Belum ada transaksi</td></tr>`;
@@ -1043,8 +1078,10 @@
         <td class="p-3 md:p-4"><span class="flex items-center gap-1 text-xs font-bold ${c}"><i class="ph ${ic}"></i> ${t['Jenis Transaksi']}</span></td>
         <td class="p-3 md:p-4 font-bold ${c}">${formatRupiah(t['Nominal'])}</td>
         <td class="p-3 md:p-4 text-center space-x-1">
-          <button onclick="window.editTransaksi('${t['ID Transaksi']}')" class="text-blue-500 bg-blue-50 p-2 rounded-lg"><i class="ph ph-pencil-simple"></i></button>
-          <button onclick="deleteTransaksi('${t['ID Transaksi']}')" class="text-danger bg-red-50 hover:bg-red-100 dark:bg-red-900/30 p-2 rounded-lg"><i class="ph ph-trash"></i></button>
+          ${canEdit ? `
+            <button onclick="window.editTransaksi('${t['ID Transaksi']}')" class="text-blue-500 bg-blue-50 p-2 rounded-lg"><i class="ph ph-pencil-simple"></i></button>
+            <button onclick="deleteTransaksi('${t['ID Transaksi']}')" class="text-danger bg-red-50 hover:bg-red-100 dark:bg-red-900/30 p-2 rounded-lg"><i class="ph ph-trash"></i></button>
+          ` : ''}
         </td></tr>`;
     });
   }
@@ -1086,6 +1123,7 @@
     let tb = document.getElementById('table-buku'); tb.innerHTML='';
     let trx = state.data.transaksi.filter(t=>String(t['ID Anggota'])===String(id)).sort((x,y)=>new Date(x['Tanggal'])-new Date(y['Tanggal']));
     let sld = 0;
+    const canEdit = (state.user.role === 'superadmin' || state.user.role === 'admin_istri');
     if(trx.length===0) tb.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-gray-500 italic">Belum ada mutasi</td></tr>`;
     else trx.forEach(t => {
       let isS = t['Jenis Transaksi']==='Setoran';
@@ -1097,14 +1135,17 @@
         <td class="p-3 text-right text-danger text-sm">${!isS?formatRupiah(n):'-'}</td>
         <td class="p-3 text-right font-bold text-sm bg-gray-50 dark:bg-gray-800/30">${formatRupiah(sld)}</td>
         <td class="p-3 text-center"><div class="flex gap-1 justify-center">
-          <button onclick="window.editTransaksi('${t['ID Transaksi']}')" class="text-blue-500 bg-blue-50 p-1.5 rounded"><i class="ph ph-pencil-simple text-sm"></i></button>
-          <button onclick="deleteTransaksi('${t['ID Transaksi']}')" class="text-danger bg-red-50 p-1.5 rounded"><i class="ph ph-trash text-sm"></i></button>
+          ${canEdit ? `
+            <button onclick="window.editTransaksi('${t['ID Transaksi']}')" class="text-blue-500 bg-blue-50 p-1.5 rounded"><i class="ph ph-pencil-simple text-sm"></i></button>
+            <button onclick="deleteTransaksi('${t['ID Transaksi']}')" class="text-danger bg-red-50 p-1.5 rounded"><i class="ph ph-trash text-sm"></i></button>
+          ` : ''}
         </div></td>
       </tr>`;
     });
   };
 
   window.editTransaksi = function(idTransaksi) {
+    if (state.user.role !== 'superadmin' && state.user.role !== 'admin_istri') return;
     const trx = state.data.transaksi.find(t => t['ID Transaksi'] === idTransaksi);
     if (!trx) return showToast('Transaksi tidak ditemukan', 'error');
     let opts = '<option value="">-- Pilih Warga --</option>';
@@ -1256,6 +1297,7 @@
 
   window.openModal = function(id) {
     if (id === 'modal-transaksi') {
+      if (state.user.role !== 'superadmin' && state.user.role !== 'admin_istri') return;
       let opts = '<option value="">-- Pilih Warga --</option>';
       state.data.warga.forEach(w => opts += `<option value="${w['ID Warga']}">${w['ID Warga']} - ${w['Nama Istri']}</option>`);
       document.getElementById('modals').innerHTML = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
