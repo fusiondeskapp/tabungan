@@ -189,7 +189,6 @@
 </template>
 
 <template id="tpl-transaksi">
-  <!-- tetap -->
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
       <h2 class="text-2xl font-bold dark:text-white">Riwayat Transaksi</h2>
@@ -214,7 +213,6 @@
 </template>
 
 <template id="tpl-pembayaran">
-  <!-- tetap -->
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <h2 class="text-2xl font-bold dark:text-white">Penerimaan Pembayaran</h2>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -255,7 +253,6 @@
 </template>
 
 <template id="tpl-kas">
-  <!-- tetap -->
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
       <h2 class="text-2xl font-bold dark:text-white">Buku Kas</h2>
@@ -281,7 +278,6 @@
 </template>
 
 <template id="tpl-setting">
-  <!-- tetap -->
   <div class="space-y-6 animate-fade-in h-full flex flex-col w-full">
     <h2 class="text-2xl font-bold dark:text-white">Pengaturan RT</h2>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -312,7 +308,6 @@
 </template>
 
 <template id="tpl-buku">
-  <!-- tetap -->
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <h2 class="text-2xl font-bold hidden lg:block dark:text-white">Buku Tabungan Digital</h2>
     <div class="bg-white dark:bg-darkcard p-3 md:p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800" id="buku-selector-wrapper">
@@ -668,8 +663,8 @@
         const data = state.data.warga || [];
         const role = state.user.role;
         const showSaldo = role === 'superadmin' || role === 'admin_istri';
+        const canManage = role === 'superadmin' || role === 'admin_istri' || role === 'admin_suami';
         
-        // Header tabel dinamis
         const thead = document.getElementById('warga-thead');
         thead.innerHTML = `
           <tr>
@@ -683,7 +678,7 @@
           </tr>
         `;
 
-        document.getElementById('warga-add-btn').innerHTML = role === 'superadmin' ? 
+        document.getElementById('warga-add-btn').innerHTML = canManage ? 
           `<button class="bg-primary hover:bg-primary-dark text-white px-4 py-2.5 rounded-xl flex items-center gap-2" onclick="window.ekas.warga.openModal()"><i class="ph ph-plus-circle text-lg"></i> Tambah Warga</button>` : '';
         
         if(data.length===0) {
@@ -697,7 +692,7 @@
           const iuran = w['Bayar Iuran?'] || 'TIDAK';
           const arisan = w['Ikut Arisan?'] || 'TIDAK';
           const slot = w['Slot Arisan'] || '0';
-          const aksi = role === 'superadmin' ? `
+          const aksi = canManage ? `
             <div class="flex justify-center items-center gap-1">
               <button onclick="window.ekas.warga.openModal('${w['ID Warga']}')" class="text-blue-500 bg-blue-50 hover:bg-blue-100 p-2 rounded-lg"><i class="ph ph-pencil-simple"></i></button>
               <button onclick="window.ekas.warga.delete('${w['ID Warga']}')" class="text-danger bg-red-50 hover:bg-red-100 p-2 rounded-lg"><i class="ph ph-trash"></i></button>
@@ -714,7 +709,7 @@
         }).join('');
       },
       openModal(id = null) {
-        if (state.user.role !== 'superadmin') return;
+        if (!['superadmin', 'admin_istri', 'admin_suami'].includes(state.user.role)) return;
         const w = id ? state.data.warga.find(x=>x['ID Warga']===id) : null;
         let html = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-md modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
@@ -753,7 +748,7 @@
       },
       async submit(e) {
         e.preventDefault();
-        if (state.user.role !== 'superadmin') return;
+        if (!['superadmin', 'admin_istri', 'admin_suami'].includes(state.user.role)) return;
         const payload = {
           id: document.getElementById('w-id').value,
           namaSuami: document.getElementById('w-suami').value,
@@ -775,7 +770,7 @@
         else showToast(res.message, 'error');
       },
       async delete(id) {
-        if (state.user.role !== 'superadmin') return;
+        if (!['superadmin', 'admin_istri', 'admin_suami'].includes(state.user.role)) return;
         if(!confirm('Hapus warga ini?')) return;
         showLoading();
         const res = await fetchAPI('delete_warga', { id });
@@ -785,7 +780,6 @@
       }
     },
 
-    // pembayaran, kas, biaya, setting TETAP SAMA persis seperti sebelumnya
     pembayaran: {
       render() {
         const sel = document.getElementById('pay-warga');
@@ -1087,7 +1081,6 @@
   };
 
   // ===================== TRANSAKSI & BUKU TABUNGAN =====================
-  // ... (sama persis seperti sebelumnya, tidak diubah)
   function renderTransaksi(filter = 'Semua') {
     const tb = document.getElementById('table-transaksi'); if(!tb) return; tb.innerHTML = '';
     const canEdit = (state.user.role === 'superadmin' || state.user.role === 'admin_istri');
@@ -1121,18 +1114,351 @@
     renderTransaksi(val);
   };
 
-  function setupBukuTabungan() { /* sama */ }
-  window.renderBukuTabungan = () => { /* sama */ };
-  window.editTransaksi = function(idTransaksi) { /* sama */ };
-  window.submitEditTransaksi = async function(e, idTransaksi) { /* sama */ };
-  window.submitTransaksi = async (e) => { /* sama */ };
-  window.deleteTransaksi = async (id) => { /* sama */ };
-  window.cetakBukuTabunganPDF = function() { /* sama */ };
-  window.openModal = function(id) { /* sama */ };
-  window.submitProfile = async (e) => { /* sama */ };
+  function setupBukuTabungan() {
+    if (!state.user) return;
+    let sel = document.getElementById('select-buku-anggota');
+    sel.innerHTML = '<option value="">-- Pilih Warga --</option>';
+    if (state.user.role === 'user') {
+      sel.innerHTML = `<option value="${state.user['ID Warga']}">${state.user['ID Warga']} - ${state.user['Nama Istri']}</option>`;
+      sel.value = state.user['ID Warga'];
+      document.getElementById('buku-selector-wrapper').classList.add('hidden');
+      renderBukuTabungan();
+    } else {
+      document.getElementById('buku-selector-wrapper').classList.remove('hidden');
+      state.data.warga.forEach(w => sel.innerHTML += `<option value="${w['ID Warga']}">${w['ID Warga']} - ${w['Nama Istri']}</option>`);
+    }
+  }
+
+  window.renderBukuTabungan = () => {
+    let id = document.getElementById('select-buku-anggota').value;
+    let area = document.getElementById('passbook-area'), emp = document.getElementById('passbook-empty');
+    if(!id){ area.classList.add('hidden'); emp.classList.remove('hidden'); return; }
+    area.classList.remove('hidden'); emp.classList.add('hidden'); area.classList.add('flex');
+    let w = state.data.warga.find(x=>String(x['ID Warga'])===String(id));
+    if(!w){ area.classList.add('hidden'); emp.classList.remove('hidden'); showToast("Warga tidak ditemukan", "error"); return; }
+    document.getElementById('buku-nama').innerText=w['Nama Istri'];
+    document.getElementById('buku-id').innerText=w['ID Warga'];
+    document.getElementById('buku-norumah').innerText=w['No Rumah'];
+    document.getElementById('buku-saldo').innerText=formatRupiah(calculateSaldo(id));
+    let tb = document.getElementById('table-buku'); tb.innerHTML='';
+    let trx = state.data.transaksi.filter(t=>String(t['ID Anggota'])===String(id)).sort((x,y)=>new Date(x['Tanggal'])-new Date(y['Tanggal']));
+    let sld = 0;
+    const canEdit = (state.user.role === 'superadmin' || state.user.role === 'admin_istri');
+    if(trx.length===0) tb.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-gray-500 italic">Belum ada mutasi</td></tr>`;
+    else trx.forEach(t => {
+      let isS = t['Jenis Transaksi']==='Setoran';
+      let n = Number(t['Nominal']); sld += isS?n:-n;
+      tb.innerHTML+=`<tr class="border-b border-gray-100">
+        <td class="p-3 text-xs text-gray-600 w-40">${formatDateTime(t['Tanggal'])}</td>
+        <td class="p-3"><span class="text-[10px] font-bold uppercase ${isS?'text-success':'text-danger'}">${t['Jenis Transaksi']}</span><br><span class="text-xs truncate block max-w-[200px]">${t['Keterangan']||'-'}</span></td>
+        <td class="p-3 text-right text-success text-sm">${isS?formatRupiah(n):'-'}</td>
+        <td class="p-3 text-right text-danger text-sm">${!isS?formatRupiah(n):'-'}</td>
+        <td class="p-3 text-right font-bold text-sm bg-gray-50 dark:bg-gray-800/30">${formatRupiah(sld)}</td>
+        <td class="p-3 text-center"><div class="flex gap-1 justify-center">
+          ${canEdit ? `
+            <button onclick="window.editTransaksi('${t['ID Transaksi']}')" class="text-blue-500 bg-blue-50 p-1.5 rounded"><i class="ph ph-pencil-simple text-sm"></i></button>
+            <button onclick="deleteTransaksi('${t['ID Transaksi']}')" class="text-danger bg-red-50 p-1.5 rounded"><i class="ph ph-trash text-sm"></i></button>
+          ` : ''}
+        </div></td>
+      </tr>`;
+    });
+  };
+
+  window.editTransaksi = function(idTransaksi) {
+    if (state.user.role !== 'superadmin' && state.user.role !== 'admin_istri') return;
+    const trx = state.data.transaksi.find(t => t['ID Transaksi'] === idTransaksi);
+    if (!trx) return showToast('Transaksi tidak ditemukan', 'error');
+    let opts = '<option value="">-- Pilih Warga --</option>';
+    state.data.warga.forEach(w => opts += `<option value="${w['ID Warga']}" ${w['ID Warga']===trx['ID Anggota']?'selected':''}>${w['ID Warga']} - ${w['Nama Istri']}</option>`);
+    document.getElementById('modals').innerHTML = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-md modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
+        <div class="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
+          <h3 class="font-bold">Edit Transaksi</h3><button onclick="window.closeAllModals()"><i class="ph ph-x text-lg"></i></button>
+        </div>
+        <div class="overflow-y-auto p-4 md:p-6 hide-scroll">
+          <form class="space-y-4" onsubmit="window.submitEditTransaksi(event, '${idTransaksi}')">
+            <div class="flex p-1 bg-gray-100 dark:bg-gray-800 rounded-xl">
+              <label class="flex-1 text-center"><input type="radio" name="f-t-jenis" value="Setoran" class="peer sr-only" ${trx['Jenis Transaksi']==='Setoran'?'checked':''}><div class="py-2 rounded-lg text-sm font-medium peer-checked:bg-white peer-checked:text-success shadow-sm">Uang Masuk</div></label>
+              <label class="flex-1 text-center"><input type="radio" name="f-t-jenis" value="Penarikan" class="peer sr-only" ${trx['Jenis Transaksi']==='Penarikan'?'checked':''}><div class="py-2 rounded-lg text-sm font-medium peer-checked:bg-white peer-checked:text-danger shadow-sm">Uang Keluar</div></label>
+            </div>
+            <div><label class="block text-xs font-medium mb-1">Warga</label><select id="f-t-warga" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" required>${opts}</select></div>
+            <div><label class="block text-xs font-medium mb-1">Nominal (Rp)</label><input type="text" id="f-t-nominal" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 font-bold text-lg text-right" required value="${formatAngkaInput(trx['Nominal'])}"></div>
+            <div><label class="block text-xs font-medium mb-1">Keterangan</label><input type="text" id="f-t-ket" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${trx['Keterangan']||''}"></div>
+            <div class="pt-2"><button type="submit" class="w-full py-3 rounded-xl bg-primary text-white font-medium text-sm">Simpan Perubahan</button></div>
+          </form>
+        </div>
+      </div></div>`;
+    setTimeout(() => {
+      const nominalInput = document.getElementById('f-t-nominal');
+      if (nominalInput) {
+        nominalInput.addEventListener('input', formatInputRibuan);
+      }
+    }, 50);
+  };
+
+  window.submitEditTransaksi = async function(e, idTransaksi) {
+    e.preventDefault();
+    const idWarga = document.getElementById('f-t-warga').value;
+    const warga = state.data.warga.find(w=>w['ID Warga']===idWarga);
+    if(!warga) { showToast("Pilih warga", "error"); return; }
+    const nominalInput = document.getElementById('f-t-nominal');
+    const nominal = toNumber(nominalInput.dataset.value || '0');
+    if(nominal <= 0) { showToast("Nominal > 0", "error"); return; }
+    showLoading();
+    const res = await fetchAPI('save_transaksi', {
+      idTransaksi,
+      idAnggota: idWarga,
+      namaAnggota: warga['Nama Istri'],
+      jenis: document.querySelector('input[name="f-t-jenis"]:checked').value,
+      nominal,
+      keterangan: document.getElementById('f-t-ket').value
+    });
+    hideLoading();
+    if(!res.success) { showToast(res.message || "Gagal", "error"); return; }
+    showToast("Transaksi diperbarui");
+    window.closeAllModals();
+    await loadData();
+  };
+
+  window.submitTransaksi = async (e) => {
+    e.preventDefault();
+    const idWarga = document.getElementById('f-t-warga').value;
+    const warga = state.data.warga.find(w=>w['ID Warga']===idWarga);
+    if(!warga) { showToast("Pilih warga", "error"); return; }
+    const nominalInput = document.getElementById('f-t-nominal');
+    const nominal = toNumber(nominalInput.dataset.value || '0');
+    if(nominal <= 0) { showToast("Nominal > 0", "error"); return; }
+    showLoading();
+    const res = await fetchAPI('save_transaksi', {
+      idAnggota: idWarga,
+      namaAnggota: warga['Nama Istri'],
+      jenis: document.querySelector('input[name="f-t-jenis"]:checked').value,
+      nominal,
+      keterangan: document.getElementById('f-t-ket').value
+    });
+    hideLoading();
+    if(!res.success) { showToast(res.message || "Gagal", "error"); return; }
+    showToast("Transaksi berhasil");
+    window.closeAllModals();
+    await loadData();
+  };
+
+  window.deleteTransaksi = async (id) => {
+    if(!confirm("Hapus transaksi ini?")) return;
+    showLoading();
+    const res = await fetchAPI('delete_transaksi', { id });
+    hideLoading();
+    if(res.success) { await loadData(); showToast('Transaksi dihapus'); }
+    else showToast(res.message, "error");
+  };
+
+  window.cetakBukuTabunganPDF = function() {
+    const id = document.getElementById('select-buku-anggota').value;
+    if (!id) { showToast('Pilih warga terlebih dahulu', 'error'); return; }
+    const warga = state.data.warga.find(x => String(x['ID Warga']) === String(id));
+    if (!warga) { showToast('Data warga tidak ditemukan', 'error'); return; }
+    const saldoAkhir = calculateSaldo(id);
+    const transaksi = state.data.transaksi
+        .filter(t => String(t['ID Anggota']) === String(id))
+        .sort((a, b) => new Date(a['Tanggal']) - new Date(b['Tanggal']));
+    const div = document.createElement('div');
+    div.style.padding = '20px'; div.style.background = 'white'; div.style.color = 'black'; div.style.fontFamily = 'sans-serif';
+    div.innerHTML = `
+        <div style="text-align:center; margin-bottom: 20px;">
+            <h2 style="margin:0; font-size:20px;">BUKU TABUNGAN</h2>
+            <h3 style="margin:5px 0 0; font-size:16px; font-weight:normal;">Tabungan Ibu-Ibu RT</h3>
+            <hr style="margin:10px 0;">
+        </div>
+        <table style="width:100%; font-size:12px; margin-bottom: 20px;">
+            <tr><td style="width:30%; font-weight:bold;">ID Warga</td><td>: ${warga['ID Warga']}</td></tr>
+            <tr><td style="font-weight:bold;">Nama Istri</td><td>: ${warga['Nama Istri']}</td></tr>
+            <tr><td style="font-weight:bold;">No Rumah</td><td>: ${warga['No Rumah'] || '-'}</td></tr>
+            <tr><td style="font-weight:bold;">Status</td><td>: ${warga['Status'] || '-'}</td></tr>
+            <tr><td style="font-weight:bold;">Saldo Akhir</td><td>: ${formatRupiah(saldoAkhir)}</td></tr>
+        </table>
+        <h4 style="font-size:14px; margin-bottom: 10px;">Riwayat Mutasi</h4>
+        <table style="width:100%; border-collapse:collapse; font-size:11px;">
+            <thead>
+                <tr style="background:#0F766E; color:white;">
+                    <th style="border:1px solid #ccc; padding:6px;">Tanggal</th>
+                    <th style="border:1px solid #ccc; padding:6px;">Keterangan</th>
+                    <th style="border:1px solid #ccc; padding:6px; text-align:right;">Debit</th>
+                    <th style="border:1px solid #ccc; padding:6px; text-align:right;">Kredit</th>
+                    <th style="border:1px solid #ccc; padding:6px; text-align:right;">Saldo</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${transaksi.length === 0 ? '<tr><td colspan="5" style="text-align:center; padding:15px;">Belum ada mutasi</td></tr>' : ''}
+                ${(() => {
+                    let saldoBerjalan = 0;
+                    return transaksi.map(t => {
+                        const isSetoran = t['Jenis Transaksi'] === 'Setoran';
+                        const nominal = Number(t['Nominal']);
+                        saldoBerjalan += isSetoran ? nominal : -nominal;
+                        return `
+                            <tr>
+                                <td style="border:1px solid #ddd; padding:6px;">${formatDateTime(t['Tanggal'])}</td>
+                                <td style="border:1px solid #ddd; padding:6px;">
+                                    <strong>${t['Jenis Transaksi']}</strong><br>
+                                    <span style="font-size:10px;">${t['Keterangan'] || '-'}</span>
+                                </td>
+                                <td style="border:1px solid #ddd; padding:6px; text-align:right; color:green;">${isSetoran ? formatRupiah(nominal) : '-'}</td>
+                                <td style="border:1px solid #ddd; padding:6px; text-align:right; color:red;">${!isSetoran ? formatRupiah(nominal) : '-'}</td>
+                                <td style="border:1px solid #ddd; padding:6px; text-align:right; font-weight:bold;">${formatRupiah(saldoBerjalan)}</td>
+                            </tr>`;
+                    }).join('');
+                })()}
+            </tbody>
+        </table>
+        <p style="text-align:right; margin-top:20px; font-size:10px;">Dicetak pada: ${formatDateTime(new Date())}</p>
+    `;
+    html2pdf().set({ margin: 10, filename: `Buku_Tabungan_${id}_${Date.now()}.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(div).save();
+  };
+
+  window.openModal = function(id) {
+    if (id === 'modal-transaksi') {
+      if (state.user.role !== 'superadmin' && state.user.role !== 'admin_istri') return;
+      let opts = '<option value="">-- Pilih Warga --</option>';
+      state.data.warga.forEach(w => opts += `<option value="${w['ID Warga']}">${w['ID Warga']} - ${w['Nama Istri']}</option>`);
+      document.getElementById('modals').innerHTML = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-md modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
+          <div class="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
+            <h3 class="font-bold">Transaksi Baru</h3><button onclick="window.closeAllModals()"><i class="ph ph-x text-lg"></i></button>
+          </div>
+          <div class="overflow-y-auto p-4 md:p-6 hide-scroll">
+            <form class="space-y-4" onsubmit="window.submitTransaksi(event)">
+              <div class="flex p-1 bg-gray-100 dark:bg-gray-800 rounded-xl">
+                <label class="flex-1 text-center"><input type="radio" name="f-t-jenis" value="Setoran" class="peer sr-only" checked><div class="py-2 rounded-lg text-sm font-medium peer-checked:bg-white peer-checked:text-success shadow-sm">Uang Masuk</div></label>
+                <label class="flex-1 text-center"><input type="radio" name="f-t-jenis" value="Penarikan" class="peer sr-only"><div class="py-2 rounded-lg text-sm font-medium peer-checked:bg-white peer-checked:text-danger shadow-sm">Uang Keluar</div></label>
+              </div>
+              <div><label class="block text-xs font-medium mb-1">Warga</label><select id="f-t-warga" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" required>${opts}</select></div>
+              <div><label class="block text-xs font-medium mb-1">Nominal (Rp)</label><input type="text" id="f-t-nominal" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 font-bold text-lg text-right" required></div>
+              <div><label class="block text-xs font-medium mb-1">Keterangan</label><input type="text" id="f-t-ket" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" placeholder="Cth: Iuran Juli"></div>
+              <div class="pt-2"><button type="submit" class="w-full py-3 rounded-xl bg-primary text-white font-medium text-sm">Proses Transaksi</button></div>
+            </form>
+          </div>
+        </div></div>`;
+      setTimeout(() => {
+        const nominalInput = document.getElementById('f-t-nominal');
+        if (nominalInput) {
+          nominalInput.addEventListener('input', formatInputRibuan);
+        }
+      }, 50);
+    } else if (id === 'modal-profile') {
+      const user = state.user;
+      document.getElementById('modals').innerHTML = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-md modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
+          <div class="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
+            <h3 class="font-bold flex items-center gap-2"><i class="ph ph-user-circle-gear text-primary text-xl"></i> Edit Profil</h3>
+            <button onclick="window.closeAllModals()"><i class="ph ph-x text-lg"></i></button>
+          </div>
+          <div class="overflow-y-auto p-4 md:p-6 hide-scroll">
+            <form class="space-y-4" onsubmit="window.submitProfile(event)">
+              <div class="flex items-center gap-4">
+                <div id="profile-photo-preview">${avatarMarkup(state.user, 'h-24 w-24')}</div>
+                <div class="min-w-0">
+                  <p class="font-bold dark:text-white truncate">${user['Nama Istri'] || user['Nama Suami'] || '-'}</p>
+                  <p class="text-xs text-gray-500 font-mono">${user['ID Warga'] || '-'}</p>
+                  <span class="inline-flex mt-2 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-primary/10 text-primary">${user.role}</span>
+                </div>
+              </div>
+              <div><label class="block text-xs font-medium mb-1">Nama Suami</label><input type="text" id="p-suami" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${user['Nama Suami'] || ''}"></div>
+              <div><label class="block text-xs font-medium mb-1">Nama Istri</label><input type="text" id="p-istri" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${user['Nama Istri'] || ''}"></div>
+              <div><label class="block text-xs font-medium mb-1">No Rumah</label><input type="text" id="p-rumah" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${user['No Rumah'] || ''}"></div>
+              <div class="grid grid-cols-2 gap-4">
+                <div><label class="block text-xs font-medium mb-1">No HP Suami</label><input type="text" id="p-hp-suami" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${user['No HP Suami'] || ''}"></div>
+                <div><label class="block text-xs font-medium mb-1">No HP Istri</label><input type="text" id="p-hp-istri" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${user['No HP Istri'] || ''}"></div>
+              </div>
+              <div><label class="block text-xs font-medium mb-1">Foto Profil</label><input type="file" id="f-p-photo" accept="image/*" onchange="window.previewProfilePhoto(event)" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm"></div>
+              <div><label class="block text-xs font-medium mb-1">Password Baru</label><input type="password" id="f-p-password" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" autocomplete="new-password" placeholder="Kosongkan jika tidak diganti"></div>
+              <div><label class="block text-xs font-medium mb-1">Ulangi Password Baru</label><input type="password" id="f-p-password2" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" autocomplete="new-password"></div>
+              <div class="pt-2"><button type="submit" id="btn-profile-save" class="w-full py-3 rounded-xl bg-primary text-white font-medium text-sm"><i class="ph ph-floppy-disk text-lg"></i> Simpan Profil</button></div>
+            </form>
+          </div>
+        </div></div>`;
+    }
+  };
+
+  window.submitProfile = async (e) => {
+    e.preventDefault();
+    const password = document.getElementById('f-p-password').value.trim();
+    const password2 = document.getElementById('f-p-password2').value.trim();
+    const file = document.getElementById('f-p-photo').files[0];
+    const namaSuami = document.getElementById('p-suami').value.trim();
+    const namaIstri = document.getElementById('p-istri').value.trim();
+    const noRumah = document.getElementById('p-rumah').value.trim();
+    const noHpSuami = document.getElementById('p-hp-suami').value.trim();
+    const noHpIstri = document.getElementById('p-hp-istri').value.trim();
+
+    if(password || password2) {
+      if(password.length < 4) { showToast("Password minimal 4 karakter", "error"); return; }
+      if(password !== password2) { showToast("Konfirmasi password tidak sama", "error"); return; }
+    }
+    if(!namaIstri) { showToast("Nama Istri tidak boleh kosong", "error"); return; }
+    if(!noRumah) { showToast("No Rumah tidak boleh kosong", "error"); return; }
+
+    const photo = file ? await resizeProfilePhoto(file) : null;
+    const payload = {
+      namaSuami,
+      namaIstri,
+      noRumah,
+      noHpSuami,
+      noHpIstri,
+      password: password || undefined,
+      photo
+    };
+    showLoading();
+    const res = await fetchAPI('update_profile', payload);
+    hideLoading();
+    if(!res.success) { showToast(res.message || "Gagal memperbarui profil", "error"); return; }
+    state.user = { ...state.user, ...(res.data || {}), role: state.user.role || normalizeRole(res.data?.Role) };
+    state.user['Nama Suami'] = namaSuami;
+    state.user['Nama Istri'] = namaIstri;
+    state.user['No Rumah'] = noRumah;
+    state.user['No HP Suami'] = noHpSuami;
+    state.user['No HP Istri'] = noHpIstri;
+    if (res.data && res.data['Foto Profil']) state.user['Foto Profil'] = res.data['Foto Profil'];
+    persistSession();
+    document.body.setAttribute('data-role', state.user.role);
+    showToast("Profil diperbarui");
+    window.closeAllModals();
+    await loadData();
+  };
+
   window.closeAllModals = () => document.getElementById('modals').innerHTML = '';
-  window.previewProfilePhoto = function(e) { /* sama */ };
-  function resizeProfilePhoto(file) { /* sama */ }
+  window.previewProfilePhoto = function(e) {
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+    if(!file.type.startsWith('image/')) { showToast("File harus berupa gambar", "error"); e.target.value = ''; return; }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const preview = document.getElementById('profile-photo-preview');
+      if(preview) preview.innerHTML = `<img src="${reader.result}" class="h-24 w-24 rounded-2xl object-cover border border-gray-200 dark:border-gray-700 shadow-lg" alt="Preview Foto">`;
+    };
+    reader.readAsDataURL(file);
+  };
+
+  function resizeProfilePhoto(file) {
+    return new Promise((resolve, reject) => {
+      if(!file) { resolve(null); return; }
+      if(!file.type.startsWith('image/')) { reject(new Error("File harus gambar.")); return; }
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = () => {
+          const size = 512;
+          const canvas = document.createElement('canvas');
+          canvas.width = size; canvas.height = size;
+          const ctx = canvas.getContext('2d');
+          const scale = Math.max(size / img.width, size / img.height);
+          ctx.drawImage(img, (size - img.width*scale)/2, (size - img.height*scale)/2, img.width*scale, img.height*scale);
+          resolve({ name: file.name, mimeType: 'image/jpeg', data: canvas.toDataURL('image/jpeg', 0.82) });
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
 
   document.addEventListener('DOMContentLoaded', async () => {
     if(localStorage.getItem('theme')==='dark') document.documentElement.classList.add('dark');
