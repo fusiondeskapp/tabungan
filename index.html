@@ -132,8 +132,10 @@
         <button class="nav-btn-mobile flex flex-col items-center justify-center p-2 text-primary flex-1 min-w-0" data-target="dashboard"><i class="ph ph-squares-four text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Home</span></button>
         <button class="nav-btn-mobile flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0" data-target="warga"><i class="ph ph-identification-badge text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Warga</span></button>
         <button class="nav-btn-mobile flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0" data-target="transaksi"><i class="ph ph-arrows-left-right text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Trx</span></button>
+        <button class="nav-btn-mobile flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0" data-target="pembayaran"><i class="ph ph-credit-card text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Bayar</span></button>
+        <button class="nav-btn-mobile flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0" data-target="kas"><i class="ph ph-book-open text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Kas</span></button>
         <button class="nav-btn-mobile flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0" data-target="buku"><i class="ph ph-book-bookmark text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Buku</span></button>
-        <button class="nav-btn-mobile flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0" data-target="tentang"><i class="ph ph-info text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Tentang</span></button>
+        <button class="nav-btn-mobile flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0" data-target="pengaturan"><i class="ph ph-gear text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Set</span></button>
       </div>
     </nav>
   </div>
@@ -634,7 +636,6 @@
     document.getElementById('profile-card').classList.remove('hidden');
     document.getElementById('dash-title').innerText = state.user.role === 'superadmin' ? 'Dashboard Superadmin' : (state.user.role === 'admin_istri' ? 'Dashboard Admin Istri' : (state.user.role === 'admin_suami' ? 'Dashboard Admin Suami' : 'Beranda Warga'));
 
-    // Tabel Riwayat Mutasi (hanya untuk selain superadmin)
     const mutasiDiv = document.getElementById('dashboard-mutasi');
     if (state.user.role !== 'superadmin') {
       const myTransaksi = state.data.transaksi.filter(t => String(t['ID Anggota']) === String(myId)).sort((a,b) => new Date(b['Tanggal']) - new Date(a['Tanggal']));
