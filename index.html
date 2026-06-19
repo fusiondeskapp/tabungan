@@ -152,7 +152,7 @@
   </div>
 </div>
 
-<!-- TEMPLATES (lengkap semua) -->
+<!-- TEMPLATES -->
 <template id="tpl-dashboard">
   <div class="space-y-4 md:space-y-6 animate-fade-in w-full">
     <h2 class="text-2xl font-bold hidden lg:block dark:text-white" id="dash-title">Dashboard</h2>
@@ -662,7 +662,6 @@
     const mySaldo = calculateSaldo(myId);
     const roleLabel = state.user.role === 'superadmin' ? 'Superadmin' : (state.user.role === 'admin_istri' ? 'Admin Istri' : (state.user.role === 'admin_suami' ? 'Admin Suami' : 'Warga'));
     
-    // --- HITUNG TUNGGAKAN ---
     const tunggakanSaya = state.data.tunggakan.filter(t => t['ID Warga'] === myId);
     const jumlahBulanMenunggak = tunggakanSaya.length;
     const totalTunggakan = tunggakanSaya.reduce((sum, t) => sum + Number(t['Iuran']||0) + Number(t['Arisan']||0), 0);
@@ -812,7 +811,6 @@
         const showTunggakan = role === 'superadmin' || role === 'admin_suami';
         const canManage = role === 'superadmin' || role === 'admin_istri' || role === 'admin_suami';
         
-        // Tombol Catat Tunggakan
         document.getElementById('warga-tunggakan-btn').innerHTML = 
           (role === 'superadmin' || role === 'admin_suami') ? 
           `<button onclick="window.ekas.warga.openTunggakanModal()" class="bg-warning hover:bg-amber-600 text-white px-4 py-2.5 rounded-xl flex items-center gap-2">
@@ -863,7 +861,10 @@
             <td class="p-3 md:p-4">${w['No Rumah']}</td>
             <td class="p-3 md:p-4 text-xs">Iuran: <span class="${iuran==='YA'?'text-success':'text-danger'} font-bold">${iuran}</span><br>Arisan: <span class="text-primary">${arisan==='YA'? slot+' Slot' : 'TIDAK'}</span></td>
             ${showSaldo ? `<td class="p-3 md:p-4 font-bold text-gray-700 dark:text-gray-200">${formatRupiah(saldo)}</td>` : ''}
-            ${showTunggakan ? `<td class="p-3 md:p-4 font-bold ${totalTunggakan > 0 ? 'text-danger' : 'text-success'}">${totalTunggakan > 0 ? formatRupiah(totalTunggakan) + ' (' + tunggakanList.length + ' bln)' : 'Lunas'}</td>` : ''}
+            ${showTunggakan ? `<td class="p-3 md:p-4 font-bold ${totalTunggakan > 0 ? 'text-danger' : 'text-success'}">
+              <span class="cursor-pointer hover:underline" onclick="window.ekas.warga.openTunggakanList('${w['ID Warga']}')">${totalTunggakan > 0 ? formatRupiah(totalTunggakan) + ' (' + tunggakanList.length + ' bln)' : 'Lunas'}</span>
+              ${totalTunggakan > 0 && canManage ? `<button onclick="window.ekas.pembayaran.bayarTunggakan('${w['ID Warga']}', '${tunggakanList[0]?.['Bulan'] || 'Januari'}', '${tunggakanList[0]?.['Tahun'] || '2026'}')" class="ml-1 text-success bg-green-50 p-1.5 rounded-lg" title="Bayar"><i class="ph ph-credit-card text-sm"></i></button>` : ''}
+            </td>` : ''}
             <td class="p-3 md:p-4 text-center">${aksi}</td>
           </tr>`;
         }).join('');
@@ -939,7 +940,6 @@
         else showToast(res.message, 'error');
       },
       
-      // --- TUNGGAKAN MANUAL ---
       openTunggakanModal() {
         if (!['superadmin', 'admin_suami'].includes(state.user.role)) return;
         let opts = state.data.warga.map(w => `<option value="${w['ID Warga']}">${w['Nama Suami']} (${w['No Rumah']})</option>`).join('');
@@ -997,6 +997,57 @@
         } else {
           showToast(res.message, 'error');
         }
+      },
+      openTunggakanList(wargaId) {
+        if (!['superadmin', 'admin_suami'].includes(state.user.role)) return;
+        const w = state.data.warga.find(x => x['ID Warga'] === wargaId);
+        if (!w) return;
+        const list = state.data.tunggakan.filter(t => t['ID Warga'] === wargaId);
+        let rows = '';
+        if (list.length === 0) {
+          rows = '<tr><td colspan="5" class="p-4 text-center text-gray-500">Tidak ada tunggakan.</td></tr>';
+        } else {
+          rows = list.map(t => `
+            <tr class="border-b border-gray-100 dark:border-gray-800">
+              <td class="p-2">${t['Bulan']} ${t['Tahun']}</td>
+              <td class="p-2 text-right">${formatRupiah(t['Iuran'])}</td>
+              <td class="p-2 text-right">${formatRupiah(t['Arisan'])}</td>
+              <td class="p-2 text-right font-bold">${formatRupiah(Number(t['Iuran']) + Number(t['Arisan']))}</td>
+              <td class="p-2 text-center">
+                <button onclick="window.ekas.warga.deleteTunggakan('${t['ID Tunggakan']}')" class="text-danger bg-red-50 p-1.5 rounded-lg"><i class="ph ph-trash"></i></button>
+              </td>
+            </tr>
+          `).join('');
+        }
+        document.getElementById('modals').innerHTML = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-lg modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
+            <div class="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
+              <h3 class="font-bold">Tunggakan: ${w['Nama Suami']} (${w['No Rumah']})</h3>
+              <button onclick="window.closeAllModals()"><i class="ph ph-x text-lg"></i></button>
+            </div>
+            <div class="overflow-y-auto p-4 hide-scroll">
+              <table class="w-full text-left text-sm">
+                <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500">
+                  <tr><th class="p-2">Periode</th><th class="p-2 text-right">Iuran</th><th class="p-2 text-right">Arisan</th><th class="p-2 text-right">Total</th><th class="p-2 text-center">Aksi</th></tr>
+                </thead>
+                <tbody>${rows}</tbody>
+              </table>
+            </div>
+          </div>
+        </div>`;
+      },
+      async deleteTunggakan(id) {
+        if (!confirm('Hapus tunggakan ini?')) return;
+        showLoading();
+        const res = await fetchAPI('delete_tunggakan', { id });
+        hideLoading();
+        if (res.success) {
+          window.closeAllModals();
+          await loadData();
+          showToast('Tunggakan dihapus');
+        } else {
+          showToast(res.message, 'error');
+        }
       }
     },
 
@@ -1036,6 +1087,15 @@
             </td>
           </tr>`;
         }).join('');
+      },
+      bayarTunggakan(wargaId, bulan, tahun) {
+        navigate('pembayaran');
+        setTimeout(() => {
+          document.getElementById('pay-warga').value = wargaId;
+          document.getElementById('pay-bulan').value = bulan;
+          document.getElementById('pay-tahun').value = tahun;
+          this.calculate();
+        }, 200);
       },
       openEdit(payId) {
         const p = state.data.pembayaran.find(x => x.PayID === payId);
