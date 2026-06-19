@@ -355,14 +355,14 @@
 <script>
   const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbxcuUe9qO2PyallWSn7vu2UiiKTnMqirKbocdI_VI8uWnYyjYYvRsv_DUpGIV2GSWiuqQ/exec';
   
-  // --- ROLE PERMISSIONS ---
+  // --- ROLE PERMISSIONS (buku hanya untuk superadmin & admin_istri) ---
   const ROLE_PERMISSIONS = {
     dashboard: ['superadmin', 'admin_istri', 'admin_suami', 'user'],
     warga: ['superadmin', 'admin_istri', 'admin_suami'],
     transaksi: ['superadmin', 'admin_istri'],
     pembayaran: ['superadmin', 'admin_suami'],
     kas: ['superadmin', 'admin_istri', 'admin_suami', 'user'],
-    buku: ['superadmin', 'admin_istri', 'admin_suami', 'user'],
+    buku: ['superadmin', 'admin_istri'],
     pengaturan: ['superadmin']
   };
 
@@ -400,7 +400,7 @@
   };
   
   const getGasUrl = () => (state.settings.gasUrl || DEFAULT_GAS_URL || '').trim();
-  const normalizeRole = (role) => String(role || 'user').toLowerCase() === 'admin' ? 'admin' : 'user'; // untuk kompatibilitas
+  const normalizeRole = (role) => String(role || 'user').toLowerCase() === 'admin' ? 'admin' : 'user';
   const toNumber = (value) => { const n = Number(value); return Number.isFinite(n) ? n : 0; };
   const formatRupiah = (angka) => 'Rp ' + toNumber(angka).toLocaleString('id-ID');
   const formatDateTime = (iso) => {
