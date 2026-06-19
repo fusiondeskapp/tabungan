@@ -42,13 +42,8 @@
         .hide-scroll::-webkit-scrollbar { display: none; }
         .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* ROLE-BASED CSS */
         body[data-role="user"] .admin-only { display: none !important; }
         .profile-avatar-img { object-fit: cover; }
-        
-        /* CHAT BACKGROUND PATTERN */
-        .chat-bg { background-color: #e5ddd5; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230f766e' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
-        .dark .chat-bg { background-color: #0b141a; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 dark:bg-darkbg dark:text-gray-200 transition-colors duration-300 antialiased overflow-hidden selection:bg-primary/30">
@@ -98,20 +93,14 @@
                     </div>
                 </div>
 
-                <nav class="flex-1 px-4 space-y-1 overflow-y-auto hide-scroll pb-4 relative">
+                <nav class="flex-1 px-4 space-y-1 overflow-y-auto hide-scroll pb-4">
                     <button class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-primary bg-primary/10 font-medium" data-target="dashboard"><i class="ph ph-squares-four text-xl"></i> Dashboard</button>
-                    <!-- Admin Only Menus -->
                     <button class="nav-btn admin-only w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium" data-target="anggota"><i class="ph ph-users text-xl"></i> Anggota</button>
                     <button class="nav-btn admin-only w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium" data-target="transaksi"><i class="ph ph-arrows-left-right text-xl"></i> Transaksi</button>
                     <button class="nav-btn admin-only w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium" data-target="laporan"><i class="ph ph-file-text text-xl"></i> Laporan</button>
                     <div class="h-px bg-gray-100 dark:bg-gray-800 my-2 admin-only"></div>
-                    <!-- All User Menus -->
                     <button class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium" data-target="buku"><i class="ph ph-book-bookmark text-xl"></i> Buku Tabungan</button>
-                    <button class="nav-btn w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium relative" data-target="diskusi">
-                        <div class="flex items-center gap-3"><i class="ph ph-chats-circle text-xl"></i> Diskusi Group</div>
-                        <span id="badge-diskusi-desktop" class="hidden w-2.5 h-2.5 bg-danger rounded-full shadow-sm"></span>
-                    </button>
-                    <button class="nav-btn admin-only w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium" data-target="pengaturan"><i class="ph ph-gear text-xl"></i> Pengaturan & Log</button>
+                    <button class="nav-btn admin-only w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium" data-target="pengaturan"><i class="ph ph-gear text-xl"></i> Pengaturan</button>
                 </nav>
             </aside>
 
@@ -132,13 +121,13 @@
 
                 <!-- Desktop Topbar -->
                 <div class="hidden lg:flex justify-end px-8 pt-6 pb-2 w-full flex-shrink-0 gap-2">
-                    <button onclick="navigate('pengaturan')" class="p-2.5 bg-white dark:bg-darkcard text-gray-500 shadow-sm border border-gray-100 dark:border-gray-700 rounded-full pointer-events-auto hover:text-primary transition-colors admin-only"><i class="ph ph-gear text-[22px]"></i></button>
-                    <button onclick="toggleTheme()" class="p-2.5 bg-white dark:bg-darkcard text-gray-500 shadow-sm border border-gray-100 dark:border-gray-700 rounded-full pointer-events-auto hover:text-primary transition-colors"><i class="ph ph-moon text-[22px] dark:hidden"></i><i class="ph ph-sun text-[22px] hidden dark:inline-block"></i></button>
-                    <button onclick="handleLogout()" class="p-2.5 bg-white dark:bg-darkcard text-danger shadow-sm border border-gray-100 dark:border-gray-700 rounded-full pointer-events-auto hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"><i class="ph ph-sign-out text-[22px]"></i></button>
+                    <button onclick="navigate('pengaturan')" class="p-2.5 bg-white dark:bg-darkcard text-gray-500 shadow-sm border border-gray-100 dark:border-gray-700 rounded-full hover:text-primary transition-colors admin-only"><i class="ph ph-gear text-[22px]"></i></button>
+                    <button onclick="toggleTheme()" class="p-2.5 bg-white dark:bg-darkcard text-gray-500 shadow-sm border border-gray-100 dark:border-gray-700 rounded-full hover:text-primary transition-colors"><i class="ph ph-moon text-[22px] dark:hidden"></i><i class="ph ph-sun text-[22px] hidden dark:inline-block"></i></button>
+                    <button onclick="handleLogout()" class="p-2.5 bg-white dark:bg-darkcard text-danger shadow-sm border border-gray-100 dark:border-gray-700 rounded-full hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"><i class="ph ph-sign-out text-[22px]"></i></button>
                 </div>
 
                 <!-- Content Views -->
-                <div class="flex-1 overflow-y-auto overflow-x-hidden p-4 lg:px-8 lg:pb-8 lg:pt-2 pb-24 w-full relative" id="content-area"></div>
+                <div class="flex-1 overflow-y-auto overflow-x-hidden p-4 lg:px-8 lg:pb-8 lg:pt-2 pb-24 w-full" id="content-area"></div>
             </main>
 
             <!-- Bottom Navigation Mobile -->
@@ -149,11 +138,6 @@
                     <button class="nav-btn-mobile admin-only flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0" data-target="transaksi"><i class="ph ph-arrows-left-right text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Trx</span></button>
                     <button class="nav-btn-mobile flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0" data-target="buku"><i class="ph ph-book-bookmark text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Buku</span></button>
                     <button class="nav-btn-mobile admin-only flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0" data-target="laporan"><i class="ph ph-file-text text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Laporan</span></button>
-                    <button class="nav-btn-mobile flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0 relative" data-target="diskusi">
-                        <i class="ph ph-chats-circle text-[22px] mb-1"></i>
-                        <span class="text-[10px] font-medium truncate">Diskusi</span>
-                        <span id="badge-diskusi-mobile" class="hidden absolute top-1.5 right-1/4 translate-x-1 w-2.5 h-2.5 bg-danger rounded-full border border-white dark:border-darkcard"></span>
-                    </button>
                 </div>
             </nav>
         </div>
@@ -174,24 +158,22 @@
             <div id="admin-container" class="admin-only space-y-4 md:space-y-6">
                 <!-- Stats Grid -->
                 <div id="admin-stats" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 w-full"></div>
-                <!-- Charts -->
-                <div id="admin-charts" class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mt-4 w-full">
+                <!-- Charts: hanya grafik, tanpa aktivitas -->
+                <div id="admin-charts" class="grid grid-cols-1 lg:grid-cols-1 gap-4 lg:gap-6 mt-4 w-full">
                     <div class="bg-white dark:bg-darkcard p-4 md:p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 w-full min-w-0">
                         <h3 class="font-bold text-gray-700 dark:text-gray-200 mb-4 text-sm md:text-base">Statistik Keseluruhan</h3>
                         <div class="h-56 md:h-64 w-full relative">
                             <canvas id="chartTransaksi"></canvas>
                         </div>
                     </div>
-                    <div class="bg-white dark:bg-darkcard p-4 md:p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 w-full min-w-0">
-                        <h3 class="font-bold text-gray-700 dark:text-gray-200 mb-4 text-sm md:text-base">Aktivitas Sistem Terakhir</h3>
-                        <div class="space-y-3 overflow-y-auto max-h-64 hide-scroll" id="recent-activities"></div>
-                    </div>
+                    <!-- Kolom Aktivitas Sistem Terakhir dihapus -->
                 </div>
             </div>
         </div>
     </template>
 
     <template id="tpl-anggota">
+        <!-- sama seperti sebelumnya, tidak berubah -->
         <div class="space-y-4 flex flex-col w-full h-full animate-fade-in">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <h2 class="text-2xl font-bold dark:text-white">Daftar Anggota</h2>
@@ -219,6 +201,7 @@
     </template>
 
     <template id="tpl-transaksi">
+        <!-- tidak berubah -->
         <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <h2 class="text-2xl font-bold dark:text-white">Riwayat Transaksi</h2>
@@ -245,6 +228,7 @@
     </template>
 
     <template id="tpl-laporan">
+        <!-- tidak berubah -->
         <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <h2 class="text-2xl font-bold dark:text-white">Laporan Keuangan</h2>
@@ -279,6 +263,7 @@
     </template>
 
     <template id="tpl-buku">
+        <!-- tidak berubah -->
         <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
             <h2 class="text-2xl font-bold hidden lg:block dark:text-white">Buku Tabungan Digital</h2>
             
@@ -324,60 +309,10 @@
         </div>
     </template>
 
-    <!-- NEW: DISKUSI GROUP TEMPLATE -->
-    <template id="tpl-diskusi">
-        <!-- Negative margin tricks to make chat span full container on desktop -->
-        <div class="flex flex-col h-full chat-bg animate-fade-in -m-4 lg:-m-8 pb-2">
-            
-            <!-- Diskusi Header -->
-            <div class="bg-white/90 dark:bg-darkcard/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 p-3 lg:p-4 sticky top-0 z-10 flex items-center justify-between shadow-sm">
-                <div class="flex flex-col">
-                    <h2 class="text-lg lg:text-xl font-bold dark:text-white flex items-center gap-2">
-                        <i class="ph ph-chats-circle text-primary"></i> Diskusi RT
-                    </h2>
-                    <p class="text-xs text-gray-500 hidden sm:block">Wadah komunikasi antar anggota dan bendahara</p>
-                </div>
-                <div class="relative w-48 lg:w-64">
-                    <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                    <input type="text" id="search-diskusi" placeholder="Cari pesan..." class="w-full pl-9 pr-3 py-2 rounded-full border border-gray-200 dark:border-gray-700 dark:bg-gray-800 focus:ring-2 focus:ring-primary focus:outline-none bg-white/50 text-sm transition-all">
-                </div>
-            </div>
-
-            <!-- Pinned Message Area -->
-            <div id="pinned-message-container" class="z-10 w-full px-4 pt-2 hidden">
-                <!-- Injected via JS -->
-            </div>
-
-            <!-- Chat History Area -->
-            <div id="chat-history" class="flex-1 overflow-y-auto p-4 space-y-3 lg:space-y-4">
-                <!-- Injected via JS -->
-            </div>
-
-            <!-- Input Area -->
-            <div class="bg-white/90 dark:bg-darkcard/90 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 p-2 lg:p-3 mx-2 lg:mx-4 mb-2 lg:mb-0 rounded-2xl lg:rounded-3xl shadow-lg sticky bottom-0 z-10">
-                <form onsubmit="submitDiskusi(event)" class="flex gap-2 items-end">
-                    <div class="flex-1 bg-gray-100 dark:bg-gray-800 rounded-xl lg:rounded-2xl border border-transparent focus-within:border-primary/50 focus-within:bg-white dark:focus-within:bg-gray-900 transition-all flex items-end">
-                        <textarea id="f-d-content" rows="1" class="w-full bg-transparent resize-none outline-none py-3 px-4 text-sm max-h-32" placeholder="Tulis pesan..." oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" required></textarea>
-                    </div>
-                    <select id="f-d-type" class="admin-only hidden sm:block bg-gray-100 dark:bg-gray-800 border-none outline-none rounded-xl py-3 px-2 text-sm h-11 text-gray-600 dark:text-gray-300">
-                        <option value="Chat">Chat</option>
-                        <option value="Announcement">Pengumuman</option>
-                    </select>
-                    <button type="submit" id="btn-diskusi-send" class="h-11 w-11 flex-shrink-0 bg-primary hover:bg-primary-dark text-white rounded-xl lg:rounded-2xl flex items-center justify-center transition-transform active:scale-95 shadow-md shadow-primary/30">
-                        <i class="ph ph-paper-plane-right text-xl"></i>
-                    </button>
-                </form>
-            </div>
-        </div>
-    </template>
-
     <!-- JS LOGIC -->
     <script>
         const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbxcuUe9qO2PyallWSn7vu2UiiKTnMqirKbocdI_VI8uWnYyjYYvRsv_DUpGIV2GSWiuqQ/exec';
         const ADMIN_VIEWS = new Set(['anggota', 'transaksi', 'laporan', 'pengaturan']);
-        
-        // Polling state
-        let diskusiInterval = null;
 
         const readStorage = (key, fallback = '') => {
             try { return localStorage.getItem(key) || fallback; } catch(e) { return fallback; }
@@ -391,40 +326,28 @@
             try { localStorage.removeItem(key); } catch(e) {}
         };
 
-        // Standard function declarations (Hoisted globally to prevent ReferenceErrors)
-        function toggleTheme() { 
+        window.toggleTheme = () => { 
             const html = document.documentElement; 
             html.classList.toggle('dark'); 
-            writeStorage('theme', html.classList.contains('dark') ? 'dark' : 'light');
-        }
+            try { localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light'); } catch(e) {} 
+        };
 
         function initMockDB() {
             if(!localStorage.getItem('mock_anggota')) {
-                writeStorage('mock_anggota', JSON.stringify([{"ID Anggota":"sitiaminah12", "Password":"123456", "Role":"user", "Nama Lengkap":"Siti Aminah", "No Rumah":"12", "No HP":"08123456789", "Status":"Aktif", "Foto Profil":""}]));
-                writeStorage('mock_transaksi', JSON.stringify([{"ID Transaksi":"TRX-2026-01", "Tanggal": new Date().toISOString(), "ID Anggota":"sitiaminah12", "Nama Anggota":"Siti Aminah", "Jenis Transaksi":"Setoran", "Nominal":150000, "Keterangan":"Iuran"}]));
-            }
-            if(!localStorage.getItem('mock_diskusi')) {
-                writeStorage('mock_diskusi', JSON.stringify([
-                    {"Message ID": "MSG-1", "Timestamp": new Date(Date.now() - 3600000).toISOString(), "Sender ID": "ADMIN", "Sender Name": "Bendahara RT", "Message Type": "Announcement", "Message Content": "Selamat datang di grup diskusi RT!", "Is Pinned": "TRUE", "Status": "Active"},
-                    {"Message ID": "MSG-2", "Timestamp": new Date(Date.now() - 3000000).toISOString(), "Sender ID": "sitiaminah12", "Sender Name": "Siti Aminah", "Message Type": "Chat", "Message Content": "Terima kasih bu bendahara", "Is Pinned": "FALSE", "Status": "Active"}
-                ]));
+                localStorage.setItem('mock_anggota', JSON.stringify([{"ID Anggota":"sitiaminah12", "Password":"123456", "Role":"user", "Nama Lengkap":"Siti Aminah", "No Rumah":"12", "No HP":"08123456789", "Status":"Aktif", "Foto Profil":""}]));
+                localStorage.setItem('mock_transaksi', JSON.stringify([{"ID Transaksi":"TRX-2026-01", "Tanggal": new Date().toISOString(), "ID Anggota":"sitiaminah12", "Nama Anggota":"Siti Aminah", "Jenis Transaksi":"Setoran", "Nominal":150000, "Keterangan":"Iuran"}]));
             }
         }
         
         document.addEventListener('DOMContentLoaded', async () => { 
             initMockDB(); 
-            if(readStorage('theme')==='dark') document.documentElement.classList.add('dark'); 
+            if(localStorage.getItem('theme')==='dark') document.documentElement.classList.add('dark'); 
             document.getElementById('login-form').addEventListener('submit', handleLogin);
             await restoreSession();
         });
 
         let chartInstance = null;
-        const state = { 
-            user: null, 
-            data: { anggota: [], transaksi: [], logs: [], diskusi: [] }, 
-            settings: { gasUrl: readStorage('gasUrl', DEFAULT_GAS_URL), theme: readStorage('theme', 'light') }, 
-            ui: { currentView: 'dashboard', lastReadDiskusi: Number(readStorage('lastReadDiskusi', '0')) } 
-        };
+        const state = { user: null, data: { anggota: [], transaksi: [], logs: [] }, settings: { gasUrl: readStorage('gasUrl', DEFAULT_GAS_URL), theme: readStorage('theme', 'light') }, ui: { currentView: 'dashboard' } };
         
         const getGasUrl = () => (state.settings.gasUrl || DEFAULT_GAS_URL || '').trim();
         const normalizeRole = (role) => String(role || 'user').toLowerCase() === 'admin' ? 'admin' : 'user';
@@ -433,7 +356,6 @@
             return Number.isFinite(n) ? n : 0;
         };
         const formatRupiah = (angka) => 'Rp ' + toNumber(angka).toLocaleString('id-ID');
-        
         const formatDateTime = (iso) => {
             if (!iso) return '-';
             const d = new Date(iso);
@@ -465,13 +387,13 @@
             return `<div class="${classes} rounded-2xl border border-white/30 bg-white/20 flex items-center justify-center text-2xl font-bold shadow-lg">${getUserInitials(user)}</div>`;
         };
 
-        function showToast(msg, type = 'success') {
+        const showToast = (msg, type = 'success') => {
             const container = document.getElementById('toast-container'); const toast = document.createElement('div');
             const clrs = { success: 'bg-green-100 text-green-800 border-green-200', error: 'bg-red-100 text-red-800 border-red-200' };
             toast.className = `flex items-center gap-3 p-3.5 rounded-xl border shadow-lg toast-enter pointer-events-auto backdrop-blur-md ${clrs[type]} w-full z-[100]`;
             toast.innerHTML = `<span class="font-medium text-sm">${msg}</span>`;
             container.appendChild(toast); setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
-        }
+        };
 
         async function fetchAPI(action, payload = {}) {
             const gasUrl = getGasUrl();
@@ -518,90 +440,52 @@
                 setTimeout(() => {
                     let a = JSON.parse(readStorage('mock_anggota', '[]')); 
                     let t = JSON.parse(readStorage('mock_transaksi', '[]')); 
-                    let l = JSON.parse(readStorage('mock_logs', '[]'));
-                    let d = JSON.parse(readStorage('mock_diskusi', '[]'));
                     const actor = state.user ? state.user.username : 'Unknown';
                     
                     if(action === 'login') {
                         if(payload.username.toLowerCase()==='bendahara' && payload.password==='123456') resolve({success:true, role:'admin', data:{'ID Anggota':'ADMIN', 'Nama Lengkap':'Bendahara'}});
                         else { let u = a.find(x => String(x['ID Anggota']).toLowerCase() === String(payload.username).toLowerCase()); if(u && payload.password===(u.Password || '123456')) resolve({success:true, role:normalizeRole(u.Role), data:withoutPassword(u)}); else resolve({success:false, message:'Username / Password salah!'}); }
                     } else if (action === 'get_all_data') {
-                        if(payload.role === 'user') resolve({success: true, data: { anggota: a.filter(x=>String(x['ID Anggota'])===String(payload.userId)).map(withoutPassword), transaksi: t.filter(x=>String(x['ID Anggota'])===String(payload.userId)), diskusi: d, logs:[] }});
-                        else resolve({success: true, data: { anggota: a.map(withoutPassword), transaksi: t, diskusi: d, logs: l }});
-                    } else if (action === 'sync_diskusi') {
-                        resolve({success: true, data: d});
-                    } else if (action === 'save_message') {
-                        let idMsg = "MSG-" + new Date().getTime() + "-" + Math.floor(Math.random()*1000);
-                        let type = (payload.type === 'Announcement' && state.user?.role === 'admin') ? 'Announcement' : 'Chat';
-                        d.push({"Message ID": idMsg, "Timestamp": new Date().toISOString(), "Sender ID": state.user['ID Anggota'], "Sender Name": state.user['Nama Lengkap'], "Message Type": type, "Message Content": payload.content, "Is Pinned": "FALSE", "Status": "Active"});
-                        writeStorage('mock_diskusi', JSON.stringify(d)); resolve({success:true, id: idMsg});
-                    } else if (action === 'delete_message') {
-                        let idx = d.findIndex(x => String(x['Message ID']) === String(payload.id));
-                        if(idx > -1) {
-                            if(state.user.role !== 'admin' && String(d[idx]['Sender ID']) !== String(state.user['ID Anggota'])) {
-                                resolve({success:false, message:'Akses ditolak.'}); return;
-                            }
-                            d.splice(idx, 1);
-                            writeStorage('mock_diskusi', JSON.stringify(d)); resolve({success:true});
-                        } else resolve({success:false, message:'Pesan tidak ditemukan'});
-                    } else if (action === 'toggle_pin') {
-                        if(state.user.role !== 'admin') { resolve({success:false, message:'Akses ditolak.'}); return; }
-                        let msg = d.find(x => String(x['Message ID']) === String(payload.id));
-                        if(msg) {
-                            msg['Is Pinned'] = msg['Is Pinned'] === 'TRUE' ? 'FALSE' : 'TRUE';
-                            writeStorage('mock_diskusi', JSON.stringify(d)); resolve({success:true});
-                        } else resolve({success:false, message:'Pesan tidak ditemukan'});
+                        if(payload.role === 'user') resolve({success: true, data: { anggota: a.filter(x=>String(x['ID Anggota'])===String(payload.userId)).map(withoutPassword), transaksi: t.filter(x=>String(x['ID Anggota'])===String(payload.userId)), logs:[] }});
+                        else resolve({success: true, data: { anggota: a.map(withoutPassword), transaksi: t, logs:[] }});
                     } else if (action === 'update_profile') {
                         let i = a.findIndex(x => String(x['ID Anggota']) === String(state.user?.['ID Anggota']));
                         if(i === -1) { resolve({success:false, message:'Profil tidak ditemukan.'}); return; }
                         if(payload.password) a[i].Password = payload.password;
                         if(payload.photo && payload.photo.data) a[i]['Foto Profil'] = payload.photo.data;
-                        writeStorage('mock_anggota', JSON.stringify(a));
+                        localStorage.setItem('mock_anggota', JSON.stringify(a));
                         resolve({success:true, message:'Profil berhasil diperbarui.', role:normalizeRole(a[i].Role), data:withoutPassword(a[i])});
                     } else if (action === 'save_anggota') {
                         if(!payload.nama || !payload.noRumah) { resolve({success:false, message:'Nama dan nomor rumah wajib diisi.'}); return; }
                         let id = payload.id || (payload.nama.toLowerCase().replace(/[^a-z]/g, '') + payload.noRumah);
                         if(!payload.id) { a.push({"ID Anggota": id, "Password": payload.password || '123456', "Role": normalizeRole(payload.role), "Nama Lengkap": payload.nama, "No Rumah": payload.noRumah, "No HP": payload.noHp, "Status": payload.status, "Tanggal Dibuat": new Date().toISOString(), "Foto Profil":""}); } 
                         else { let i = a.findIndex(x => String(x['ID Anggota']) === String(id)); if(i>-1) { if(payload.password) a[i]['Password']=payload.password; a[i]['Role']=normalizeRole(payload.role); a[i]['Nama Lengkap']=payload.nama; a[i]['No Rumah']=payload.noRumah; a[i]['No HP']=payload.noHp; a[i]['Status']=payload.status; } else { resolve({success:false, message:'Anggota tidak ditemukan.'}); return; } }
-                        writeStorage('mock_anggota', JSON.stringify(a)); resolve({success:true});
+                        localStorage.setItem('mock_anggota', JSON.stringify(a)); resolve({success:true});
                     } else if (action === 'save_transaksi') {
                         const anggota = a.find(x => String(x['ID Anggota']) === String(payload.idAnggota));
                         if(!anggota) { resolve({success:false, message:'Anggota transaksi tidak ditemukan.'}); return; }
                         if(toNumber(payload.nominal) <= 0) { resolve({success:false, message:'Nominal transaksi harus lebih dari 0.'}); return; }
                         let id = "TRX-" + new Date().toISOString().slice(0,10).replace(/-/g,'') + "-" + ("000"+(t.length+1)).slice(-4);
                         t.push({"ID Transaksi": id, "Tanggal": new Date().toISOString(), "ID Anggota": payload.idAnggota, "Nama Anggota": anggota['Nama Lengkap'], "Jenis Transaksi": payload.jenis, "Nominal": toNumber(payload.nominal), "Keterangan": payload.keterangan, "User Input": actor});
-                        writeStorage('mock_transaksi', JSON.stringify(t)); resolve({success:true});
+                        localStorage.setItem('mock_transaksi', JSON.stringify(t)); resolve({success:true});
                     } else if (action === 'delete_anggota') {
                         if(t.some(x => String(x['ID Anggota']) === String(payload.id))) { resolve({success:false, message:'Anggota masih punya transaksi. Ubah status menjadi Nonaktif.'}); return; }
                         let idx = a.findIndex(x => String(x['ID Anggota']) === String(payload.id));
                         if(idx > -1) a.splice(idx, 1); else { resolve({success:false, message:'Anggota tidak ditemukan.'}); return; }
-                        l.push({"Waktu": new Date().toISOString(), "User": actor, "Aktivitas": "Menghapus anggota " + payload.id});
-                        writeStorage('mock_anggota', JSON.stringify(a));
-                        writeStorage('mock_logs', JSON.stringify(l));
+                        // log dihapus
+                        localStorage.setItem('mock_anggota', JSON.stringify(a));
                         resolve({success:true});
                     } else if (action === 'delete_transaksi') {
                         let idx = t.findIndex(x => String(x['ID Transaksi']) === String(payload.id));
                         if(idx > -1) t.splice(idx, 1); else { resolve({success:false, message:'Transaksi tidak ditemukan.'}); return; }
-                        l.push({"Waktu": new Date().toISOString(), "User": actor, "Aktivitas": "Menghapus transaksi " + payload.id});
-                        writeStorage('mock_transaksi', JSON.stringify(t));
-                        writeStorage('mock_logs', JSON.stringify(l));
+                        // log dihapus
+                        localStorage.setItem('mock_transaksi', JSON.stringify(t));
                         resolve({success:true});
                     } else {
                         resolve({success:false, message:'Aksi tidak ditemukan.'});
                     }
                 }, 400);
             });
-        }
-
-        function updateBadges() {
-            if (!state.user) return;
-            const currentMsgs = state.data.diskusi ? state.data.diskusi.length : 0;
-            const hasUnread = currentMsgs > state.ui.lastReadDiskusi;
-            const mobileBadge = document.getElementById('badge-diskusi-mobile');
-            const desktopBadge = document.getElementById('badge-diskusi-desktop');
-            
-            if (mobileBadge) mobileBadge.style.display = hasUnread && state.ui.currentView !== 'diskusi' ? 'block' : 'none';
-            if (desktopBadge) desktopBadge.style.display = hasUnread && state.ui.currentView !== 'diskusi' ? 'block' : 'none';
         }
 
         async function restoreSession() {
@@ -629,7 +513,7 @@
                     document.getElementById('main-layout').classList.add('hidden');
                     return false;
                 }
-                
+
                 return true;
             } catch (error) {
                 clearSession();
@@ -667,13 +551,10 @@
                 state.data = {
                     anggota: (res.data && res.data.anggota) || [],
                     transaksi: (res.data && res.data.transaksi) || [],
-                    diskusi: (res.data && res.data.diskusi) || [],
-                    logs: (res.data && res.data.logs) || []
+                    logs: []   // log selalu kosong
                 };
                 const current = state.data.anggota.find(a => String(a['ID Anggota']) === String(state.user['ID Anggota']));
                 if (current) state.user = { ...state.user, ...current, role: state.user.role || normalizeRole(current.Role) };
-                
-                updateBadges();
                 renderCurrentView();
                 return true;
             }
@@ -683,9 +564,8 @@
         }
 
         function handleLogout() {
-            state.user = null; state.data = { anggota: [], transaksi: [], logs: [], diskusi: [] }; state.ui.currentView = 'dashboard';
+            state.user = null; state.data = { anggota: [], transaksi: [], logs: [] }; state.ui.currentView = 'dashboard';
             clearSession();
-            if (diskusiInterval) { clearInterval(diskusiInterval); diskusiInterval = null; }
             document.body.removeAttribute('data-role'); document.getElementById('login-screen').classList.remove('hidden'); document.getElementById('main-layout').classList.add('hidden');
             document.getElementById('login-form').reset(); closeAllModals(); if(chartInstance) { chartInstance.destroy(); chartInstance = null; }
             document.getElementById('content-area').innerHTML = '';
@@ -696,34 +576,22 @@
             if (!state.user) return;
             if (state.user.role !== 'admin' && ADMIN_VIEWS.has(viewName)) viewName = 'dashboard';
             state.ui.currentView = viewName;
-            
-            if (viewName === 'diskusi') {
-                state.ui.lastReadDiskusi = state.data.diskusi ? state.data.diskusi.length : 0;
-                writeStorage('lastReadDiskusi', state.ui.lastReadDiskusi);
-                updateBadges();
-            }
-
             document.querySelectorAll('.nav-btn, .nav-btn-mobile').forEach(btn => {
                 let isAktif = btn.dataset.target === viewName;
                 let isAdminOnly = btn.classList.contains('admin-only') ? ' admin-only' : '';
                 
                 if(btn.classList.contains('nav-btn')) {
-                    btn.className = isAktif ? 'nav-btn' + isAdminOnly + ' w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-primary bg-primary/10 font-medium relative' : 'nav-btn' + isAdminOnly + ' w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium relative';
+                    btn.className = isAktif ? 'nav-btn' + isAdminOnly + ' w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-primary bg-primary/10 font-medium' : 'nav-btn' + isAdminOnly + ' w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all font-medium';
                 } else {
-                    btn.className = isAktif ? 'nav-btn-mobile' + isAdminOnly + ' flex flex-col items-center justify-center p-2 text-primary flex-1 min-w-0 relative' : 'nav-btn-mobile' + isAdminOnly + ' flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0 relative';
+                    btn.className = isAktif ? 'nav-btn-mobile' + isAdminOnly + ' flex flex-col items-center justify-center p-2 text-primary flex-1 min-w-0' : 'nav-btn-mobile' + isAdminOnly + ' flex flex-col items-center justify-center p-2 text-gray-400 flex-1 min-w-0';
                 }
             });
-            const tMap = { dashboard:'Dashboard', anggota:'Anggota', transaksi:'Transaksi', buku:'Buku Tabungan', laporan:'Laporan', pengaturan:'Pengaturan', diskusi:'Diskusi Group' };
+            const tMap = { dashboard:'Dashboard', anggota:'Anggota', transaksi:'Transaksi', buku:'Buku Tabungan', laporan:'Laporan', pengaturan:'Pengaturan' };
             document.getElementById('mobile-header-title').innerText = tMap[viewName] || 'Aplikasi';
-            
-            // Handle polling
-            if (diskusiInterval) { clearInterval(diskusiInterval); diskusiInterval = null; }
-            if (viewName === 'diskusi') {
-                diskusiInterval = setInterval(syncDiskusi, 15000);
-            }
-
             renderCurrentView();
         }
+
+        document.querySelectorAll('.nav-btn, .nav-btn-mobile').forEach(b => b.addEventListener('click', () => navigate(b.dataset.target)));
 
         function renderCurrentView() {
             if (!state.user) return;
@@ -735,13 +603,11 @@
             else if(v==='laporan'){ a.appendChild(document.getElementById('tpl-laporan').content.cloneNode(true)); renderLaporanData(); }
             else if(v==='buku'){ a.appendChild(document.getElementById('tpl-buku').content.cloneNode(true)); setupBukuTabungan(); }
             else if(v==='pengaturan'){ renderPengaturan(a); }
-            else if(v==='diskusi'){ a.appendChild(document.getElementById('tpl-diskusi').content.cloneNode(true)); renderDiskusi(); }
         }
 
-        // --- GLOBAL HOISTED UTILITIES ---
-        function closeAllModals() { document.getElementById('modals').innerHTML = ''; }
+        window.closeAllModals = () => document.getElementById('modals').innerHTML = '';
 
-        function previewProfilePhoto(e) {
+        window.previewProfilePhoto = function(e) {
             const file = e.target.files && e.target.files[0];
             if(!file) return;
 
@@ -757,7 +623,7 @@
                 if(preview) preview.innerHTML = `<img src="${reader.result}" class="h-24 w-24 rounded-2xl object-cover border border-gray-200 dark:border-gray-700 shadow-lg" alt="Preview Foto">`;
             };
             reader.readAsDataURL(file);
-        }
+        };
 
         function resizeProfilePhoto(file) {
             return new Promise((resolve, reject) => {
@@ -843,17 +709,7 @@
                     ]}, options: { responsive: true, maintainAspectRatio: false }});
                 }
 
-                // Render Logs
-                const logsTb = document.getElementById('recent-activities');
-                logsTb.innerHTML = '';
-                let recentLogs = (state.data.logs || []).sort((a,b)=>new Date(b['Waktu']) - new Date(a['Waktu'])).slice(0, 5);
-                if(recentLogs.length === 0) logsTb.innerHTML = `<p class="text-sm text-gray-500 italic">Belum ada aktivitas sistem.</p>`;
-                recentLogs.forEach(l => {
-                    logsTb.innerHTML += `<div class="flex items-start gap-3 border-b border-gray-100 dark:border-gray-800 pb-3 mb-3 last:border-0 last:pb-0 last:mb-0">
-                        <div class="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-500 mt-0.5"><i class="ph ph-activity text-sm"></i></div>
-                        <div><p class="text-sm font-medium dark:text-gray-200">${l['Aktivitas']}</p><p class="text-xs text-gray-500">${formatDateTime(l['Waktu'])} • ${l['User']}</p></div>
-                    </div>`;
-                });
+                // Tidak ada lagi render log aktivitas
             }
         }
 
@@ -884,8 +740,7 @@
                 });
             };
             renderTb();
-            const searchInput = document.getElementById('search-anggota');
-            if (searchInput) searchInput.addEventListener('input', e => renderTb(e.target.value));
+            document.getElementById('search-anggota').addEventListener('input', e => renderTb(e.target.value));
         }
 
         function renderTransaksi(filter = 'Semua') {
@@ -905,14 +760,13 @@
                     </td></tr>`;
             });
         }
-        
-        function filterTrx(val, btn) {
+        window.filterTrx = (val, btn) => {
             document.querySelectorAll('#content-area button').forEach(b => { if(b.innerText.includes('Semua')||b.innerText.includes('Setoran')||b.innerText.includes('Penarikan')) b.className = 'px-4 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs sm:text-sm font-medium hover:bg-gray-200 whitespace-nowrap flex-shrink-0 transition-colors'; });
             btn.className = 'px-4 py-1.5 rounded-full bg-primary text-white text-xs sm:text-sm font-medium whitespace-nowrap flex-shrink-0 transition-colors';
             renderTransaksi(val);
-        }
+        };
 
-        function renderLaporanData() {
+        window.renderLaporanData = () => {
             const filter = document.getElementById('filter-waktu').value, tb = document.getElementById('table-laporan'); tb.innerHTML = '';
             let tSetoran = 0, tPenarikan = 0;
             let filtered = state.data.transaksi.filter(t => { let d = new Date(t['Tanggal']), now = new Date(); if (filter === 'Hari Ini') return d.toDateString() === now.toDateString(); if (filter === 'Minggu Ini') { let fd = new Date(now.setDate(now.getDate() - now.getDay())); return d >= fd; } if (filter === 'Bulan Ini') return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear(); if (filter === 'Tahun Ini') return d.getFullYear() === now.getFullYear(); return true; });
@@ -924,9 +778,9 @@
                 tb.innerHTML += `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-50 dark:border-gray-800/50"><td class="p-3 md:p-4 text-xs text-gray-500 w-44">${formatDateTime(t['Tanggal'])}</td><td class="p-3 md:p-4 font-medium">${t['Nama Anggota']}</td><td class="p-3 md:p-4 text-xs font-bold ${c}">${t['Jenis Transaksi']}</td><td class="p-3 md:p-4 font-bold text-right ${c}">${formatRupiah(t['Nominal'])}</td></tr>`;
             });
             document.getElementById('lap-tot-setoran').innerText = formatRupiah(tSetoran); document.getElementById('lap-tot-penarikan').innerText = formatRupiah(tPenarikan);
-        }
+        };
 
-        function exportLaporanPDF() {
+        window.exportLaporanPDF = function() {
             const div = document.createElement('div');
             div.style.padding = '20px'; div.style.background = 'white'; div.style.color = 'black';
             let setoran = document.getElementById('lap-tot-setoran').innerText, penarikan = document.getElementById('lap-tot-penarikan').innerText, filter = document.getElementById('filter-waktu').value;
@@ -946,15 +800,15 @@
                 </table>
             `;
             html2pdf().set({ margin: 10, filename: `Laporan_${new Date().getTime()}.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(div).save();
-        }
+        };
 
-        function exportExcel() {
+        window.exportExcel = function() {
             const wb = XLSX.utils.book_new();
             const agt = state.data.anggota.map(a => ({ ...a, "Saldo Akhir": calculateSaldo(a['ID Anggota']) }));
             XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(agt), "Anggota");
             XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(state.data.transaksi), "Transaksi");
             XLSX.writeFile(wb, `Tabungan_RT_${new Date().toISOString().slice(0,10)}.xlsx`); showToast("Excel berhasil diunduh");
-        }
+        };
 
         function renderPengaturan(container) { 
             container.innerHTML = `
@@ -967,36 +821,10 @@
                         <button onclick="saveSettings()" class="bg-primary text-white px-6 py-3 rounded-xl font-medium shadow-sm hover:bg-primary-dark transition-colors">Simpan</button>
                     </div>
                 </div>
-                
-                <div class="bg-white dark:bg-darkcard p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-hidden flex flex-col min-w-0">
-                    <h3 class="font-bold text-lg mb-4 dark:text-white flex items-center gap-2"><i class="ph ph-clock-counter-clockwise text-primary text-xl"></i> Log Aktivitas Sistem</h3>
-                    <div class="overflow-x-auto w-full">
-                        <table class="w-full text-left text-sm whitespace-nowrap min-w-[600px]">
-                            <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 border-b border-gray-200 dark:border-gray-700">
-                                <tr><th class="p-4 w-44">Waktu</th><th class="p-4 w-32">User</th><th class="p-4">Aktivitas</th></tr>
-                            </thead>
-                            <tbody id="table-log" class="divide-y divide-gray-100 dark:divide-gray-800">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <!-- Bagian Log Aktivitas dihapus -->
             </div>`; 
-            
-            const tbLog = document.getElementById('table-log');
-            let logs = state.data.logs || [];
-            if(logs.length === 0) tbLog.innerHTML = `<tr><td colspan="3" class="p-6 text-center text-gray-500 italic">Belum ada log aktivitas.</td></tr>`;
-            else {
-                logs.sort((a,b)=>new Date(b['Waktu'])-new Date(a['Waktu'])).forEach(l => {
-                    tbLog.innerHTML += `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
-                        <td class="p-4 text-xs text-gray-500">${formatDateTime(l['Waktu'])}</td>
-                        <td class="p-4 font-bold text-xs">${l['User']}</td>
-                        <td class="p-4 text-xs">${l['Aktivitas']}</td>
-                    </tr>`;
-                });
-            }
         }
-        
-        async function saveSettings() {
+        window.saveSettings = async function() {
             const url = document.getElementById('setting-gas').value.trim();
             if (url && !/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/i.test(url)) {
                 showToast("URL Apps Script harus berupa Web App URL yang berakhir /exec", "error");
@@ -1006,183 +834,8 @@
             state.settings.gasUrl = url; localStorage.setItem('gasUrl', url);
             showToast("Pengaturan disimpan. Memuat ulang...");
             await loadData();
-        }
+        };
 
-        // --- DISKUSI GROUP ---
-        async function syncDiskusi() {
-            if (state.ui.currentView !== 'diskusi') return;
-            const res = await fetchAPI('sync_diskusi');
-            if (res.success && res.data) {
-                const isNew = state.data.diskusi.length !== res.data.length;
-                state.data.diskusi = res.data;
-                state.ui.lastReadDiskusi = res.data.length;
-                writeStorage('lastReadDiskusi', res.data.length);
-                if (isNew) renderDiskusi(false); // don't scroll abruptly unless necessary
-            }
-        }
-
-        async function submitDiskusi(e) {
-            e.preventDefault();
-            const contentInput = document.getElementById('f-d-content');
-            const content = contentInput.value.trim();
-            const type = document.getElementById('f-d-type') ? document.getElementById('f-d-type').value : 'Chat';
-            
-            if(!content) return;
-            
-            contentInput.value = '';
-            contentInput.style.height = '';
-            
-            // Optimistic update
-            const tempId = 'temp-' + Date.now();
-            state.data.diskusi.push({
-                "Message ID": tempId,
-                "Timestamp": new Date().toISOString(),
-                "Sender ID": state.user['ID Anggota'],
-                "Sender Name": state.user['Nama Lengkap'] || state.user.username,
-                "Message Type": type,
-                "Message Content": content,
-                "Is Pinned": "FALSE",
-                "Status": "Active"
-            });
-            renderDiskusi(true);
-            
-            const res = await fetchAPI('save_message', { content, type });
-            if (!res.success) {
-                showToast(res.message || "Pesan gagal terkirim", "error");
-                state.data.diskusi = state.data.diskusi.filter(m => m['Message ID'] !== tempId);
-                renderDiskusi(false);
-            } else {
-                syncDiskusi();
-            }
-        }
-
-        async function deleteDiskusi(id) {
-            if(!confirm("Hapus pesan ini?")) return;
-            const res = await fetchAPI('delete_message', { id });
-            if(res.success) {
-                state.data.diskusi = state.data.diskusi.filter(m => String(m['Message ID']) !== String(id));
-                renderDiskusi(false);
-            } else {
-                showToast(res.message || "Gagal menghapus pesan", "error");
-            }
-        }
-
-        async function togglePinDiskusi(id) {
-            const res = await fetchAPI('toggle_pin', { id });
-            if(res.success) {
-                syncDiskusi();
-            } else {
-                showToast(res.message || "Gagal menyematkan pesan", "error");
-            }
-        }
-
-        function renderDiskusi(scrollToBottom = true) {
-            const historyArea = document.getElementById('chat-history');
-            const pinArea = document.getElementById('pinned-message-container');
-            const searchInput = document.getElementById('search-diskusi');
-            if(!historyArea) return;
-
-            const searchQuery = searchInput ? searchInput.value.toLowerCase() : '';
-
-            // Render Pinned Messages
-            const pinnedMsgs = state.data.diskusi.filter(m => String(m['Is Pinned']).toUpperCase() === 'TRUE');
-            if (pinnedMsgs.length > 0 && !searchQuery) {
-                pinArea.innerHTML = pinnedMsgs.map(m => `
-                    <div class="bg-white/80 dark:bg-darkcard/80 backdrop-blur-sm border-l-4 border-primary p-3 rounded-r-xl shadow-sm text-sm relative group mb-2">
-                        <div class="flex items-center gap-2 mb-1">
-                            <i class="ph-fill ph-push-pin text-primary"></i>
-                            <span class="font-bold text-xs text-primary">${m['Sender Name']}</span>
-                        </div>
-                        <p class="text-gray-700 dark:text-gray-300 truncate">${m['Message Content']}</p>
-                        ${state.user.role === 'admin' ? `<button onclick="togglePinDiskusi('${m['Message ID']}')" class="absolute right-2 top-2 p-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-red-100 hover:text-danger rounded-lg hidden group-hover:block transition-colors"><i class="ph ph-x"></i></button>` : ''}
-                    </div>
-                `).join('');
-                pinArea.classList.remove('hidden');
-            } else {
-                pinArea.innerHTML = '';
-                pinArea.classList.add('hidden');
-            }
-
-            // Render Chat Messages
-            let visibleMsgs = state.data.diskusi;
-            if (searchQuery) {
-                visibleMsgs = visibleMsgs.filter(m => 
-                    String(m['Sender Name']).toLowerCase().includes(searchQuery) || 
-                    String(m['Message Content']).toLowerCase().includes(searchQuery)
-                );
-            }
-
-            if (visibleMsgs.length === 0) {
-                historyArea.innerHTML = `<div class="flex flex-col items-center justify-center h-full text-gray-400 opacity-70"><i class="ph ph-chats-circle text-6xl mb-2"></i><p class="text-sm">Belum ada diskusi.</p></div>`;
-                return;
-            }
-
-            let lastDate = '';
-            let html = '';
-
-            visibleMsgs.forEach((m, index) => {
-                const msgDate = new Date(m['Timestamp']);
-                const dateStr = msgDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-                const timeStr = msgDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-                
-                const isMe = String(m['Sender ID']) === String(state.user['ID Anggota']);
-                const isAdmin = state.user.role === 'admin';
-                const isAnnouncement = m['Message Type'] === 'Announcement';
-                const canDelete = isAdmin || isMe;
-
-                // Date separator
-                if (dateStr !== lastDate) {
-                    html += `<div class="flex justify-center my-4"><span class="bg-gray-200/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">${dateStr}</span></div>`;
-                    lastDate = dateStr;
-                }
-
-                if (isAnnouncement) {
-                    html += `
-                        <div class="flex justify-center my-4 relative group">
-                            <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700/50 p-4 rounded-2xl w-full max-w-lg shadow-sm text-center">
-                                <div class="flex justify-center mb-2"><div class="bg-yellow-100 dark:bg-yellow-800 text-yellow-600 dark:text-yellow-400 p-2 rounded-full"><i class="ph-fill ph-megaphone text-xl"></i></div></div>
-                                <h4 class="font-bold text-yellow-800 dark:text-yellow-500 text-sm mb-1">${m['Sender Name']}</h4>
-                                <p class="text-gray-800 dark:text-gray-200 text-sm">${m['Message Content'].replace(/\n/g, '<br>')}</p>
-                                <span class="text-[10px] text-gray-500 mt-2 block">${timeStr}</span>
-                            </div>
-                            <div class="absolute right-4 top-1/2 -translate-y-1/2 hidden group-hover:flex flex-col gap-1">
-                                ${isAdmin ? `<button onclick="togglePinDiskusi('${m['Message ID']}')" class="p-2 bg-white dark:bg-gray-800 rounded-full shadow-sm hover:text-primary"><i class="ph ph-push-pin text-sm"></i></button>` : ''}
-                                ${canDelete ? `<button onclick="deleteDiskusi('${m['Message ID']}')" class="p-2 bg-white dark:bg-gray-800 rounded-full shadow-sm hover:text-danger"><i class="ph ph-trash text-sm"></i></button>` : ''}
-                            </div>
-                        </div>`;
-                } else {
-                    html += `
-                        <div class="flex ${isMe ? 'justify-end' : 'justify-start'} group relative mb-2">
-                            <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} max-w-[85%] lg:max-w-[70%] relative">
-                                ${!isMe ? `<span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 ml-1 mb-0.5">${m['Sender Name']}</span>` : ''}
-                                <div class="relative px-4 py-2.5 shadow-sm text-sm ${isMe ? 'bg-primary text-white rounded-2xl rounded-br-sm' : 'bg-white dark:bg-darkcard dark:border dark:border-gray-700 text-gray-800 dark:text-gray-200 rounded-2xl rounded-bl-sm'}">
-                                    <p class="whitespace-pre-wrap break-words">${m['Message Content']}</p>
-                                    <div class="flex items-center justify-end gap-1 mt-1 opacity-70">
-                                        <span class="text-[9px] ${isMe ? 'text-white/80' : 'text-gray-400'}">${timeStr}</span>
-                                        ${isMe ? `<i class="ph-fill ph-check text-[10px]"></i>` : ''}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="absolute ${isMe ? 'right-[100%] mr-2' : 'left-[100%] ml-2'} top-1/2 -translate-y-1/2 hidden group-hover:flex items-center gap-1 z-10">
-                                ${isAdmin ? `<button onclick="togglePinDiskusi('${m['Message ID']}')" class="p-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full shadow-sm hover:text-primary transition-colors"><i class="ph ph-push-pin text-xs"></i></button>` : ''}
-                                ${canDelete ? `<button onclick="deleteDiskusi('${m['Message ID']}')" class="p-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full shadow-sm hover:text-danger transition-colors"><i class="ph ph-trash text-xs"></i></button>` : ''}
-                            </div>
-                        </div>`;
-                }
-            });
-
-            historyArea.innerHTML = html;
-
-            if(searchInput) {
-                searchInput.oninput = () => renderDiskusi(false);
-            }
-
-            if (scrollToBottom) {
-                historyArea.scrollTop = historyArea.scrollHeight;
-            }
-        }
-
-        // --- BUKU TABUNGAN ---
         function setupBukuTabungan() {
             if (!state.user) return;
             let sel = document.getElementById('select-buku-anggota'); sel.innerHTML = '<option value="">-- Pilih Anggota --</option>';
@@ -1196,7 +849,7 @@
             }
         }
         
-        function renderBukuTabungan() {
+        window.renderBukuTabungan = () => {
             let id = document.getElementById('select-buku-anggota').value;
             let area = document.getElementById('passbook-area'), emp = document.getElementById('passbook-empty');
             if(!id){ area.classList.add('hidden'); emp.classList.remove('hidden'); return; }
@@ -1209,24 +862,23 @@
             let tb = document.getElementById('table-buku'); tb.innerHTML='';
             let trx = state.data.transaksi.filter(t=>String(t['ID Anggota'])===String(id)).sort((x,y)=>new Date(x['Tanggal'])-new Date(y['Tanggal']));
             let sld = 0;
-            if(trx.length===0) tb.innerHTML = `<tr><td colspan=\"5\" class=\"p-6 text-center text-gray-500 italic\">Belum ada mutasi</td></tr>`;
+            if(trx.length===0) tb.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-gray-500 italic">Belum ada mutasi</td></tr>`;
             else trx.forEach(t => { let isS = t['Jenis Transaksi']==='Setoran'; let n = Number(t['Nominal']); sld += isS?n:-n;
                 tb.innerHTML+=`<tr class="border-b border-gray-100">
                     <td class="p-3 text-xs text-gray-600 w-40">${formatDateTime(t['Tanggal'])}</td>
                     <td class="p-3"><span class="text-[10px] font-bold uppercase ${isS?'text-success':'text-danger'}">${t['Jenis Transaksi']}</span><br><span class="text-xs truncate block max-w-[200px]">${t['Keterangan']||'-'}</span></td>
                     <td class="p-3 text-right text-success text-sm">${isS?formatRupiah(n):'-'}</td><td class="p-3 text-right text-danger text-sm">${!isS?formatRupiah(n):'-'}</td><td class="p-3 text-right font-bold text-sm bg-gray-50 dark:bg-gray-800/30">${formatRupiah(sld)}</td></tr>`;
             });
-        }
+        };
 
-        // --- INFO & RIWAYAT ANGGOTA ---
-        function showDetailAnggota(id) {
+        window.showDetailAnggota = function(id) {
             const a = state.data.anggota.find(x => String(x['ID Anggota']) === String(id));
             if(!a) { showToast("Anggota tidak ditemukan", "error"); return; }
             const saldo = calculateSaldo(id);
             let trx = state.data.transaksi.filter(t => String(t['ID Anggota']) === String(id)).sort((x,y)=>new Date(y['Tanggal'])-new Date(x['Tanggal']));
 
             let trHtml = '';
-            if(trx.length === 0) trHtml = `<tr><td colspan=\"3\" class=\"p-6 text-center text-gray-500 text-sm italic\">Belum ada mutasi transaksi</td></tr>`;
+            if(trx.length === 0) trHtml = `<tr><td colspan="3" class="p-6 text-center text-gray-500 text-sm italic">Belum ada mutasi transaksi</td></tr>`;
             trx.forEach(t => {
                  let isS = t['Jenis Transaksi'] === 'Setoran';
                  let c = isS ? 'text-success' : 'text-danger';
@@ -1277,8 +929,7 @@
             document.getElementById('modals').innerHTML = content;
         }
 
-        // --- MODALS (Tambah/Edit/Transaksi) ---
-        function openModal(id) {
+        window.openModal = function(id) {
             const con = document.getElementById('modals'); let content = '';
             if(id === 'modal-profile') {
                 content = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -1352,7 +1003,7 @@
             con.innerHTML = content;
         }
 
-        async function submitProfile(e) {
+        window.submitProfile = async (e) => {
             e.preventDefault();
             const password = document.getElementById('f-p-password').value.trim();
             const password2 = document.getElementById('f-p-password2').value.trim();
@@ -1395,9 +1046,9 @@
                     btn.innerHTML = `<i class="ph ph-floppy-disk text-lg"></i> Simpan Profil`;
                 }
             }
-        }
+        };
 
-        async function submitAnggota(e) {
+        window.submitAnggota = async (e) => {
             e.preventDefault();
             const res = await fetchAPI('save_anggota', {
                 id: document.getElementById('f-a-id').value,
@@ -1414,9 +1065,9 @@
             showToast(res.message || "Data anggota tersimpan");
             closeAllModals();
             await loadData();
-        }
+        };
 
-        async function submitTransaksi(e) {
+        window.submitTransaksi = async (e) => {
             e.preventDefault();
             const idA = document.getElementById('f-t-anggota').value;
             const anggota = state.data.anggota.find(a=>String(a['ID Anggota'])===String(idA));
@@ -1438,23 +1089,23 @@
             showToast(res.message || "Transaksi berhasil");
             closeAllModals();
             await loadData();
-        }
+        };
         
-        function editAnggota(id) { 
+        window.editAnggota = (id) => { 
             const a = state.data.anggota.find(x => String(x['ID Anggota']) === String(id));
             if(!a) { showToast("Anggota tidak ditemukan", "error"); return; }
             openModal('modal-anggota'); 
             document.getElementById('m-anggota-title').innerText='Edit Anggota'; 
             document.getElementById('f-a-id').value=a['ID Anggota']; document.getElementById('f-a-password').value=''; document.getElementById('f-a-role').value=normalizeRole(a['Role']); document.getElementById('f-a-nama').value=a['Nama Lengkap']; document.getElementById('f-a-norumah').value=a['No Rumah']; document.getElementById('f-a-nohp').value=a['No HP']; document.getElementById('div-status').classList.remove('hidden'); document.getElementById('f-a-status').value=a['Status']; 
-        }
+        };
 
-        async function deleteAnggota(id) {
+        window.deleteAnggota = async (id) => {
             if(!confirm("Yakin ingin menghapus anggota ini? Aksi ini tidak dapat dibatalkan.")) return;
             const res = await fetchAPI('delete_anggota', { id: id });
             if(res.success) { showToast(res.message || "Anggota dihapus!"); loadData(); } else { showToast(res.message || "Gagal menghapus", "error"); }
         }
 
-        async function deleteTransaksi(id) {
+        window.deleteTransaksi = async (id) => {
             if(!confirm("Yakin menghapus transaksi ini? Saldo dan buku tabungan akan disesuaikan secara otomatis.")) return;
             const res = await fetchAPI('delete_transaksi', { id: id });
             if(res.success) { showToast(res.message || "Transaksi dihapus!"); loadData(); } else { showToast(res.message || "Gagal menghapus", "error"); }
