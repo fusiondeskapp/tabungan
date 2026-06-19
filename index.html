@@ -152,7 +152,7 @@
   </div>
 </div>
 
-<!-- TEMPLATES -->
+<!-- TEMPLATES (lengkap semua) -->
 <template id="tpl-dashboard">
   <div class="space-y-4 md:space-y-6 animate-fade-in w-full">
     <h2 class="text-2xl font-bold hidden lg:block dark:text-white" id="dash-title">Dashboard</h2>
@@ -178,7 +178,10 @@
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
       <h2 class="text-2xl font-bold dark:text-white">Data Warga</h2>
-      <span id="warga-add-btn"></span>
+      <div class="flex gap-2">
+        <span id="warga-tunggakan-btn"></span>
+        <span id="warga-add-btn"></span>
+      </div>
     </div>
     <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-hidden relative w-full">
       <div class="overflow-x-auto w-full h-full">
@@ -658,6 +661,12 @@
     const myId = state.user['ID Warga'];
     const mySaldo = calculateSaldo(myId);
     const roleLabel = state.user.role === 'superadmin' ? 'Superadmin' : (state.user.role === 'admin_istri' ? 'Admin Istri' : (state.user.role === 'admin_suami' ? 'Admin Suami' : 'Warga'));
+    
+    // --- HITUNG TUNGGAKAN ---
+    const tunggakanSaya = state.data.tunggakan.filter(t => t['ID Warga'] === myId);
+    const jumlahBulanMenunggak = tunggakanSaya.length;
+    const totalTunggakan = tunggakanSaya.reduce((sum, t) => sum + Number(t['Iuran']||0) + Number(t['Arisan']||0), 0);
+    
     const profileHtml = `
       <div class="bg-gradient-to-br from-primary to-primary-dark p-5 md:p-6 rounded-2xl shadow-md text-white relative overflow-hidden flex flex-col sm:flex-row gap-4 mb-2 mt-2">
         <div class="absolute -right-6 -top-6 opacity-10"><i class="ph ph-user-circle" style="font-size: 150px;"></i></div>
@@ -667,8 +676,8 @@
             <p class="text-white/80 text-[10px] uppercase font-bold tracking-wide">Profil ${roleLabel}</p>
             <span class="text-[10px] uppercase font-bold bg-white/15 border border-white/20 px-2 py-0.5 rounded-full">${roleLabel}</span>
           </div>
-          <h3 class="text-2xl font-bold mb-1 truncate">${state.user['Nama Istri'] || '-'}</h3>
-          <p class="text-xs opacity-90">Suami: ${state.user['Nama Suami'] || '-'}</p>
+          <h3 class="text-2xl font-bold mb-1 truncate">${state.user['Nama Suami'] || '-'}</h3>
+          <p class="text-xs opacity-90">Istri: ${state.user['Nama Istri'] || '-'}</p>
           <p class="text-xs opacity-90 mt-0.5"><i class="ph ph-identification-card"></i> ID: ${state.user['ID Warga'] || '-'}</p>
           <p class="text-xs opacity-90 mt-0.5"><i class="ph ph-house"></i> Rumah No. ${state.user['No Rumah'] || '-'}</p>
         </div>
@@ -677,6 +686,18 @@
             <p class="text-[10px] font-bold text-gray-500 uppercase">Tabungan Istri</p>
             <p class="text-xl font-bold text-primary">${formatRupiah(mySaldo)}</p>
           </div>
+          ${state.user.role !== 'superadmin' ? `
+          <div class="bg-white/10 backdrop-blur-sm p-3 rounded-xl text-sm text-white">
+            <div class="flex justify-between gap-4">
+              <span class="text-white/70">Tunggakan:</span>
+              <span class="font-bold">${jumlahBulanMenunggak} bulan</span>
+            </div>
+            ${totalTunggakan > 0 ? `
+            <div class="flex justify-between gap-4 mt-1">
+              <span class="text-white/70">Total:</span>
+              <span class="font-bold text-warning">${formatRupiah(totalTunggakan)}</span>
+            </div>` : ''}
+          </div>` : ''}
           <button onclick="openModal('modal-profile')" class="bg-white/15 hover:bg-white/25 text-white border border-white/25 px-4 py-2 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-colors">
             <i class="ph ph-user-circle-gear text-lg"></i> Edit Profil
           </button>
@@ -791,6 +812,13 @@
         const showTunggakan = role === 'superadmin' || role === 'admin_suami';
         const canManage = role === 'superadmin' || role === 'admin_istri' || role === 'admin_suami';
         
+        // Tombol Catat Tunggakan
+        document.getElementById('warga-tunggakan-btn').innerHTML = 
+          (role === 'superadmin' || role === 'admin_suami') ? 
+          `<button onclick="window.ekas.warga.openTunggakanModal()" class="bg-warning hover:bg-amber-600 text-white px-4 py-2.5 rounded-xl flex items-center gap-2">
+            <i class="ph ph-clock-counter-clockwise text-lg"></i> Catat Tunggakan
+          </button>` : '';
+
         const thead = document.getElementById('warga-thead');
         thead.innerHTML = `
           <tr>
@@ -835,7 +863,7 @@
             <td class="p-3 md:p-4">${w['No Rumah']}</td>
             <td class="p-3 md:p-4 text-xs">Iuran: <span class="${iuran==='YA'?'text-success':'text-danger'} font-bold">${iuran}</span><br>Arisan: <span class="text-primary">${arisan==='YA'? slot+' Slot' : 'TIDAK'}</span></td>
             ${showSaldo ? `<td class="p-3 md:p-4 font-bold text-gray-700 dark:text-gray-200">${formatRupiah(saldo)}</td>` : ''}
-            ${showTunggakan ? `<td class="p-3 md:p-4 font-bold ${totalTunggakan > 0 ? 'text-danger' : 'text-success'}">${totalTunggakan > 0 ? formatRupiah(totalTunggakan) : 'Lunas'}</td>` : ''}
+            ${showTunggakan ? `<td class="p-3 md:p-4 font-bold ${totalTunggakan > 0 ? 'text-danger' : 'text-success'}">${totalTunggakan > 0 ? formatRupiah(totalTunggakan) + ' (' + tunggakanList.length + ' bln)' : 'Lunas'}</td>` : ''}
             <td class="p-3 md:p-4 text-center">${aksi}</td>
           </tr>`;
         }).join('');
@@ -909,6 +937,66 @@
         hideLoading();
         if(res.success) { await loadData(); showToast('Dihapus'); }
         else showToast(res.message, 'error');
+      },
+      
+      // --- TUNGGAKAN MANUAL ---
+      openTunggakanModal() {
+        if (!['superadmin', 'admin_suami'].includes(state.user.role)) return;
+        let opts = state.data.warga.map(w => `<option value="${w['ID Warga']}">${w['Nama Suami']} (${w['No Rumah']})</option>`).join('');
+        document.getElementById('modals').innerHTML = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-md modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
+            <div class="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
+              <h3 class="font-bold">Catat Tunggakan Manual</h3>
+              <button onclick="window.closeAllModals()"><i class="ph ph-x text-lg"></i></button>
+            </div>
+            <div class="overflow-y-auto p-4 md:p-6 hide-scroll">
+              <form class="space-y-4" onsubmit="window.ekas.warga.submitTunggakan(event)">
+                <div><label class="block text-xs font-medium mb-1">Pilih Warga</label>
+                  <select id="tung-warga" required class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm">${opts}</select>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                  <div><label class="block text-xs font-medium mb-1">Bulan</label>
+                    <select id="tung-bulan" required class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm">
+                      <option value="Januari">Januari</option><option value="Februari">Februari</option><option value="Maret">Maret</option>
+                      <option value="April">April</option><option value="Mei">Mei</option><option value="Juni">Juni</option>
+                      <option value="Juli">Juli</option><option value="Agustus">Agustus</option><option value="September">September</option>
+                      <option value="Oktober">Oktober</option><option value="November">November</option><option value="Desember">Desember</option>
+                    </select>
+                  </div>
+                  <div><label class="block text-xs font-medium mb-1">Tahun</label>
+                    <input type="number" id="tung-tahun" value="2026" required class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm">
+                  </div>
+                </div>
+                <div><label class="block text-xs font-medium mb-1">Nominal Iuran (Rp)</label>
+                  <input type="number" id="tung-iuran" value="0" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm">
+                </div>
+                <div><label class="block text-xs font-medium mb-1">Nominal Arisan (Rp)</label>
+                  <input type="number" id="tung-arisan" value="0" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm">
+                </div>
+                <div class="pt-4"><button type="submit" class="w-full py-3 rounded-xl bg-warning hover:bg-amber-600 text-white font-medium text-sm">Simpan Tunggakan</button></div>
+              </form>
+            </div>
+          </div></div>`;
+      },
+      async submitTunggakan(e) {
+        e.preventDefault();
+        const payload = {
+          wargaId: document.getElementById('tung-warga').value,
+          bulan: document.getElementById('tung-bulan').value,
+          tahun: Number(document.getElementById('tung-tahun').value),
+          iuran: Number(document.getElementById('tung-iuran').value) || 0,
+          arisan: Number(document.getElementById('tung-arisan').value) || 0
+        };
+        showLoading();
+        const res = await fetchAPI('save_tunggakan_manual', payload);
+        hideLoading();
+        if (res.success) {
+          window.closeAllModals();
+          await loadData();
+          showToast('Tunggakan berhasil dicatat');
+        } else {
+          showToast(res.message, 'error');
+        }
       }
     },
 
