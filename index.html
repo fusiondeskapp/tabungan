@@ -153,6 +153,7 @@
   <div class="space-y-4 md:space-y-6 animate-fade-in w-full">
     <h2 class="text-2xl font-bold hidden lg:block dark:text-white" id="dash-title">Dashboard</h2>
     <div id="profile-card" class="hidden"></div>
+    <div id="dashboard-mutasi"></div>
     <div id="admin-container" class="space-y-4 md:space-y-6" style="display:none;">
       <div id="dashboard-stats" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 w-full"></div>
       <div id="admin-charts" class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mt-4 w-full">
@@ -608,6 +609,56 @@
     document.getElementById('profile-card').innerHTML = profileHtml;
     document.getElementById('profile-card').classList.remove('hidden');
     document.getElementById('dash-title').innerText = state.user.role === 'superadmin' ? 'Dashboard Superadmin' : (state.user.role === 'admin_istri' ? 'Dashboard Admin Istri' : (state.user.role === 'admin_suami' ? 'Dashboard Admin Suami' : 'Beranda Warga'));
+
+    // Tabel Riwayat Mutasi (hanya untuk selain superadmin)
+    const mutasiDiv = document.getElementById('dashboard-mutasi');
+    if (state.user.role !== 'superadmin') {
+      const myTransaksi = state.data.transaksi.filter(t => String(t['ID Anggota']) === String(myId)).sort((a,b) => new Date(b['Tanggal']) - new Date(a['Tanggal']));
+      const recent = myTransaksi.slice(0, 5);
+      const sortedAsc = [...myTransaksi].sort((a,b) => new Date(a['Tanggal']) - new Date(b['Tanggal']));
+      let saldo = 0;
+      const saldoMap = new Map();
+      sortedAsc.forEach(t => {
+        const isSetoran = t['Jenis Transaksi'] === 'Setoran';
+        const nominal = Number(t['Nominal']);
+        saldo += isSetoran ? nominal : -nominal;
+        saldoMap.set(t['ID Transaksi'], saldo);
+      });
+      const recentSorted = [...myTransaksi].sort((a,b) => new Date(b['Tanggal']) - new Date(a['Tanggal'])).slice(0,5);
+      let html = `
+        <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4 md:p-5 mt-6">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-gray-700 dark:text-gray-200 text-sm md:text-base">Riwayat Mutasi Terakhir</h3>
+            ${canAccess('buku') ? `<button onclick="navigate('buku')" class="text-xs text-primary hover:underline">Lihat Buku Tabungan</button>` : ''}
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs md:text-sm whitespace-nowrap min-w-[600px]">
+              <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
+                <tr><th class="p-2 font-medium">Tanggal</th><th class="p-2 font-medium">Keterangan</th><th class="p-2 font-medium text-right">Debit</th><th class="p-2 font-medium text-right">Kredit</th><th class="p-2 font-medium text-right">Saldo</th></tr>
+              </thead>
+              <tbody>
+                ${recentSorted.length === 0 ? '<tr><td colspan="5" class="p-4 text-center text-gray-500 italic">Belum ada mutasi</td></tr>' : ''}
+                ${recentSorted.map(t => {
+                  const isSetoran = t['Jenis Transaksi'] === 'Setoran';
+                  const nominal = Number(t['Nominal']);
+                  const saldoSaatIni = saldoMap.get(t['ID Transaksi']);
+                  return `<tr class="border-b border-gray-100 dark:border-gray-800">
+                    <td class="p-2 text-gray-600">${formatDateTime(t['Tanggal'])}</td>
+                    <td class="p-2"><span class="text-[10px] font-bold uppercase ${isSetoran?'text-success':'text-danger'}">${t['Jenis Transaksi']}</span><br><span class="text-xs">${t['Keterangan']||'-'}</span></td>
+                    <td class="p-2 text-right text-success">${isSetoran ? formatRupiah(nominal) : '-'}</td>
+                    <td class="p-2 text-right text-danger">${!isSetoran ? formatRupiah(nominal) : '-'}</td>
+                    <td class="p-2 text-right font-bold">${formatRupiah(saldoSaatIni)}</td>
+                  </tr>`;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>`;
+      mutasiDiv.innerHTML = html;
+      mutasiDiv.style.display = 'block';
+    } else {
+      mutasiDiv.style.display = 'none';
+    }
 
     const adminContainer = document.getElementById('admin-container');
     if (state.user.role === 'superadmin') {
