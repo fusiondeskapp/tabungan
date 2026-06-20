@@ -273,14 +273,14 @@
     </div>
     <div id="kas-print-area">
       <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-x-auto">
-        <table class="w-full text-left text-sm whitespace-nowrap">
+        <table class="w-full text-left text-sm whitespace-nowrap" id="kas-table">
           <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 border-b border-gray-200 dark:border-gray-700">
             <tr><th class="px-6 py-4">Tanggal</th><th class="px-6 py-4">Kategori</th><th class="px-6 py-4">Keterangan</th><th class="px-6 py-4 text-right">Nominal</th><th class="px-6 py-4 text-right">Aksi</th></tr>
           </thead>
           <tbody id="table-kas" class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
+          <tfoot id="kas-footer" class="border-t-2 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50"></tfoot>
         </table>
       </div>
-      <div id="kas-summary" class="mt-6 space-y-4"></div>
     </div>
   </div>
 </template>
@@ -1245,6 +1245,7 @@
     kas: {
       render() {
         const tb = document.getElementById('table-kas');
+        const tf = document.getElementById('kas-footer');
         let kas = [...(state.data.kas||[])];
         const dari = document.getElementById('kas-dari')?.value;
         const sampai = document.getElementById('kas-sampai')?.value;
@@ -1257,8 +1258,10 @@
           <button onclick="window.ekas.kas.openModal('Pengeluaran')" class="bg-danger hover:bg-red-700 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-medium flex items-center shadow-md transition-colors"><i class="ph ph-minus-circle text-lg sm:mr-2"></i> <span class="hidden sm:block">Pengeluaran</span></button>
           <button onclick="window.ekas.kas.cetakPDF()" class="bg-gray-800 hover:bg-gray-900 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-medium flex items-center shadow-md transition-colors"><i class="ph ph-printer text-lg sm:mr-2"></i> <span class="hidden sm:block">Cetak</span></button>
         ` : '';
-        if(kas.length===0) { tb.innerHTML = '<tr><td colspan="5" class="px-6 py-10 text-center text-gray-500">Belum ada transaksi.</td></tr>'; }
-        else {
+        if(kas.length===0) { 
+          tb.innerHTML = '<tr><td colspan="5" class="px-6 py-10 text-center text-gray-500">Belum ada transaksi.</td></tr>'; 
+          tf.innerHTML = '';
+        } else {
           tb.innerHTML = kas.map(k => {
             const isMasuk = k.Jenis==='Pemasukan';
             return `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-50">
@@ -1282,15 +1285,36 @@
         const sampaiDate = sampai ? new Date(sampai + 'T23:59:59') : new Date();
         state.data.kas.forEach(k => { if(!k.Tanggal) return; const t = new Date(k.Tanggal); if (t <= sampaiDate) { const nom = Number(k.Nominal)||0; saldoAkhir += (k.Jenis === 'Pemasukan' ? nom : -nom); } });
         const totalTunggakan = (state.data.tunggakan || []).reduce((sum, t) => sum + Number(t['Iuran']||0) + Number(t['Arisan']||0), 0);
-        document.getElementById('kas-summary').innerHTML = `
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border flex justify-between"><span>Total Pemasukan</span><span class="font-bold text-success">${formatRupiah(totalMasuk)}</span></div>
-            <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border flex justify-between"><span>Total Pengeluaran</span><span class="font-bold text-danger">${formatRupiah(totalKeluar)}</span></div>
-            <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border flex justify-between"><span>Surplus/Defisit</span><span class="font-bold ${surplus>=0?'text-success':'text-danger'}">${formatRupiah(surplus)}</span></div>
-            <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border flex justify-between"><span>Saldo Akhir</span><span class="font-bold text-primary">${formatRupiah(saldoAkhir)}</span></div>
-            <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border flex justify-between md:col-span-2"><span>Total Saldo Tertunggak</span><span class="font-bold text-warning">${formatRupiah(totalTunggakan)}</span></div>
-          </div>`;
+        
+        tf.innerHTML = `
+          <tr class="font-bold text-xs md:text-sm">
+            <td class="px-6 py-3" colspan="3">Total Pemasukan</td>
+            <td class="px-6 py-3 text-right text-success">${formatRupiah(totalMasuk)}</td>
+            <td></td>
+          </tr>
+          <tr class="font-bold text-xs md:text-sm">
+            <td class="px-6 py-3" colspan="3">Total Pengeluaran</td>
+            <td class="px-6 py-3 text-right text-danger">${formatRupiah(totalKeluar)}</td>
+            <td></td>
+          </tr>
+          <tr class="font-bold text-xs md:text-sm">
+            <td class="px-6 py-3" colspan="3">Surplus/Defisit</td>
+            <td class="px-6 py-3 text-right ${surplus>=0?'text-success':'text-danger'}">${formatRupiah(surplus)}</td>
+            <td></td>
+          </tr>
+          <tr class="font-bold text-xs md:text-sm border-t border-gray-300 dark:border-gray-600">
+            <td class="px-6 py-3" colspan="3">Saldo Akhir</td>
+            <td class="px-6 py-3 text-right text-primary">${formatRupiah(saldoAkhir)}</td>
+            <td></td>
+          </tr>
+          <tr class="font-bold text-xs md:text-sm">
+            <td class="px-6 py-3" colspan="3">Total Saldo Tertunggak</td>
+            <td class="px-6 py-3 text-right text-warning">${formatRupiah(totalTunggakan)}</td>
+            <td></td>
+          </tr>
+        `;
       },
+      // ... lanjutkan dengan openModal, submit, delete, cetakPDF (tidak diubah)
       openModal(jenis, id=null) {
         if (state.user.role !== 'superadmin' && state.user.role !== 'admin_suami') return;
         const k = id ? state.data.kas.find(x=>x.KasID===id) : null;
