@@ -123,7 +123,7 @@
         <button onclick="handleLogout()" class="p-2.5 bg-white dark:bg-darkcard text-danger shadow-sm border border-gray-100 dark:border-gray-700 rounded-full hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"><i class="ph ph-sign-out text-[22px]"></i></button>
       </div>
 
-      <div class="flex-1 overflow-y-auto overflow-x-hidden p-4 lg:px-8 lg:pb-8 lg:pt-2 pb-24 w-full" id="content-area"></div>
+      <div class="flex-1 overflow-y-auto overflow-x-hidden p-4 lg:px-8 lg:pb-8 lg:pt-2 pb-32 w-full" id="content-area"></div>
     </main>
 
     <!-- Bottom Navigation Mobile -->
@@ -177,7 +177,7 @@
 <template id="tpl-warga">
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-      <h2 class="text-2xl font-bold dark:text-white">Data Warga</h2>
+      <h2 class="text-2xl font-bold dark:text-white hidden lg:block">Data Warga</h2>
       <div class="flex gap-2">
         <span id="warga-tunggakan-btn"></span>
         <span id="warga-add-btn"></span>
@@ -198,7 +198,7 @@
 <template id="tpl-transaksi">
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-      <h2 class="text-2xl font-bold dark:text-white">Riwayat Transaksi</h2>
+      <h2 class="text-2xl font-bold dark:text-white hidden lg:block">Riwayat Transaksi</h2>
       <span id="trx-add-btn"></span>
     </div>
     <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-hidden flex flex-col min-w-0 w-full relative">
@@ -221,7 +221,7 @@
 
 <template id="tpl-pembayaran">
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
-    <h2 class="text-2xl font-bold dark:text-white">Penerimaan Pembayaran</h2>
+    <h2 class="text-2xl font-bold dark:text-white hidden lg:block">Penerimaan Pembayaran</h2>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div class="lg:col-span-1 bg-white dark:bg-darkcard p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 h-fit">
         <form onsubmit="window.ekas.pembayaran.submit(event)" class="space-y-4">
@@ -263,7 +263,7 @@
 <template id="tpl-kas">
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-      <h2 class="text-2xl font-bold dark:text-white">Buku Kas</h2>
+      <h2 class="text-2xl font-bold dark:text-white hidden lg:block">Buku Kas</h2>
       <div class="flex gap-2 sm:gap-3" id="kas-action-btns"></div>
     </div>
     <div class="flex gap-2 items-end bg-white dark:bg-darkcard p-3 rounded-xl border">
@@ -287,7 +287,7 @@
 
 <template id="tpl-setting">
   <div class="space-y-6 animate-fade-in h-full flex flex-col w-full">
-    <h2 class="text-2xl font-bold dark:text-white">Pengaturan RT</h2>
+    <h2 class="text-2xl font-bold dark:text-white hidden lg:block">Pengaturan RT</h2>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="bg-white dark:bg-darkcard p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 h-fit">
         <h3 class="font-bold text-lg mb-4 flex items-center"><i class="ph ph-gear text-primary text-xl mr-2"></i> Aturan Umum</h3>
@@ -323,24 +323,31 @@
       <select id="select-buku-anggota" class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none bg-white" onchange="renderBukuTabungan()"></select>
     </div>
     <div id="passbook-area" class="hidden flex-1 flex-col gap-4 min-w-0 w-full overflow-y-auto hide-scroll pb-10">
-      <div class="flex flex-col md:flex-row gap-4 w-full shrink-0">
-        <div class="bg-gradient-to-br from-primary to-primary-dark p-5 md:p-6 rounded-2xl shadow-md text-white flex-1 relative overflow-hidden h-36 md:h-44">
-          <div class="absolute -right-6 -top-6 opacity-10 pointer-events-none"><i class="ph ph-wallet" style="font-size:140px;"></i></div>
-          <div class="relative z-10 flex flex-col h-full justify-between">
-            <div><p class="text-white/80 text-[10px] uppercase font-bold tracking-wider mb-1">Buku Tabungan RT</p><h3 class="text-xl md:text-2xl font-bold truncate pr-10" id="buku-nama">-</h3></div>
-            <div class="grid grid-cols-2 gap-2 text-sm mt-auto">
+      <!-- Profile Card + Saldo + PDF gabung -->
+      <div class="bg-gradient-to-br from-primary to-primary-dark p-5 md:p-6 rounded-2xl shadow-md text-white relative overflow-hidden">
+        <div class="absolute -right-6 -top-6 opacity-10 pointer-events-none"><i class="ph ph-wallet" style="font-size:140px;"></i></div>
+        <div class="relative z-10 flex flex-col md:flex-row gap-4">
+          <div class="flex-1 min-w-0">
+            <p class="text-white/80 text-[10px] uppercase font-bold tracking-wider mb-1">Buku Tabungan RT</p>
+            <h3 class="text-xl md:text-2xl font-bold truncate pr-10" id="buku-nama">-</h3>
+            <div class="grid grid-cols-2 gap-2 text-sm mt-2">
               <div><p class="text-white/60 text-[10px]">ID Warga</p><p class="font-medium font-mono text-xs md:text-sm truncate" id="buku-id">-</p></div>
               <div><p class="text-white/60 text-[10px]">No Rumah</p><p class="font-medium font-mono text-xs md:text-sm" id="buku-norumah">-</p></div>
             </div>
           </div>
-        </div>
-        <div class="bg-white dark:bg-darkcard p-5 md:p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-[0.7] flex flex-col justify-center items-center h-36 md:h-44">
-          <p class="text-gray-500 dark:text-gray-400 text-xs font-medium mb-1 uppercase tracking-wide">Saldo Akhir</p>
-          <h2 class="text-2xl md:text-3xl font-bold text-primary mb-3 md:mb-4 truncate w-full text-center" id="buku-saldo">Rp 0</h2>
-          <div class="w-full"><button onclick="cetakBukuTabunganPDF()" class="w-full bg-gray-50 hover:bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-white py-2 rounded-xl text-sm font-medium transition flex justify-center items-center gap-2"><i class="ph ph-file-pdf text-lg text-danger"></i> Unduh PDF</button></div>
+          <div class="flex flex-col items-start md:items-end justify-center gap-3">
+            <div class="text-right">
+              <p class="text-white/60 text-[10px] uppercase tracking-wide">Saldo Akhir</p>
+              <h2 class="text-2xl md:text-3xl font-bold text-white" id="buku-saldo">Rp 0</h2>
+            </div>
+            <button onclick="cetakBukuTabunganPDF()" class="bg-white/15 hover:bg-white/25 text-white border border-white/25 px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition-colors">
+              <i class="ph ph-file-pdf text-lg"></i> Unduh PDF
+            </button>
+          </div>
         </div>
       </div>
-      <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-hidden flex flex-col min-w-0" id="pdf-content">
+      <!-- Tabel Riwayat Mutasi full width -->
+      <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-hidden flex flex-col min-w-0">
         <div class="p-3 md:p-4 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50"><h4 class="font-bold text-sm text-primary flex items-center gap-2"><i class="ph ph-list-bullets text-lg"></i> Tabel Riwayat Mutasi</h4></div>
         <div class="overflow-x-auto w-full flex-1">
           <table class="w-full text-left text-xs md:text-sm whitespace-nowrap min-w-[700px]">
@@ -426,10 +433,7 @@
   </div>
 </template>
 
-<!-- ==============================================
-     BAGIAN 1 SELESAI - LANJUT KE BAGIAN 2 (SCRIPT)
-     ============================================== -->
-	 <!-- JS LOGIC (BAGIAN 2) -->
+<!-- JS (Bagian 1): Konstanta, Helper, State, Auth, Navigasi, Dashboard -->
 <script>
   const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbxcuUe9qO2PyallWSn7vu2UiiKTnMqirKbocdI_VI8uWnYyjYYvRsv_DUpGIV2GSWiuqQ/exec';
   
@@ -505,6 +509,63 @@
     toast.innerHTML = `<span class="font-medium text-sm">${msg}</span>`;
     container.appendChild(toast); setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
   };
+
+  // Custom confirm dialog dengan UI bagus
+  function showConfirmDialog(message, options = {}) {
+    return new Promise((resolve) => {
+      const { confirmText = 'Ya', cancelText = 'Batal', showCheckbox = false, checkboxLabel = '' } = options;
+      const modalDiv = document.createElement('div');
+      modalDiv.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm z-[300] flex items-center justify-center p-4';
+      const modalContent = document.createElement('div');
+      modalContent.className = 'bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-sm modal-animate overflow-hidden shadow-xl border border-gray-100 dark:border-gray-700';
+      modalContent.innerHTML = `
+        <div class="p-6 text-center">
+          <i class="ph ph-warning-circle text-4xl text-warning mb-4"></i>
+          <p class="text-gray-800 dark:text-gray-200 font-medium text-sm mb-6">${message}</p>
+          ${showCheckbox ? `
+            <label class="flex items-center justify-center gap-2 mb-4 text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
+              <input type="checkbox" id="confirm-checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
+              <span>${checkboxLabel}</span>
+            </label>` : ''}
+          <div class="flex gap-3 justify-center">
+            <button id="confirm-cancel" class="px-6 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium text-sm transition-colors">${cancelText}</button>
+            <button id="confirm-ok" class="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-medium text-sm transition-colors shadow-md">${confirmText}</button>
+          </div>
+        </div>
+      `;
+      modalDiv.appendChild(modalContent);
+      document.body.appendChild(modalDiv);
+
+      const okBtn = modalDiv.querySelector('#confirm-ok');
+      const cancelBtn = modalDiv.querySelector('#confirm-cancel');
+      const checkbox = modalDiv.querySelector('#confirm-checkbox');
+
+      const cleanup = () => { modalDiv.remove(); };
+
+      okBtn.addEventListener('click', () => {
+        if (showCheckbox) {
+          resolve({ confirmed: true, checked: checkbox ? checkbox.checked : false });
+        } else {
+          resolve(true);
+        }
+        cleanup();
+      });
+
+      cancelBtn.addEventListener('click', () => {
+        if (showCheckbox) {
+          resolve({ confirmed: false, checked: false });
+        } else {
+          resolve(false);
+        }
+        cleanup();
+      });
+
+      modalDiv.addEventListener('click', (e) => {
+        if (e.target === modalDiv) cancelBtn.click();
+      });
+    });
+  }
+
   function showLoading() { document.getElementById('loading-overlay').classList.remove('hidden'); }
   function hideLoading() { document.getElementById('loading-overlay').classList.add('hidden'); }
 
@@ -805,13 +866,10 @@
       if(chartEkasInstance) { chartEkasInstance.destroy(); chartEkasInstance = null; }
     }
   }
-
-  // ==============================================
-  //  BAGIAN 2 SELESAI - LANJUT KE BAGIAN 3 (EKAS + TRANSAKSI)
-  // ==============================================
+  // End of Bagian 1
 </script>
 <script>
-  // ===================== E-KAS (WARGA) =====================
+  // ===================== E-KAS =====================
   window.ekas = {
     warga: {
       render() {
@@ -936,7 +994,7 @@
       },
       async delete(id) {
         if (!['superadmin', 'admin_istri', 'admin_suami'].includes(state.user.role)) return;
-        if(!confirm('Hapus warga ini?')) return;
+        if(!(await showConfirmDialog('Hapus warga ini?'))) return;
         showLoading();
         const res = await fetchAPI('delete_warga', { id });
         hideLoading();
@@ -945,7 +1003,6 @@
       }
     },
 
-    // ===================== E-KAS: PEMBAYARAN =====================
     pembayaran: {
       render() {
         const sel = document.getElementById('pay-warga');
@@ -1058,7 +1115,7 @@
         } else showToast(res.message,'error');
       },
       async delete(id) {
-        if(!confirm('Hapus pembayaran ini? Data terkait di Buku Kas juga akan dihapus.')) return;
+        if(!(await showConfirmDialog('Hapus pembayaran ini? Data terkait di Buku Kas juga akan dihapus.'))) return;
         showLoading();
         const res = await fetchAPI('delete_pembayaran', { id });
         hideLoading();
@@ -1161,8 +1218,14 @@
           </div></div>`;
       },
       async deleteTunggakan(id) {
-        if (!confirm('Hapus tunggakan ini?')) return;
-        const catatPemasukan = confirm('Catat sebagai pemasukan di Buku Kas?');
+        const result = await showConfirmDialog('Hapus tunggakan ini?', {
+          confirmText: 'Hapus',
+          cancelText: 'Batal',
+          showCheckbox: true,
+          checkboxLabel: 'Catat sebagai pemasukan di Buku Kas?'
+        });
+        if (!result || !result.confirmed) return;
+        const catatPemasukan = result.checked;
         showLoading();
         const res = await fetchAPI('delete_tunggakan', { 
           id, 
@@ -1179,7 +1242,6 @@
       }
     },
 
-    // ===================== E-KAS: KAS =====================
     kas: {
       render() {
         const tb = document.getElementById('table-kas');
@@ -1219,12 +1281,14 @@
         let saldoAkhir = 0;
         const sampaiDate = sampai ? new Date(sampai + 'T23:59:59') : new Date();
         state.data.kas.forEach(k => { if(!k.Tanggal) return; const t = new Date(k.Tanggal); if (t <= sampaiDate) { const nom = Number(k.Nominal)||0; saldoAkhir += (k.Jenis === 'Pemasukan' ? nom : -nom); } });
+        const totalTunggakan = (state.data.tunggakan || []).reduce((sum, t) => sum + Number(t['Iuran']||0) + Number(t['Arisan']||0), 0);
         document.getElementById('kas-summary').innerHTML = `
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border flex justify-between"><span>Total Pemasukan</span><span class="font-bold text-success">${formatRupiah(totalMasuk)}</span></div>
             <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border flex justify-between"><span>Total Pengeluaran</span><span class="font-bold text-danger">${formatRupiah(totalKeluar)}</span></div>
             <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border flex justify-between"><span>Surplus/Defisit</span><span class="font-bold ${surplus>=0?'text-success':'text-danger'}">${formatRupiah(surplus)}</span></div>
             <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border flex justify-between"><span>Saldo Akhir</span><span class="font-bold text-primary">${formatRupiah(saldoAkhir)}</span></div>
+            <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border flex justify-between md:col-span-2"><span>Total Saldo Tertunggak</span><span class="font-bold text-warning">${formatRupiah(totalTunggakan)}</span></div>
           </div>`;
       },
       openModal(jenis, id=null) {
@@ -1267,7 +1331,7 @@
         else showToast(res.message,'error');
       },
       async delete(id) {
-        if(!confirm('Hapus?')) return;
+        if(!(await showConfirmDialog('Hapus?'))) return;
         showLoading();
         const res = await fetchAPI('delete_kas', { id });
         hideLoading();
@@ -1298,7 +1362,6 @@
       }
     },
 
-    // ===================== E-KAS: BIAYA =====================
     biaya: {
       render() {
         const tb = document.getElementById('table-biaya');
@@ -1357,7 +1420,7 @@
         else showToast(res.message,'error');
       },
       async delete(id) {
-        if(!confirm('Hapus?')) return;
+        if(!(await showConfirmDialog('Hapus?'))) return;
         showLoading();
         const res = await fetchAPI('delete_biaya', { id });
         hideLoading();
@@ -1366,7 +1429,6 @@
       }
     },
 
-    // ===================== E-KAS: SETTING =====================
     setting: {
       async save(e) {
         e.preventDefault();
@@ -1385,8 +1447,9 @@
         else showToast(res.message,'error');
       }
     }
-  }; // akhir window.ekas
-
+  };
+</script>
+<script>
   // ===================== TRANSAKSI & BUKU TABUNGAN =====================
   function renderTransaksi(filter = 'Semua') {
     const tb = document.getElementById('table-transaksi'); if(!tb) return; tb.innerHTML = '';
@@ -1551,7 +1614,7 @@
   };
 
   window.deleteTransaksi = async (id) => {
-    if(!confirm("Hapus transaksi ini?")) return;
+    if(!(await showConfirmDialog("Hapus transaksi ini?"))) return;
     showLoading();
     const res = await fetchAPI('delete_transaksi', { id });
     hideLoading();
