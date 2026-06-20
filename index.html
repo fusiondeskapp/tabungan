@@ -174,7 +174,6 @@
   </div>
 </template>
 
-<!-- SELANJUTNYA BAGIAN 2/6 - TEMPLATE WARGA & TRANSAKSI -->
 <template id="tpl-warga">
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -220,7 +219,6 @@
   </div>
 </template>
 
-<!-- SELANJUTNYA BAGIAN 3/6 - TEMPLATE PEMBAYARAN & KAS -->
 <template id="tpl-pembayaran">
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <h2 class="text-2xl font-bold dark:text-white">Penerimaan Pembayaran</h2>
@@ -245,7 +243,6 @@
           </div>
           <button type="submit" id="btn-save-pay" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl transition-all shadow-md disabled:opacity-50 mt-2">Simpan Pembayaran</button>
         </form>
-        <!-- Tombol Tunggakan di Pembayaran -->
         <div id="pembayaran-tunggakan-btns" class="mt-4 flex gap-2"></div>
       </div>
       <div class="lg:col-span-2 bg-white dark:bg-darkcard rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden flex flex-col h-fit">
@@ -288,7 +285,6 @@
   </div>
 </template>
 
-<!-- SELANJUTNYA BAGIAN 4/6 - TEMPLATE SETTING & BUKU & TENTANG -->
 <template id="tpl-setting">
   <div class="space-y-6 animate-fade-in h-full flex flex-col w-full">
     <h2 class="text-2xl font-bold dark:text-white">Pengaturan RT</h2>
@@ -430,7 +426,6 @@
   </div>
 </template>
 
-<!-- SELANJUTNYA BAGIAN 5/6 - JAVASCRIPT (BAGIAN PERTAMA) -->
 <!-- JS LOGIC -->
 <script>
   const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbxcuUe9qO2PyallWSn7vu2UiiKTnMqirKbocdI_VI8uWnYyjYYvRsv_DUpGIV2GSWiuqQ/exec';
@@ -668,7 +663,6 @@
   const mySaldo = calculateSaldo(myId);
   const roleLabel = state.user.role === 'superadmin' ? 'Superadmin' : (state.user.role === 'admin_istri' ? 'Admin Istri' : (state.user.role === 'admin_suami' ? 'Admin Suami' : 'Warga'));
 
-  // --- HITUNG TUNGGAKAN ---
   const tunggakanSaya = state.data.tunggakan.filter(t => t['ID Warga'] === myId);
   const jumlahBulanMenunggak = tunggakanSaya.length;
   const totalTunggakan = tunggakanSaya.reduce((sum, t) => sum + Number(t['Iuran']||0) + Number(t['Arisan']||0), 0);
@@ -820,7 +814,6 @@
         const showTunggakan = role === 'superadmin' || role === 'admin_suami';
         const canManage = role === 'superadmin' || role === 'admin_istri' || role === 'admin_suami';
         
-        // Tombol Catat Tunggakan dipindahkan ke Pembayaran
         document.getElementById('warga-tunggakan-btn').innerHTML = '';
 
         const thead = document.getElementById('warga-thead');
@@ -944,8 +937,7 @@
       }
     },
 
-    // SELANJUTNYA BAGIAN 6/6 - PEMBAYARAN, KAS, BIAYA, SETTING, TRANSAKSI, BUKU, PROFILE, DLL.
-	    // ===================== E-KAS: PEMBAYARAN =====================
+    // ===================== E-KAS: PEMBAYARAN =====================
     pembayaran: {
       render() {
         const sel = document.getElementById('pay-warga');
@@ -1066,7 +1058,6 @@
         else showToast(res.message,'error');
       },
 
-      // ---------- TUNGGAKAN ----------
       openTunggakanModal() {
         if (!['superadmin','admin_suami'].includes(state.user.role)) return;
         let opts = state.data.warga.map(w => `<option value="${w['ID Warga']}">${w['Nama Suami']} (${w['No Rumah']})</option>`).join('');
@@ -1382,7 +1373,7 @@
         else showToast(res.message,'error');
       }
     }
-  }; // akhir window.ekas
+  };
 
   // ===================== TRANSAKSI & BUKU TABUNGAN =====================
   function renderTransaksi(filter = 'Semua') {
