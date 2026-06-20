@@ -80,6 +80,7 @@
 
   <!-- MAIN LAYOUT -->
   <div id="main-layout" class="flex w-full h-full max-w-[100vw] hidden">
+    <!-- Sidebar Desktop -->
     <aside class="w-64 bg-white dark:bg-darkcard border-r border-gray-200 dark:border-gray-700 hidden lg:flex flex-col z-20 flex-shrink-0">
       <div class="p-6 flex items-center gap-3">
         <div class="h-10 w-10 bg-primary text-white rounded-xl flex items-center justify-center text-xl shadow-md"><i class="ph ph-wallet"></i></div>
@@ -102,6 +103,7 @@
       </nav>
     </aside>
 
+    <!-- Main Content Area -->
     <main class="flex-1 min-w-0 flex flex-col h-full relative max-w-full">
       <header class="lg:hidden glass-nav border-b border-gray-200 dark:border-gray-700 sticky top-0 z-20 px-4 py-3 flex justify-between items-center shadow-sm">
         <div class="flex items-center gap-3 min-w-0">
@@ -114,14 +116,17 @@
           <button onclick="handleLogout()" class="p-2 text-danger hover:bg-red-50 dark:hover:bg-red-900/30 rounded-full transition-colors"><i class="ph ph-sign-out text-xl"></i></button>
         </div>
       </header>
+
       <div class="hidden lg:flex justify-end px-8 pt-6 pb-2 w-full flex-shrink-0 gap-2">
         <button onclick="navigate('tentang')" class="p-2.5 bg-white dark:bg-darkcard text-gray-500 shadow-sm border border-gray-100 dark:border-gray-700 rounded-full hover:text-primary transition-colors"><i class="ph ph-info text-[22px]"></i></button>
         <button onclick="toggleTheme()" class="p-2.5 bg-white dark:bg-darkcard text-gray-500 shadow-sm border border-gray-100 dark:border-gray-700 rounded-full hover:text-primary transition-colors"><i class="ph ph-moon text-[22px] dark:hidden"></i><i class="ph ph-sun text-[22px] hidden dark:inline-block"></i></button>
         <button onclick="handleLogout()" class="p-2.5 bg-white dark:bg-darkcard text-danger shadow-sm border border-gray-100 dark:border-gray-700 rounded-full hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"><i class="ph ph-sign-out text-[22px]"></i></button>
       </div>
+
       <div class="flex-1 overflow-y-auto overflow-x-hidden p-4 lg:px-8 lg:pb-8 lg:pt-2 pb-32 w-full" id="content-area"></div>
     </main>
 
+    <!-- Bottom Navigation Mobile -->
     <nav class="lg:hidden fixed bottom-0 left-0 right-0 w-full glass-nav border-t border-gray-200 dark:border-gray-700 z-30 shadow-[0_-5px_15px_-5px_rgba(0,0,0,0.1)] pb-safe">
       <div class="flex justify-around items-center p-1.5 px-1" id="mobile-nav">
         <button class="nav-btn-mobile flex flex-col items-center justify-center p-2 text-primary flex-1 min-w-0" data-target="dashboard"><i class="ph ph-squares-four text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Home</span></button>
@@ -137,7 +142,7 @@
   </div>
 </div>
 
-<!-- MODALS & TOASTS -->
+<!-- MODALS & TOASTS & LOADING -->
 <div id="modals" class="relative z-50"></div>
 <div id="toast-container" class="fixed top-4 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 pointer-events-none w-[calc(100%-2rem)] max-w-sm"></div>
 <div id="loading-overlay" class="fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm flex items-center justify-center hidden">
@@ -147,11 +152,12 @@
   </div>
 </div>
 
-<!-- TEMPLATES (dashboard, warga, transaksi, pembayaran, kas, setting, buku, tentang) -->
+<!-- TEMPLATES -->
 <template id="tpl-dashboard">
   <div class="space-y-4 md:space-y-6 animate-fade-in w-full">
     <h2 class="text-2xl font-bold hidden lg:block dark:text-white" id="dash-title">Dashboard</h2>
     <div id="profile-card" class="hidden"></div>
+    <div id="tunggakan-table-container" class="hidden"></div>
     <div id="dashboard-mutasi"></div>
     <div id="admin-container" class="space-y-4 md:space-y-6" style="display:none;">
       <div id="dashboard-stats" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 w-full"></div>
@@ -168,6 +174,7 @@
     </div>
   </div>
 </template>
+
 <template id="tpl-warga">
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -180,13 +187,15 @@
     <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-hidden relative w-full">
       <div class="overflow-x-auto w-full h-full">
         <table class="w-full text-left text-sm whitespace-nowrap min-w-[900px]" id="warga-table">
-          <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10" id="warga-thead"></thead>
+          <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10" id="warga-thead">
+          </thead>
           <tbody id="table-warga" class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
         </table>
       </div>
     </div>
   </div>
 </template>
+
 <template id="tpl-transaksi">
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -210,6 +219,7 @@
     </div>
   </div>
 </template>
+
 <template id="tpl-pembayaran">
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <h2 class="text-2xl font-bold dark:text-white hidden lg:block">Penerimaan Pembayaran</h2>
@@ -250,6 +260,7 @@
     </div>
   </div>
 </template>
+
 <template id="tpl-kas">
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -274,6 +285,7 @@
     </div>
   </div>
 </template>
+
 <template id="tpl-setting">
   <div class="space-y-6 animate-fade-in h-full flex flex-col w-full">
     <h2 class="text-2xl font-bold dark:text-white hidden lg:block">Pengaturan RT</h2>
@@ -303,6 +315,7 @@
     </div>
   </div>
 </template>
+
 <template id="tpl-buku">
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <h2 class="text-2xl font-bold hidden lg:block dark:text-white">Buku Tabungan Digital</h2>
@@ -348,6 +361,7 @@
     <div id="passbook-empty" class="flex-1 flex flex-col items-center justify-center text-gray-400 pb-10 text-center px-4"><i class="ph ph-book-open text-6xl mb-4 opacity-50 text-primary"></i><h3 class="font-bold text-gray-600 dark:text-gray-300 mb-1">Pilih Warga Terlebih Dahulu</h3><p class="text-sm">Riwayat mutasi transaksi akan muncul di sini.</p></div>
   </div>
 </template>
+
 <template id="tpl-tentang">
   <div class="max-w-2xl mx-auto py-6 px-4 sm:px-6 lg:px-8 space-y-8 animate-fade-in text-gray-800 dark:text-gray-200">
     <div class="text-center">
@@ -418,6 +432,7 @@
   </div>
 </template>
 
+<!-- JS (Bagian 1) : Konstanta, Helper, Auth, Navigasi, Dashboard -->
 <script>
   const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbxcuUe9qO2PyallWSn7vu2UiiKTnMqirKbocdI_VI8uWnYyjYYvRsv_DUpGIV2GSWiuqQ/exec';
   
@@ -685,14 +700,17 @@
     else if(v==='tentang'){ a.appendChild(document.getElementById('tpl-tentang').content.cloneNode(true)); }
   }
 
+  // ===================== DASHBOARD =====================
   function renderDashboard() {
     if (!state.user) return;
     const myId = state.user['ID Warga'];
     const mySaldo = calculateSaldo(myId);
     const roleLabel = state.user.role === 'superadmin' ? 'Superadmin' : (state.user.role === 'admin_istri' ? 'Admin Istri' : (state.user.role === 'admin_suami' ? 'Admin Suami' : 'Warga'));
+
     const tunggakanSaya = state.data.tunggakan.filter(t => t['ID Warga'] === myId);
     const jumlahBulanMenunggak = tunggakanSaya.length;
     const totalTunggakan = tunggakanSaya.reduce((sum, t) => sum + Number(t['Iuran']||0) + Number(t['Arisan']||0), 0);
+
     const profileHtml = `
       <div class="bg-gradient-to-br from-primary to-primary-dark p-5 md:p-6 rounded-2xl shadow-md text-white relative overflow-hidden flex flex-col sm:flex-row gap-4 mb-2 mt-2">
         <div class="absolute -right-6 -top-6 opacity-10"><i class="ph ph-user-circle" style="font-size: 150px;"></i></div>
@@ -733,7 +751,55 @@
       </div>`;
     document.getElementById('profile-card').innerHTML = profileHtml;
     document.getElementById('profile-card').classList.remove('hidden');
-    document.getElementById('dash-title').innerText = state.user.role === 'superadmin' ? 'Dashboard Superadmin' : (state.user.role === 'admin_istri' ? 'Dashboard Admin Istri' : (state.user.role === 'admin_suami' ? 'Dashboard Admin Suami' : 'Beranda Warga'));
+
+    // === TABEL TUNGGAKAN (NON‑SUPERADMIN) ===
+    const tunggakanContainer = document.getElementById('tunggakan-table-container');
+    if (state.user.role !== 'superadmin') {
+      const myTunggakan = state.data.tunggakan.filter(t => t['ID Warga'] === myId);
+      if (myTunggakan.length > 0) {
+        tunggakanContainer.innerHTML = `
+          <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4 md:p-5 mt-4">
+            <h3 class="font-bold text-gray-700 dark:text-gray-200 text-sm md:text-base mb-4 flex items-center gap-2">
+              <i class="ph ph-clock-counter-clockwise text-warning text-lg"></i> Data Tunggakan Saya
+            </h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs md:text-sm whitespace-nowrap min-w-[500px]">
+                <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
+                  <tr>
+                    <th class="p-2 font-medium">ID Tunggakan</th>
+                    <th class="p-2 font-medium">Bulan</th>
+                    <th class="p-2 font-medium">Tahun</th>
+                    <th class="p-2 font-medium text-right">Iuran</th>
+                    <th class="p-2 font-medium text-right">Arisan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${myTunggakan.map(t => `
+                    <tr class="border-b border-gray-100 dark:border-gray-800">
+                      <td class="p-2 text-xs font-mono text-gray-500">${t['ID Tunggakan'] || '-'}</td>
+                      <td class="p-2 font-medium">${t['Bulan'] || '-'}</td>
+                      <td class="p-2">${t['Tahun'] || '-'}</td>
+                      <td class="p-2 text-right text-success font-medium">${formatRupiah(t['Iuran'])}</td>
+                      <td class="p-2 text-right text-primary font-medium">${formatRupiah(t['Arisan'])}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>`;
+      } else {
+        tunggakanContainer.innerHTML = `
+          <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4 md:p-5 mt-4 text-center text-gray-500">
+            <i class="ph ph-smiley text-2xl mb-2 text-success"></i>
+            <p class="text-sm font-medium">Kamu tidak memiliki tunggakan. 👍</p>
+          </div>`;
+      }
+      tunggakanContainer.classList.remove('hidden');
+    } else {
+      tunggakanContainer.classList.add('hidden');
+    }
+
+    // Riwayat Mutasi / Admin Container (sama seperti sebelumnya)
     const mutasiDiv = document.getElementById('dashboard-mutasi');
     if (state.user.role !== 'superadmin') {
       const myTransaksi = state.data.transaksi.filter(t => String(t['ID Anggota']) === String(myId)).sort((a,b) => new Date(b['Tanggal']) - new Date(a['Tanggal']));
@@ -781,6 +847,7 @@
     } else {
       mutasiDiv.style.display = 'none';
     }
+
     const adminContainer = document.getElementById('admin-container');
     if (state.user.role === 'superadmin') {
       adminContainer.style.display = 'block';
@@ -798,6 +865,7 @@
           if(m===now.getMonth() && tgl.getFullYear()===now.getFullYear()) keluar+=nom;
         }
       });
+
       document.getElementById('dashboard-stats').innerHTML = `
         <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Total Warga</p><h3 class="text-xl font-bold">${state.data.warga.length}</h3></div>
         <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Saldo Kas</p><h3 class="text-xl font-bold text-primary">${formatRupiah(saldoKas)}</h3></div>
@@ -962,7 +1030,7 @@
       }
     },
 
-    // ===================== PEMBAYARAN (dengan multi‑bulan & hapus massal) =====================
+    // ===================== PEMBAYARAN (dengan multi‑bulan, hapus massal, update bulan ini) =====================
     pembayaran: {
       render() {
         const sel = document.getElementById('pay-warga');
@@ -1006,16 +1074,16 @@
         if (btnsDiv) {
           if (state.user.role === 'superadmin' || state.user.role === 'admin_suami') {
             btnsDiv.innerHTML = `
-  <button onclick="window.ekas.pembayaran.openTunggakanModal()" class="flex-1 bg-warning hover:bg-amber-600 text-white px-3 py-2 rounded-xl font-medium text-sm shadow-sm transition-colors">
-    <i class="ph ph-clock-counter-clockwise mr-1"></i> Catat Tunggakan
-  </button>
-  <button onclick="window.ekas.pembayaran.openHapusTunggakanModal()" class="flex-1 bg-danger hover:bg-red-700 text-white px-3 py-2 rounded-xl font-medium text-sm shadow-sm transition-colors">
-    <i class="ph ph-trash mr-1"></i> Hapus Tunggakan
-  </button>
-  <button onclick="window.ekas.pembayaran.updateSemuaTunggakan()" class="flex-1 bg-primary hover:bg-primary-dark text-white px-3 py-2 rounded-xl font-medium text-sm shadow-sm transition-colors">
-    <i class="ph ph-arrows-clockwise mr-1"></i> Update Tunggakan
-  </button>
-`;
+              <button onclick="window.ekas.pembayaran.openTunggakanModal()" class="flex-1 bg-warning hover:bg-amber-600 text-white px-3 py-2 rounded-xl font-medium text-sm shadow-sm transition-colors">
+                <i class="ph ph-clock-counter-clockwise mr-1"></i> Catat Tunggakan
+              </button>
+              <button onclick="window.ekas.pembayaran.openHapusTunggakanModal()" class="flex-1 bg-danger hover:bg-red-700 text-white px-3 py-2 rounded-xl font-medium text-sm shadow-sm transition-colors">
+                <i class="ph ph-trash mr-1"></i> Hapus Tunggakan
+              </button>
+              <button onclick="window.ekas.pembayaran.updateSemuaTunggakan()" class="flex-1 bg-primary hover:bg-primary-dark text-white px-3 py-2 rounded-xl font-medium text-sm shadow-sm transition-colors">
+                <i class="ph ph-arrows-clockwise mr-1"></i> Update Tunggakan
+              </button>
+            `;
           } else {
             btnsDiv.innerHTML = '';
           }
@@ -1241,23 +1309,6 @@
         }, 50);
       },
 
-      async updateSemuaTunggakan() {
-  const ok = await showConfirmDialog(
-    'Tambahkan tunggakan untuk bulan ini kepada semua warga yang memiliki kewajiban?',
-    { confirmText: 'Update', cancelText: 'Batal' }
-  );
-  if (!ok) return;
-  showLoading();
-  const res = await fetchAPI('update_tunggakan_bulan_ini', {}); // <-- ganti di sini
-  hideLoading();
-  if (res.success) {
-    await loadData();
-    showToast(res.message || 'Tunggakan bulan ini ditambahkan');
-  } else {
-    showToast(res.message, 'error');
-  }
-},
-      
       async hapusTerpilih() {
         const selected = [...document.querySelectorAll('.tung-hapus-cb:checked')].map(cb => cb.value);
         if (selected.length === 0) return showToast('Pilih tunggakan dulu!', 'error');
@@ -1281,6 +1332,24 @@
           window.closeAllModals();
           await loadData();
           showToast(`${selected.length} tunggakan dihapus` + (catatPemasukan ? ' dan pemasukan dicatat' : ''));
+        }
+      },
+
+      // ---------- UPDATE TUNGGAKAN BULAN INI ----------
+      async updateSemuaTunggakan() {
+        const ok = await showConfirmDialog(
+          'Tambahkan tunggakan untuk bulan ini kepada semua warga yang memiliki kewajiban?',
+          { confirmText: 'Update', cancelText: 'Batal' }
+        );
+        if (!ok) return;
+        showLoading();
+        const res = await fetchAPI('update_tunggakan_bulan_ini', {});
+        hideLoading();
+        if (res.success) {
+          await loadData();
+          showToast(res.message || 'Tunggakan bulan ini ditambahkan');
+        } else {
+          showToast(res.message, 'error');
         }
       }
     },
