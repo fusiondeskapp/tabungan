@@ -151,7 +151,8 @@
     <p class="mt-4 font-bold text-gray-700 dark:text-gray-200">Menyimpan...</p>
   </div>
 </div>
-<!-- ==================== TEMPLATES ==================== -->
+
+<!-- TEMPLATES -->
 <template id="tpl-dashboard">
   <div class="space-y-4 md:space-y-6 animate-fade-in w-full">
     <h2 class="text-2xl font-bold hidden lg:block dark:text-white" id="dash-title">Dashboard</h2>
@@ -173,6 +174,7 @@
   </div>
 </template>
 
+<!-- SELANJUTNYA BAGIAN 2/6 - TEMPLATE WARGA & TRANSAKSI -->
 <template id="tpl-warga">
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -218,6 +220,7 @@
   </div>
 </template>
 
+<!-- SELANJUTNYA BAGIAN 3/6 - TEMPLATE PEMBAYARAN & KAS -->
 <template id="tpl-pembayaran">
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <h2 class="text-2xl font-bold dark:text-white">Penerimaan Pembayaran</h2>
@@ -243,7 +246,7 @@
           <button type="submit" id="btn-save-pay" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl transition-all shadow-md disabled:opacity-50 mt-2">Simpan Pembayaran</button>
         </form>
         <!-- Tombol Tunggakan di Pembayaran -->
-        <div class="mt-4 flex gap-2" id="pembayaran-tunggakan-btns"></div>
+        <div id="pembayaran-tunggakan-btns" class="mt-4 flex gap-2"></div>
       </div>
       <div class="lg:col-span-2 bg-white dark:bg-darkcard rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden flex flex-col h-fit">
         <div class="p-5 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50"><h3 class="font-bold text-lg">Riwayat Pembayaran</h3></div>
@@ -285,6 +288,7 @@
   </div>
 </template>
 
+<!-- SELANJUTNYA BAGIAN 4/6 - TEMPLATE SETTING & BUKU & TENTANG -->
 <template id="tpl-setting">
   <div class="space-y-6 animate-fade-in h-full flex flex-col w-full">
     <h2 class="text-2xl font-bold dark:text-white">Pengaturan RT</h2>
@@ -425,6 +429,8 @@
     </div>
   </div>
 </template>
+
+<!-- SELANJUTNYA BAGIAN 5/6 - JAVASCRIPT (BAGIAN PERTAMA) -->
 <!-- JS LOGIC -->
 <script>
   const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbxcuUe9qO2PyallWSn7vu2UiiKTnMqirKbocdI_VI8uWnYyjYYvRsv_DUpGIV2GSWiuqQ/exec';
@@ -801,7 +807,7 @@
     }
   }
 
-  // ===================== E-KAS =====================
+  // ===================== E-KAS (WARGA) =====================
   window.ekas = {
     warga: {
       render() {
@@ -936,6 +942,8 @@
       }
     },
 
+    // SELANJUTNYA BAGIAN 6/6 - PEMBAYARAN, KAS, BIAYA, SETTING, TRANSAKSI, BUKU, PROFILE, DLL.
+	    // ===================== E-KAS: PEMBAYARAN =====================
     pembayaran: {
       render() {
         const sel = document.getElementById('pay-warga');
@@ -956,36 +964,39 @@
           saveBtn.disabled = !canEdit;
           saveBtn.classList.toggle('opacity-50', !canEdit);
         }
-        if(pay.length===0) { tb.innerHTML = '<tr><td colspan="5" class="px-5 py-10 text-center text-gray-500">Belum ada pembayaran.</td></tr>'; return; }
-        tb.innerHTML = pay.map(p => {
-          const wName = state.data.warga.find(w=>w['ID Warga']===p.WargaID)?.['Nama Suami'] || p.WargaID;
-          return `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-50">
-            <td class="px-5 py-3"><div class="font-bold">${wName}</div><div class="text-xs text-gray-500">${new Date(p.Tanggal).toLocaleDateString('id-ID')}</div></td>
-            <td class="px-5 py-3">${p.Bulan} ${p.Tahun}</td>
-            <td class="px-5 py-3 text-xs">Iur:${p.Iuran} Ars:${p.Arisan} Tmb:${p.Tambahan}</td>
-            <td class="px-5 py-3 font-black text-success">${formatRupiah(p.Total)}</td>
-            <td class="px-5 py-3 text-right space-x-1">
-              ${canEdit ? `
-                <button onclick="window.ekas.pembayaran.openEdit('${p.PayID}')" class="text-blue-500 bg-blue-50 p-2 rounded-lg"><i class="ph ph-pencil-simple"></i></button>
-                <button onclick="window.ekas.pembayaran.delete('${p.PayID}')" class="text-danger bg-red-50 p-2 rounded-lg"><i class="ph ph-trash"></i></button>
-              ` : ''}
-            </td>
-          </tr>`;
-        }).join('');
-        
-        // Tombol Catat & Hapus Tunggakan di Pembayaran
+        if(pay.length===0) { tb.innerHTML = '<tr><td colspan="5" class="px-5 py-10 text-center text-gray-500">Belum ada pembayaran.</td></tr>'; }
+        else {
+          tb.innerHTML = pay.map(p => {
+            const wName = state.data.warga.find(w=>w['ID Warga']===p.WargaID)?.['Nama Suami'] || p.WargaID;
+            return `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-50">
+              <td class="px-5 py-3"><div class="font-bold">${wName}</div><div class="text-xs text-gray-500">${new Date(p.Tanggal).toLocaleDateString('id-ID')}</div></td>
+              <td class="px-5 py-3">${p.Bulan} ${p.Tahun}</td>
+              <td class="px-5 py-3 text-xs">Iur:${p.Iuran} Ars:${p.Arisan} Tmb:${p.Tambahan}</td>
+              <td class="px-5 py-3 font-black text-success">${formatRupiah(p.Total)}</td>
+              <td class="px-5 py-3 text-right space-x-1">
+                ${canEdit ? `
+                  <button onclick="window.ekas.pembayaran.openEdit('${p.PayID}')" class="text-blue-500 bg-blue-50 p-2 rounded-lg"><i class="ph ph-pencil-simple"></i></button>
+                  <button onclick="window.ekas.pembayaran.delete('${p.PayID}')" class="text-danger bg-red-50 p-2 rounded-lg"><i class="ph ph-trash"></i></button>
+                ` : ''}
+              </td>
+            </tr>`;
+          }).join('');
+        }
+
         const btnsDiv = document.getElementById('pembayaran-tunggakan-btns');
-        if (btnsDiv && (state.user.role === 'superadmin' || state.user.role === 'admin_suami')) {
-          btnsDiv.innerHTML = `
-            <button onclick="window.ekas.pembayaran.openTunggakanModal()" class="flex-1 bg-warning hover:bg-amber-600 text-white px-3 py-2 rounded-xl font-medium text-sm shadow-sm transition-colors">
-              <i class="ph ph-clock-counter-clockwise mr-1"></i> Catat Tunggakan
-            </button>
-            <button onclick="window.ekas.pembayaran.openHapusTunggakanModal()" class="flex-1 bg-danger hover:bg-red-700 text-white px-3 py-2 rounded-xl font-medium text-sm shadow-sm transition-colors">
-              <i class="ph ph-trash mr-1"></i> Hapus Tunggakan
-            </button>
-          `;
-        } else if (btnsDiv) {
-          btnsDiv.innerHTML = '';
+        if (btnsDiv) {
+          if (state.user.role === 'superadmin' || state.user.role === 'admin_suami') {
+            btnsDiv.innerHTML = `
+              <button onclick="window.ekas.pembayaran.openTunggakanModal()" class="flex-1 bg-warning hover:bg-amber-600 text-white px-3 py-2 rounded-xl font-medium text-sm shadow-sm transition-colors">
+                <i class="ph ph-clock-counter-clockwise mr-1"></i> Catat Tunggakan
+              </button>
+              <button onclick="window.ekas.pembayaran.openHapusTunggakanModal()" class="flex-1 bg-danger hover:bg-red-700 text-white px-3 py-2 rounded-xl font-medium text-sm shadow-sm transition-colors">
+                <i class="ph ph-trash mr-1"></i> Hapus Tunggakan
+              </button>
+            `;
+          } else {
+            btnsDiv.innerHTML = '';
+          }
         }
       },
       openEdit(payId) {
@@ -1052,10 +1063,10 @@
         if(res.success) { await loadData(); showToast('Dihapus'); }
         else showToast(res.message,'error');
       },
-      
-      // ========== TUNGGAKAN DI PEMBAYARAN ==========
+
+      // ---------- TUNGGAKAN ----------
       openTunggakanModal() {
-        if (!['superadmin', 'admin_suami'].includes(state.user.role)) return;
+        if (!['superadmin','admin_suami'].includes(state.user.role)) return;
         let opts = state.data.warga.map(w => `<option value="${w['ID Warga']}">${w['Nama Suami']} (${w['No Rumah']})</option>`).join('');
         document.getElementById('modals').innerHTML = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-md modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
@@ -1112,9 +1123,8 @@
           showToast(res.message, 'error');
         }
       },
-      
       openHapusTunggakanModal() {
-        if (!['superadmin', 'admin_suami'].includes(state.user.role)) return;
+        if (!['superadmin','admin_suami'].includes(state.user.role)) return;
         const list = state.data.tunggakan || [];
         if (list.length === 0) {
           showToast('Tidak ada data tunggakan', 'error');
@@ -1133,7 +1143,6 @@
             </td>
           </tr>`;
         }).join('');
-        
         document.getElementById('modals').innerHTML = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-lg modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
             <div class="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
@@ -1150,7 +1159,6 @@
             </div>
           </div></div>`;
       },
-      
       async deleteTunggakan(id) {
         if (!confirm('Hapus tunggakan ini?')) return;
         showLoading();
@@ -1166,6 +1174,7 @@
       }
     },
 
+    // ===================== E-KAS: KAS =====================
     kas: {
       render() {
         const tb = document.getElementById('table-kas');
@@ -1284,6 +1293,7 @@
       }
     },
 
+    // ===================== E-KAS: BIAYA =====================
     biaya: {
       render() {
         const tb = document.getElementById('table-biaya');
@@ -1351,6 +1361,7 @@
       }
     },
 
+    // ===================== E-KAS: SETTING =====================
     setting: {
       async save(e) {
         e.preventDefault();
@@ -1369,7 +1380,7 @@
         else showToast(res.message,'error');
       }
     }
-  };
+  }; // akhir window.ekas
 
   // ===================== TRANSAKSI & BUKU TABUNGAN =====================
   function renderTransaksi(filter = 'Semua') {
