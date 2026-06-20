@@ -80,7 +80,6 @@
 
   <!-- MAIN LAYOUT -->
   <div id="main-layout" class="flex w-full h-full max-w-[100vw] hidden">
-    <!-- Sidebar Desktop -->
     <aside class="w-64 bg-white dark:bg-darkcard border-r border-gray-200 dark:border-gray-700 hidden lg:flex flex-col z-20 flex-shrink-0">
       <div class="p-6 flex items-center gap-3">
         <div class="h-10 w-10 bg-primary text-white rounded-xl flex items-center justify-center text-xl shadow-md"><i class="ph ph-wallet"></i></div>
@@ -103,7 +102,6 @@
       </nav>
     </aside>
 
-    <!-- Main Content Area -->
     <main class="flex-1 min-w-0 flex flex-col h-full relative max-w-full">
       <header class="lg:hidden glass-nav border-b border-gray-200 dark:border-gray-700 sticky top-0 z-20 px-4 py-3 flex justify-between items-center shadow-sm">
         <div class="flex items-center gap-3 min-w-0">
@@ -116,17 +114,14 @@
           <button onclick="handleLogout()" class="p-2 text-danger hover:bg-red-50 dark:hover:bg-red-900/30 rounded-full transition-colors"><i class="ph ph-sign-out text-xl"></i></button>
         </div>
       </header>
-
       <div class="hidden lg:flex justify-end px-8 pt-6 pb-2 w-full flex-shrink-0 gap-2">
         <button onclick="navigate('tentang')" class="p-2.5 bg-white dark:bg-darkcard text-gray-500 shadow-sm border border-gray-100 dark:border-gray-700 rounded-full hover:text-primary transition-colors"><i class="ph ph-info text-[22px]"></i></button>
         <button onclick="toggleTheme()" class="p-2.5 bg-white dark:bg-darkcard text-gray-500 shadow-sm border border-gray-100 dark:border-gray-700 rounded-full hover:text-primary transition-colors"><i class="ph ph-moon text-[22px] dark:hidden"></i><i class="ph ph-sun text-[22px] hidden dark:inline-block"></i></button>
         <button onclick="handleLogout()" class="p-2.5 bg-white dark:bg-darkcard text-danger shadow-sm border border-gray-100 dark:border-gray-700 rounded-full hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"><i class="ph ph-sign-out text-[22px]"></i></button>
       </div>
-
       <div class="flex-1 overflow-y-auto overflow-x-hidden p-4 lg:px-8 lg:pb-8 lg:pt-2 pb-32 w-full" id="content-area"></div>
     </main>
 
-    <!-- Bottom Navigation Mobile -->
     <nav class="lg:hidden fixed bottom-0 left-0 right-0 w-full glass-nav border-t border-gray-200 dark:border-gray-700 z-30 shadow-[0_-5px_15px_-5px_rgba(0,0,0,0.1)] pb-safe">
       <div class="flex justify-around items-center p-1.5 px-1" id="mobile-nav">
         <button class="nav-btn-mobile flex flex-col items-center justify-center p-2 text-primary flex-1 min-w-0" data-target="dashboard"><i class="ph ph-squares-four text-[22px] mb-1"></i><span class="text-[10px] font-medium truncate">Home</span></button>
@@ -142,7 +137,7 @@
   </div>
 </div>
 
-<!-- MODALS & TOASTS & LOADING -->
+<!-- MODALS & TOASTS -->
 <div id="modals" class="relative z-50"></div>
 <div id="toast-container" class="fixed top-4 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 pointer-events-none w-[calc(100%-2rem)] max-w-sm"></div>
 <div id="loading-overlay" class="fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm flex items-center justify-center hidden">
@@ -152,7 +147,7 @@
   </div>
 </div>
 
-<!-- TEMPLATES -->
+<!-- TEMPLATES (dashboard, warga, transaksi, pembayaran, kas, setting, buku, tentang) -->
 <template id="tpl-dashboard">
   <div class="space-y-4 md:space-y-6 animate-fade-in w-full">
     <h2 class="text-2xl font-bold hidden lg:block dark:text-white" id="dash-title">Dashboard</h2>
@@ -173,7 +168,6 @@
     </div>
   </div>
 </template>
-
 <template id="tpl-warga">
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -186,15 +180,13 @@
     <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-hidden relative w-full">
       <div class="overflow-x-auto w-full h-full">
         <table class="w-full text-left text-sm whitespace-nowrap min-w-[900px]" id="warga-table">
-          <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10" id="warga-thead">
-          </thead>
+          <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10" id="warga-thead"></thead>
           <tbody id="table-warga" class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
         </table>
       </div>
     </div>
   </div>
 </template>
-
 <template id="tpl-transaksi">
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -218,7 +210,6 @@
     </div>
   </div>
 </template>
-
 <template id="tpl-pembayaran">
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <h2 class="text-2xl font-bold dark:text-white hidden lg:block">Penerimaan Pembayaran</h2>
@@ -259,7 +250,6 @@
     </div>
   </div>
 </template>
-
 <template id="tpl-kas">
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -284,7 +274,6 @@
     </div>
   </div>
 </template>
-
 <template id="tpl-setting">
   <div class="space-y-6 animate-fade-in h-full flex flex-col w-full">
     <h2 class="text-2xl font-bold dark:text-white hidden lg:block">Pengaturan RT</h2>
@@ -314,7 +303,6 @@
     </div>
   </div>
 </template>
-
 <template id="tpl-buku">
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <h2 class="text-2xl font-bold hidden lg:block dark:text-white">Buku Tabungan Digital</h2>
@@ -323,7 +311,6 @@
       <select id="select-buku-anggota" class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none bg-white" onchange="renderBukuTabungan()"></select>
     </div>
     <div id="passbook-area" class="hidden flex-1 flex-col gap-4 min-w-0 w-full overflow-y-auto hide-scroll pb-10">
-      <!-- Profile Card + Saldo + PDF gabung -->
       <div class="bg-gradient-to-br from-primary to-primary-dark p-5 md:p-6 rounded-2xl shadow-md text-white relative overflow-hidden">
         <div class="absolute -right-6 -top-6 opacity-10 pointer-events-none"><i class="ph ph-wallet" style="font-size:140px;"></i></div>
         <div class="relative z-10 flex flex-col md:flex-row gap-4">
@@ -346,7 +333,6 @@
           </div>
         </div>
       </div>
-      <!-- Tabel Riwayat Mutasi full width -->
       <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-hidden flex flex-col min-w-0">
         <div class="p-3 md:p-4 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50"><h4 class="font-bold text-sm text-primary flex items-center gap-2"><i class="ph ph-list-bullets text-lg"></i> Tabel Riwayat Mutasi</h4></div>
         <div class="overflow-x-auto w-full flex-1">
@@ -362,7 +348,6 @@
     <div id="passbook-empty" class="flex-1 flex flex-col items-center justify-center text-gray-400 pb-10 text-center px-4"><i class="ph ph-book-open text-6xl mb-4 opacity-50 text-primary"></i><h3 class="font-bold text-gray-600 dark:text-gray-300 mb-1">Pilih Warga Terlebih Dahulu</h3><p class="text-sm">Riwayat mutasi transaksi akan muncul di sini.</p></div>
   </div>
 </template>
-
 <template id="tpl-tentang">
   <div class="max-w-2xl mx-auto py-6 px-4 sm:px-6 lg:px-8 space-y-8 animate-fade-in text-gray-800 dark:text-gray-200">
     <div class="text-center">
@@ -433,11 +418,9 @@
   </div>
 </template>
 
-<!-- JS (Bagian 1): Konstanta, Helper, State, Auth, Navigasi, Dashboard -->
 <script>
   const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbxcuUe9qO2PyallWSn7vu2UiiKTnMqirKbocdI_VI8uWnYyjYYvRsv_DUpGIV2GSWiuqQ/exec';
   
-  // --- ROLE PERMISSIONS ---
   const ROLE_PERMISSIONS = {
     dashboard: ['superadmin', 'admin_istri', 'admin_suami', 'user'],
     warga: ['superadmin', 'admin_istri', 'admin_suami'],
@@ -457,11 +440,8 @@
   function updateNavigationVisibility() {
     document.querySelectorAll('.nav-btn[data-target], .nav-btn-mobile[data-target]').forEach(btn => {
       const target = btn.dataset.target;
-      if (!canAccess(target)) {
-        btn.classList.add('hidden');
-      } else {
-        btn.classList.remove('hidden');
-      }
+      if (!canAccess(target)) btn.classList.add('hidden');
+      else btn.classList.remove('hidden');
     });
   }
 
@@ -510,7 +490,6 @@
     container.appendChild(toast); setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
   };
 
-  // Custom confirm dialog dengan UI bagus
   function showConfirmDialog(message, options = {}) {
     return new Promise((resolve) => {
       const { confirmText = 'Ya', cancelText = 'Batal', showCheckbox = false, checkboxLabel = '' } = options;
@@ -535,34 +514,21 @@
       `;
       modalDiv.appendChild(modalContent);
       document.body.appendChild(modalDiv);
-
       const okBtn = modalDiv.querySelector('#confirm-ok');
       const cancelBtn = modalDiv.querySelector('#confirm-cancel');
       const checkbox = modalDiv.querySelector('#confirm-checkbox');
-
       const cleanup = () => { modalDiv.remove(); };
-
       okBtn.addEventListener('click', () => {
-        if (showCheckbox) {
-          resolve({ confirmed: true, checked: checkbox ? checkbox.checked : false });
-        } else {
-          resolve(true);
-        }
+        if (showCheckbox) resolve({ confirmed: true, checked: checkbox ? checkbox.checked : false });
+        else resolve(true);
         cleanup();
       });
-
       cancelBtn.addEventListener('click', () => {
-        if (showCheckbox) {
-          resolve({ confirmed: false, checked: false });
-        } else {
-          resolve(false);
-        }
+        if (showCheckbox) resolve({ confirmed: false, checked: false });
+        else resolve(false);
         cleanup();
       });
-
-      modalDiv.addEventListener('click', (e) => {
-        if (e.target === modalDiv) cancelBtn.click();
-      });
+      modalDiv.addEventListener('click', (e) => { if (e.target === modalDiv) cancelBtn.click(); });
     });
   }
 
@@ -604,7 +570,6 @@
     return { success: false, message: "URL Backend tidak diatur." };
   }
 
-  // ----- SESSION & AUTH -----
   async function restoreSession() {
     const raw = readStorage('app_session', '');
     if (!raw) return false;
@@ -720,17 +685,14 @@
     else if(v==='tentang'){ a.appendChild(document.getElementById('tpl-tentang').content.cloneNode(true)); }
   }
 
-  // ===================== DASHBOARD =====================
   function renderDashboard() {
     if (!state.user) return;
     const myId = state.user['ID Warga'];
     const mySaldo = calculateSaldo(myId);
     const roleLabel = state.user.role === 'superadmin' ? 'Superadmin' : (state.user.role === 'admin_istri' ? 'Admin Istri' : (state.user.role === 'admin_suami' ? 'Admin Suami' : 'Warga'));
-
     const tunggakanSaya = state.data.tunggakan.filter(t => t['ID Warga'] === myId);
     const jumlahBulanMenunggak = tunggakanSaya.length;
     const totalTunggakan = tunggakanSaya.reduce((sum, t) => sum + Number(t['Iuran']||0) + Number(t['Arisan']||0), 0);
-
     const profileHtml = `
       <div class="bg-gradient-to-br from-primary to-primary-dark p-5 md:p-6 rounded-2xl shadow-md text-white relative overflow-hidden flex flex-col sm:flex-row gap-4 mb-2 mt-2">
         <div class="absolute -right-6 -top-6 opacity-10"><i class="ph ph-user-circle" style="font-size: 150px;"></i></div>
@@ -772,7 +734,6 @@
     document.getElementById('profile-card').innerHTML = profileHtml;
     document.getElementById('profile-card').classList.remove('hidden');
     document.getElementById('dash-title').innerText = state.user.role === 'superadmin' ? 'Dashboard Superadmin' : (state.user.role === 'admin_istri' ? 'Dashboard Admin Istri' : (state.user.role === 'admin_suami' ? 'Dashboard Admin Suami' : 'Beranda Warga'));
-
     const mutasiDiv = document.getElementById('dashboard-mutasi');
     if (state.user.role !== 'superadmin') {
       const myTransaksi = state.data.transaksi.filter(t => String(t['ID Anggota']) === String(myId)).sort((a,b) => new Date(b['Tanggal']) - new Date(a['Tanggal']));
@@ -820,7 +781,6 @@
     } else {
       mutasiDiv.style.display = 'none';
     }
-
     const adminContainer = document.getElementById('admin-container');
     if (state.user.role === 'superadmin') {
       adminContainer.style.display = 'block';
@@ -838,7 +798,6 @@
           if(m===now.getMonth() && tgl.getFullYear()===now.getFullYear()) keluar+=nom;
         }
       });
-
       document.getElementById('dashboard-stats').innerHTML = `
         <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Total Warga</p><h3 class="text-xl font-bold">${state.data.warga.length}</h3></div>
         <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Saldo Kas</p><h3 class="text-xl font-bold text-primary">${formatRupiah(saldoKas)}</h3></div>
@@ -1003,6 +962,7 @@
       }
     },
 
+    // ===================== PEMBAYARAN (dengan multi‑bulan & hapus massal) =====================
     pembayaran: {
       render() {
         const sel = document.getElementById('pay-warga');
@@ -1123,9 +1083,18 @@
         else showToast(res.message,'error');
       },
 
+      // ---------- TUNGGAKAN MULTI‑BULAN ----------
       openTunggakanModal() {
         if (!['superadmin','admin_suami'].includes(state.user.role)) return;
         let opts = state.data.warga.map(w => `<option value="${w['ID Warga']}">${w['Nama Suami']} (${w['No Rumah']})</option>`).join('');
+        const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+        const tahun = new Date().getFullYear();
+        const checkboxes = months.map(m => `
+          <label class="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg cursor-pointer">
+            <input type="checkbox" value="${m}" class="tung-bulan-cb rounded border-gray-300 text-primary focus:ring-primary">
+            <span class="text-sm">${m}</span>
+          </label>`).join('');
+        
         document.getElementById('modals').innerHTML = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-md modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
             <div class="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
@@ -1135,52 +1104,97 @@
             <div class="overflow-y-auto p-4 md:p-6 hide-scroll">
               <form class="space-y-4" onsubmit="window.ekas.pembayaran.submitTunggakan(event)">
                 <div><label class="block text-xs font-medium mb-1">Pilih Warga</label>
-                  <select id="tung-warga" required class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm">${opts}</select>
+                  <select id="tung-warga" required class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" onchange="window.ekas.pembayaran.hitungNominalTunggakan()">${opts}</select>
+                </div>
+                <div><label class="block text-xs font-medium mb-1">Tahun</label>
+                  <input type="number" id="tung-tahun" value="${tahun}" required class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" onchange="window.ekas.pembayaran.hitungNominalTunggakan()">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium mb-2">Pilih Bulan (centang satu atau lebih)</label>
+                  <div class="grid grid-cols-2 gap-1 max-h-40 overflow-y-auto border rounded-xl p-2 dark:border-gray-700" id="bulan-container">
+                    ${checkboxes}
+                  </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
-                  <div><label class="block text-xs font-medium mb-1">Bulan</label>
-                    <select id="tung-bulan" required class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm">
-                      <option value="Januari">Januari</option><option value="Februari">Februari</option><option value="Maret">Maret</option>
-                      <option value="April">April</option><option value="Mei">Mei</option><option value="Juni">Juni</option>
-                      <option value="Juli">Juli</option><option value="Agustus">Agustus</option><option value="September">September</option>
-                      <option value="Oktober">Oktober</option><option value="November">November</option><option value="Desember">Desember</option>
-                    </select>
-                  </div>
-                  <div><label class="block text-xs font-medium mb-1">Tahun</label>
-                    <input type="number" id="tung-tahun" value="2026" required class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm">
-                  </div>
+                  <div><label class="block text-xs font-medium mb-1">Iuran Wajib/bulan (Rp)</label>
+                    <input type="text" id="tung-iuran" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="0" oninput="formatInputRibuan(event)"></div>
+                  <div><label class="block text-xs font-medium mb-1">Arisan/bulan (Rp)</label>
+                    <input type="text" id="tung-arisan" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="0" oninput="formatInputRibuan(event)"></div>
                 </div>
-                <div><label class="block text-xs font-medium mb-1">Nominal Iuran (Rp)</label>
-                  <input type="number" id="tung-iuran" value="0" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm">
+                <div id="tung-tambahan-container" class="hidden">
+                  <label class="block text-xs font-medium mb-1">Biaya Tambahan/bulan (Rp)</label>
+                  <input type="text" id="tung-tambahan" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="0" oninput="formatInputRibuan(event)">
                 </div>
-                <div><label class="block text-xs font-medium mb-1">Nominal Arisan (Rp)</label>
-                  <input type="number" id="tung-arisan" value="0" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm">
+                <div class="bg-gray-100 dark:bg-gray-800 p-3 rounded-xl">
+                  <p class="text-xs text-gray-500">Total untuk <span id="tung-jumlah-bulan">0</span> bulan: <span id="tung-total" class="font-bold text-primary">Rp0</span></p>
                 </div>
                 <div class="pt-4"><button type="submit" class="w-full py-3 rounded-xl bg-warning hover:bg-amber-600 text-white font-medium text-sm">Simpan Tunggakan</button></div>
               </form>
             </div>
           </div></div>`;
+        setTimeout(() => {
+          document.getElementById('bulan-container').addEventListener('change', () => window.ekas.pembayaran.updateTotalTunggakan());
+          window.ekas.pembayaran.hitungNominalTunggakan();
+        }, 50);
       },
+
+      hitungNominalTunggakan() {
+        const wId = document.getElementById('tung-warga')?.value;
+        const w = wId ? state.data.warga.find(x => x['ID Warga'] === wId) : null;
+        let iuran = 0, arisan = 0, tambahan = 0;
+        if (w) {
+          if (w['Bayar Iuran?'] === 'YA') iuran = Number(state.data.settings['Iuran Wajib'] || 0);
+          if (w['Ikut Arisan?'] === 'YA') arisan = (Number(w['Slot Arisan']) || 0) * (Number(state.data.settings['Arisan Per Slot'] || 0));
+          state.data.biaya.filter(b => b.WargaID === wId).forEach(b => tambahan += Number(b.Nominal));
+        }
+        if (document.getElementById('tung-iuran')) document.getElementById('tung-iuran').value = formatAngkaInput(iuran);
+        if (document.getElementById('tung-arisan')) document.getElementById('tung-arisan').value = formatAngkaInput(arisan);
+        if (tambahan > 0) {
+          document.getElementById('tung-tambahan-container').classList.remove('hidden');
+          document.getElementById('tung-tambahan').value = formatAngkaInput(tambahan);
+        } else {
+          document.getElementById('tung-tambahan-container').classList.add('hidden');
+          document.getElementById('tung-tambahan').value = '0';
+        }
+        this.updateTotalTunggakan();
+      },
+
+      updateTotalTunggakan() {
+        const checked = document.querySelectorAll('.tung-bulan-cb:checked').length;
+        const iuran = toNumber(document.getElementById('tung-iuran')?.dataset?.value || document.getElementById('tung-iuran')?.value?.replace(/\./g,'') || 0);
+        const arisan = toNumber(document.getElementById('tung-arisan')?.dataset?.value || document.getElementById('tung-arisan')?.value?.replace(/\./g,'') || 0);
+        const tambahan = toNumber(document.getElementById('tung-tambahan')?.dataset?.value || document.getElementById('tung-tambahan')?.value?.replace(/\./g,'') || 0);
+        const total = (iuran + arisan + tambahan) * checked;
+        document.getElementById('tung-jumlah-bulan').innerText = checked;
+        document.getElementById('tung-total').innerText = formatRupiah(total);
+      },
+
       async submitTunggakan(e) {
         e.preventDefault();
-        const payload = {
-          wargaId: document.getElementById('tung-warga').value,
-          bulan: document.getElementById('tung-bulan').value,
-          tahun: Number(document.getElementById('tung-tahun').value),
-          iuran: Number(document.getElementById('tung-iuran').value) || 0,
-          arisan: Number(document.getElementById('tung-arisan').value) || 0
-        };
+        const wId = document.getElementById('tung-warga').value;
+        const tahun = Number(document.getElementById('tung-tahun').value);
+        const checked = [...document.querySelectorAll('.tung-bulan-cb:checked')].map(cb => cb.value);
+        if (!wId || checked.length === 0) return showToast('Pilih warga dan minimal satu bulan!', 'error');
+        
+        const iuran = toNumber(document.getElementById('tung-iuran').dataset?.value || document.getElementById('tung-iuran').value.replace(/\./g,'') || 0);
+        const arisan = toNumber(document.getElementById('tung-arisan').dataset?.value || document.getElementById('tung-arisan').value.replace(/\./g,'') || 0);
+        const tambahan = toNumber(document.getElementById('tung-tambahan')?.dataset?.value || document.getElementById('tung-tambahan')?.value?.replace(/\./g,'') || 0);
+        
         showLoading();
-        const res = await fetchAPI('save_tunggakan_manual', payload);
+        let success = true;
+        for (const bulan of checked) {
+          const res = await fetchAPI('save_tunggakan_manual', { wargaId: wId, bulan, tahun, iuran, arisan, tambahan });
+          if (!res.success) { success = false; showToast(res.message + ` (${bulan})`, 'error'); break; }
+        }
         hideLoading();
-        if (res.success) {
+        if (success) {
           window.closeAllModals();
           await loadData();
-          showToast('Tunggakan berhasil dicatat');
-        } else {
-          showToast(res.message, 'error');
+          showToast(`${checked.length} tunggakan berhasil dicatat`);
         }
       },
+
+      // ---------- HAPUS TUNGGAKAN MASSAL ----------
       openHapusTunggakanModal() {
         if (!['superadmin','admin_suami'].includes(state.user.role)) return;
         const list = state.data.tunggakan || [];
@@ -1192,13 +1206,11 @@
           const w = state.data.warga.find(x => x['ID Warga'] === t['ID Warga']);
           const nama = w ? w['Nama Suami'] : t['ID Warga'];
           return `<tr class="border-b border-gray-100 dark:border-gray-800">
+            <td class="p-2"><input type="checkbox" class="tung-hapus-cb rounded border-gray-300" value="${t['ID Tunggakan']}"></td>
             <td class="p-2 text-xs">${t['ID Tunggakan']}</td>
             <td class="p-2 font-medium">${nama}</td>
             <td class="p-2">${t['Bulan']} ${t['Tahun']}</td>
             <td class="p-2 text-right">${formatRupiah(Number(t['Iuran']) + Number(t['Arisan']))}</td>
-            <td class="p-2 text-center">
-              <button onclick="window.ekas.pembayaran.deleteTunggakan('${t['ID Tunggakan']}')" class="text-danger bg-red-50 p-1.5 rounded-lg"><i class="ph ph-trash"></i></button>
-            </td>
           </tr>`;
         }).join('');
         document.getElementById('modals').innerHTML = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -1210,15 +1222,26 @@
             <div class="overflow-y-auto p-4 hide-scroll">
               <table class="w-full text-left text-sm">
                 <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500">
-                  <tr><th class="p-2">ID</th><th class="p-2">Warga</th><th class="p-2">Periode</th><th class="p-2 text-right">Nominal</th><th class="p-2 text-center">Aksi</th></tr>
+                  <tr><th class="p-2 w-8"><input type="checkbox" id="pilih-semua" class="rounded border-gray-300"></th><th class="p-2">ID</th><th class="p-2">Warga</th><th class="p-2">Periode</th><th class="p-2 text-right">Nominal</th></tr>
                 </thead>
                 <tbody>${rows}</tbody>
               </table>
+              <button onclick="window.ekas.pembayaran.hapusTerpilih()" class="w-full mt-4 bg-danger hover:bg-red-700 text-white font-medium py-2.5 rounded-xl transition-colors">
+                <i class="ph ph-trash mr-2"></i> Hapus Terpilih
+              </button>
             </div>
           </div></div>`;
+        setTimeout(() => {
+          document.getElementById('pilih-semua').addEventListener('change', (e) => {
+            document.querySelectorAll('.tung-hapus-cb').forEach(cb => cb.checked = e.target.checked);
+          });
+        }, 50);
       },
-      async deleteTunggakan(id) {
-        const result = await showConfirmDialog('Hapus tunggakan ini?', {
+
+      async hapusTerpilih() {
+        const selected = [...document.querySelectorAll('.tung-hapus-cb:checked')].map(cb => cb.value);
+        if (selected.length === 0) return showToast('Pilih tunggakan dulu!', 'error');
+        const result = await showConfirmDialog(`Hapus ${selected.length} tunggakan terpilih?`, {
           confirmText: 'Hapus',
           cancelText: 'Batal',
           showCheckbox: true,
@@ -1226,22 +1249,23 @@
         });
         if (!result || !result.confirmed) return;
         const catatPemasukan = result.checked;
+        
         showLoading();
-        const res = await fetchAPI('delete_tunggakan', { 
-          id, 
-          catatPemasukan: catatPemasukan 
-        });
+        let allOk = true;
+        for (const id of selected) {
+          const res = await fetchAPI('delete_tunggakan', { id, catatPemasukan });
+          if (!res.success) { allOk = false; showToast(res.message, 'error'); break; }
+        }
         hideLoading();
-        if (res.success) {
+        if (allOk) {
           window.closeAllModals();
           await loadData();
-          showToast('Tunggakan dihapus' + (catatPemasukan ? ' dan pemasukan dicatat' : ''));
-        } else {
-          showToast(res.message, 'error');
+          showToast(`${selected.length} tunggakan dihapus` + (catatPemasukan ? ' dan pemasukan dicatat' : ''));
         }
       }
     },
 
+    // ===================== KAS (dengan ringkasan di footer) =====================
     kas: {
       render() {
         const tb = document.getElementById('table-kas');
@@ -1314,7 +1338,6 @@
           </tr>
         `;
       },
-      // ... lanjutkan dengan openModal, submit, delete, cetakPDF (tidak diubah)
       openModal(jenis, id=null) {
         if (state.user.role !== 'superadmin' && state.user.role !== 'admin_suami') return;
         const k = id ? state.data.kas.find(x=>x.KasID===id) : null;
@@ -1329,7 +1352,7 @@
                 <input type="hidden" id="k-id" value="${k?k.KasID:''}">
                 <input type="hidden" id="k-jenis" value="${k?k.Jenis:jenis}">
                 <div><label class="block text-xs font-medium mb-1">Kategori</label><input type="text" id="k-kategori" required class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${k?k.Kategori:''}"></div>
-                <div><label class="block text-xs font-medium mb-1">Nominal</label><input type="number" id="k-nominal" required class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${k?k.Nominal:''}"></div>
+                <div><label class="block text-xs font-medium mb-1">Nominal</label><input type="text" id="k-nominal" required class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" oninput="formatInputRibuan(event)" value="${k?formatAngkaInput(k.Nominal):''}"></div>
                 <div><label class="block text-xs font-medium mb-1">Keterangan</label><input type="text" id="k-ket" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${k?k.Keterangan:''}"></div>
                 <div class="pt-4"><button type="submit" class="w-full py-3 rounded-xl bg-primary text-white font-medium text-sm">Simpan</button></div>
               </form>
@@ -1339,13 +1362,15 @@
       },
       async submit(e) {
         e.preventDefault();
+        const nominalInput = document.getElementById('k-nominal');
+        const nominal = toNumber(nominalInput.dataset?.value || nominalInput.value.replace(/\./g,'') || 0);
         const payload = {
           isEdit: !!document.getElementById('k-id').value,
           kasId: document.getElementById('k-id').value || 'KAS-'+Date.now(),
           tgl: new Date().toISOString(),
           jenis: document.getElementById('k-jenis').value,
           kategori: document.getElementById('k-kategori').value,
-          nominal: Number(document.getElementById('k-nominal').value),
+          nominal,
           keterangan: document.getElementById('k-ket').value
         };
         showLoading();
@@ -1386,6 +1411,7 @@
       }
     },
 
+    // ===================== BIAYA =====================
     biaya: {
       render() {
         const tb = document.getElementById('table-biaya');
@@ -1422,7 +1448,7 @@
                 <input type="hidden" id="b-id" value="${id||''}">
                 <div><label class="block text-xs font-medium mb-1">Warga</label><select id="b-warga" required class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm">${opts}</select></div>
                 <div><label class="block text-xs font-medium mb-1">Nama Biaya</label><input type="text" id="b-nama" required class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${b?b.NamaBiaya:''}"></div>
-                <div><label class="block text-xs font-medium mb-1">Nominal</label><input type="number" id="b-nominal" required class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${b?b.Nominal:''}"></div>
+                <div><label class="block text-xs font-medium mb-1">Nominal</label><input type="text" id="b-nominal" required class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" oninput="formatInputRibuan(event)" value="${b?formatAngkaInput(b.Nominal):''}"></div>
                 <div class="pt-4"><button type="submit" class="w-full py-3 rounded-xl bg-warning text-white font-medium text-sm">Simpan</button></div>
               </form>
             </div>
@@ -1431,11 +1457,13 @@
       async submit(e) {
         e.preventDefault();
         const id = document.getElementById('b-id').value;
+        const nominalInput = document.getElementById('b-nominal');
+        const nominal = toNumber(nominalInput.dataset?.value || nominalInput.value.replace(/\./g,'') || 0);
         const payload = { 
           biayaId: id || undefined,
           wargaId: document.getElementById('b-warga').value, 
           namaBiaya: document.getElementById('b-nama').value, 
-          nominal: Number(document.getElementById('b-nominal').value) 
+          nominal
         };
         showLoading();
         const res = await fetchAPI('save_biaya', payload);
@@ -1453,6 +1481,7 @@
       }
     },
 
+    // ===================== SETTING =====================
     setting: {
       async save(e) {
         e.preventDefault();
@@ -1472,6 +1501,7 @@
       }
     }
   };
+  // End of Bagian 2
 </script>
 <script>
   // ===================== TRANSAKSI & BUKU TABUNGAN =====================
