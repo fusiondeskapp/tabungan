@@ -1243,16 +1243,16 @@
 
       async updateSemuaTunggakan() {
   const ok = await showConfirmDialog(
-    'Perbarui tunggakan untuk semua warga yang memiliki kewajiban? Proses ini akan menambahkan tunggakan bulan ini jika belum ada.',
+    'Tambahkan tunggakan untuk bulan ini kepada semua warga yang memiliki kewajiban?',
     { confirmText: 'Update', cancelText: 'Batal' }
   );
   if (!ok) return;
   showLoading();
-  const res = await fetchAPI('update_tunggakan_semua', {});
+  const res = await fetchAPI('update_tunggakan_bulan_ini', {}); // <-- ganti di sini
   hideLoading();
   if (res.success) {
     await loadData();
-    showToast(res.message || 'Tunggakan diperbarui');
+    showToast(res.message || 'Tunggakan bulan ini ditambahkan');
   } else {
     showToast(res.message, 'error');
   }
