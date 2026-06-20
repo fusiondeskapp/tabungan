@@ -1006,13 +1006,16 @@
         if (btnsDiv) {
           if (state.user.role === 'superadmin' || state.user.role === 'admin_suami') {
             btnsDiv.innerHTML = `
-              <button onclick="window.ekas.pembayaran.openTunggakanModal()" class="flex-1 bg-warning hover:bg-amber-600 text-white px-3 py-2 rounded-xl font-medium text-sm shadow-sm transition-colors">
-                <i class="ph ph-clock-counter-clockwise mr-1"></i> Catat Tunggakan
-              </button>
-              <button onclick="window.ekas.pembayaran.openHapusTunggakanModal()" class="flex-1 bg-danger hover:bg-red-700 text-white px-3 py-2 rounded-xl font-medium text-sm shadow-sm transition-colors">
-                <i class="ph ph-trash mr-1"></i> Hapus Tunggakan
-              </button>
-            `;
+  <button onclick="window.ekas.pembayaran.openTunggakanModal()" class="flex-1 bg-warning hover:bg-amber-600 text-white px-3 py-2 rounded-xl font-medium text-sm shadow-sm transition-colors">
+    <i class="ph ph-clock-counter-clockwise mr-1"></i> Catat Tunggakan
+  </button>
+  <button onclick="window.ekas.pembayaran.openHapusTunggakanModal()" class="flex-1 bg-danger hover:bg-red-700 text-white px-3 py-2 rounded-xl font-medium text-sm shadow-sm transition-colors">
+    <i class="ph ph-trash mr-1"></i> Hapus Tunggakan
+  </button>
+  <button onclick="window.ekas.pembayaran.updateSemuaTunggakan()" class="flex-1 bg-primary hover:bg-primary-dark text-white px-3 py-2 rounded-xl font-medium text-sm shadow-sm transition-colors">
+    <i class="ph ph-arrows-clockwise mr-1"></i> Update Tunggakan
+  </button>
+`;
           } else {
             btnsDiv.innerHTML = '';
           }
@@ -1238,6 +1241,23 @@
         }, 50);
       },
 
+      async updateSemuaTunggakan() {
+  const ok = await showConfirmDialog(
+    'Perbarui tunggakan untuk semua warga yang memiliki kewajiban? Proses ini akan menambahkan tunggakan bulan ini jika belum ada.',
+    { confirmText: 'Update', cancelText: 'Batal' }
+  );
+  if (!ok) return;
+  showLoading();
+  const res = await fetchAPI('update_tunggakan_semua', {});
+  hideLoading();
+  if (res.success) {
+    await loadData();
+    showToast(res.message || 'Tunggakan diperbarui');
+  } else {
+    showToast(res.message, 'error');
+  }
+},
+      
       async hapusTerpilih() {
         const selected = [...document.querySelectorAll('.tung-hapus-cb:checked')].map(cb => cb.value);
         if (selected.length === 0) return showToast('Pilih tunggakan dulu!', 'error');
