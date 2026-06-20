@@ -763,10 +763,9 @@
               <i class="ph ph-clock-counter-clockwise text-warning text-lg"></i> Data Tunggakan Saya
             </h3>
             <div class="overflow-x-auto">
-              <table class="w-full text-left text-xs md:text-sm whitespace-nowrap min-w-[500px]">
+              <table class="w-full text-left text-xs md:text-sm whitespace-nowrap min-w-[400px]">
                 <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
                   <tr>
-                    <th class="p-2 font-medium">ID Tunggakan</th>
                     <th class="p-2 font-medium">Bulan</th>
                     <th class="p-2 font-medium">Tahun</th>
                     <th class="p-2 font-medium text-right">Iuran</th>
@@ -776,7 +775,6 @@
                 <tbody>
                   ${myTunggakan.map(t => `
                     <tr class="border-b border-gray-100 dark:border-gray-800">
-                      <td class="p-2 text-xs font-mono text-gray-500">${t['ID Tunggakan'] || '-'}</td>
                       <td class="p-2 font-medium">${t['Bulan'] || '-'}</td>
                       <td class="p-2">${t['Tahun'] || '-'}</td>
                       <td class="p-2 text-right text-success font-medium">${formatRupiah(t['Iuran'])}</td>
