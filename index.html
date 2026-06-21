@@ -2,7 +2,7 @@
 <html lang="id" class="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
   <title>Tabungan & E-Kas RT</title>
   
   <meta name="theme-color" content="#0F766E">
@@ -42,6 +42,11 @@
     .hide-scroll::-webkit-scrollbar { display:none; }
     .hide-scroll { -ms-overflow-style:none; scrollbar-width:none; }
     .profile-avatar-img { object-fit:cover; }
+    /* Agar tabel di mobile tidak terlalu sempit dan bisa di-scroll vertikal */
+    .table-responsive-wrap {
+      max-height: 60vh;
+      overflow-y: auto;
+    }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-800 dark:bg-darkbg dark:text-gray-200 transition-colors duration-300 antialiased overflow-hidden selection:bg-primary/30">
@@ -184,9 +189,9 @@
         <span id="warga-add-btn"></span>
       </div>
     </div>
-    <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-hidden relative w-full">
+    <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-y-auto relative w-full min-h-0">
       <div class="overflow-x-auto w-full h-full">
-        <table class="w-full text-left text-sm whitespace-nowrap min-w-[900px]" id="warga-table">
+        <table class="w-full text-left text-xs md:text-sm min-w-full md:min-w-[700px]" id="warga-table">
           <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10" id="warga-thead">
           </thead>
           <tbody id="table-warga" class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
@@ -208,10 +213,9 @@
         <button class="px-4 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs sm:text-sm font-medium hover:bg-gray-200 whitespace-nowrap flex-shrink-0 transition-colors" onclick="filterTrx('Setoran', this)">Setoran</button>
         <button class="px-4 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs sm:text-sm font-medium hover:bg-gray-200 whitespace-nowrap flex-shrink-0 transition-colors" onclick="filterTrx('Penarikan', this)">Penarikan</button>
       </div>
-      <div class="overflow-x-auto w-full flex-1">
-        <table class="w-full text-left text-sm whitespace-nowrap min-w-[850px]">
+      <div class="overflow-x-auto w-full flex-1 overflow-y-auto min-h-0">
+        <table class="w-full text-left text-xs md:text-sm min-w-full md:min-w-[600px]">
           <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10" id="transaksi-thead">
-            <!-- akan diisi dinamis -->
           </thead>
           <tbody id="table-transaksi" class="divide-y divide-gray-100 dark:divide-gray-800 bg-white dark:bg-darkcard"></tbody>
         </table>
@@ -221,7 +225,6 @@
 </template>
 
 <template id="tpl-pembayaran">
-  <!-- ... (isi template pembayaran seperti sebelumnya, tidak ada perubahan) ... -->
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <h2 class="text-2xl font-bold dark:text-white hidden lg:block">Penerimaan Pembayaran</h2>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -247,10 +250,10 @@
         </form>
         <div id="pembayaran-tunggakan-btns" class="mt-4 flex gap-2"></div>
       </div>
-      <div class="lg:col-span-2 bg-white dark:bg-darkcard rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden flex flex-col h-fit">
+      <div class="lg:col-span-2 bg-white dark:bg-darkcard rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm overflow-hidden flex flex-col max-h-[70vh] md:max-h-[75vh]">
         <div class="p-5 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50"><h3 class="font-bold text-lg">Riwayat Pembayaran</h3></div>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm whitespace-nowrap">
+        <div class="overflow-x-auto overflow-y-auto flex-1">
+          <table class="w-full text-left text-xs md:text-sm min-w-full md:min-w-[600px]">
             <thead class="border-b border-gray-200 dark:border-gray-800 text-gray-500 bg-gray-50/50 dark:bg-gray-900/20">
               <tr><th class="px-5 py-4">Warga</th><th class="px-5 py-4">Periode</th><th class="px-5 py-4">Rincian</th><th class="px-5 py-4">Total</th><th class="px-5 py-4 text-right">Aksi</th></tr>
             </thead>
@@ -274,8 +277,8 @@
       <button onclick="document.getElementById('kas-dari').value=''; document.getElementById('kas-sampai').value=''; window.ekas.kas.render();" class="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm">Reset</button>
     </div>
     <div id="kas-print-area">
-      <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-x-auto">
-        <table class="w-full text-left text-sm whitespace-nowrap" id="kas-table">
+      <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-x-auto max-h-[65vh] overflow-y-auto">
+        <table class="w-full text-left text-xs md:text-sm min-w-full md:min-w-[650px]" id="kas-table">
           <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 border-b border-gray-200 dark:border-gray-700">
             <tr><th class="px-6 py-4">Tanggal</th><th class="px-6 py-4">Kategori</th><th class="px-6 py-4">Keterangan</th><th class="px-6 py-4 text-right">Nominal</th><th class="px-6 py-4 text-right">Aksi</th></tr>
           </thead>
@@ -288,7 +291,6 @@
 </template>
 
 <template id="tpl-setting">
-  <!-- ... (isi template pengaturan, biaya, dll seperti sebelumnya) ... -->
   <div class="space-y-6 animate-fade-in h-full flex flex-col w-full">
     <h2 class="text-2xl font-bold dark:text-white hidden lg:block">Pengaturan RT</h2>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -332,7 +334,6 @@
           <div class="flex-1 min-w-0">
             <p class="text-white/80 text-[10px] uppercase font-bold tracking-wider mb-1">Buku Tabungan RT</p>
             <h3 class="text-xl md:text-2xl font-bold truncate pr-10" id="buku-nama">-</h3>
-            <!-- Detail ID & No Rumah akan disembunyikan via JS -->
             <div class="grid grid-cols-2 gap-2 text-sm mt-2" id="buku-detail-grid">
               <div><p class="text-white/60 text-[10px]">ID Warga</p><p class="font-medium font-mono text-xs md:text-sm truncate" id="buku-id">-</p></div>
               <div><p class="text-white/60 text-[10px]">No Rumah</p><p class="font-medium font-mono text-xs md:text-sm" id="buku-norumah">-</p></div>
@@ -351,8 +352,8 @@
       </div>
       <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-hidden flex flex-col min-w-0">
         <div class="p-3 md:p-4 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50"><h4 class="font-bold text-sm text-primary flex items-center gap-2"><i class="ph ph-list-bullets text-lg"></i> Tabel Riwayat Mutasi</h4></div>
-        <div class="overflow-x-auto w-full flex-1 buku-tabel-wrap" style="max-height: 50vh; overflow-y: auto;">
-          <table class="w-full text-left text-xs md:text-sm whitespace-nowrap min-w-[700px]">
+        <div class="overflow-x-auto w-full flex-1 overflow-y-auto max-h-[60vh]">
+          <table class="w-full text-left text-xs md:text-sm min-w-full md:min-w-[650px]">
             <thead class="bg-white dark:bg-darkcard text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
               <tr><th class="p-3 font-medium">Tanggal</th><th class="p-3 font-medium">Keterangan</th><th class="p-3 font-medium text-right">Debit (Masuk)</th><th class="p-3 font-medium text-right">Kredit (Keluar)</th><th class="p-3 font-medium text-right bg-gray-50 dark:bg-gray-800/30">Saldo</th><th class="p-3 font-medium text-center">Aksi</th></tr>
             </thead>
@@ -766,7 +767,7 @@
               <i class="ph ph-clock-counter-clockwise text-warning text-lg"></i> Data Tunggakan Saya
             </h3>
             <div class="overflow-x-auto">
-              <table class="w-full text-left text-xs md:text-sm whitespace-nowrap min-w-[500px]">
+              <table class="w-full text-left text-xs md:text-sm whitespace-nowrap min-w-full md:min-w-[500px]">
                 <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
                   <tr>
                     <th class="p-2 font-medium">ID Tunggakan</th>
@@ -823,7 +824,7 @@
             ${canAccess('buku') ? `<button onclick="navigate('buku')" class="text-xs text-primary hover:underline">Lihat Buku Tabungan</button>` : ''}
           </div>
           <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs md:text-sm whitespace-nowrap min-w-[600px]">
+            <table class="w-full text-left text-xs md:text-sm whitespace-nowrap min-w-full md:min-w-[600px]">
               <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
                 <tr><th class="p-2 font-medium">Tanggal</th><th class="p-2 font-medium">Keterangan</th><th class="p-2 font-medium text-right">Debit</th><th class="p-2 font-medium text-right">Kredit</th><th class="p-2 font-medium text-right">Saldo</th></tr>
               </thead>
@@ -897,7 +898,6 @@
     }
   }
 
-  // Fungsi bantuan: warga efektif (iuran, arisan, atau biaya tambahan)
   function getEffectiveWarga() {
     const all = state.data.warga || [];
     return all.filter(w => {
@@ -925,32 +925,32 @@
         if (role === 'admin_istri') {
           thead.innerHTML = `
             <tr>
-              <th class="p-4">Istri</th>
-              <th class="p-4">Rumah</th>
-              <th class="p-4">Saldo Tabungan</th>
-              <th class="p-4 text-center">Aksi</th>
+              <th class="p-2 md:p-4">Istri</th>
+              <th class="p-2 md:p-4">Rumah</th>
+              <th class="p-2 md:p-4">Saldo Tabungan</th>
+              <th class="p-2 md:p-4 text-center">Aksi</th>
             </tr>`;
         } else if (role === 'admin_suami') {
           thead.innerHTML = `
             <tr>
-              <th class="p-4">Suami</th>
-              <th class="p-4">Rumah</th>
-              <th class="p-4">Iuran/Arisan</th>
-              <th class="p-4">Tunggakan</th>
-              <th class="p-4 text-center">Aksi</th>
+              <th class="p-2 md:p-4">Suami</th>
+              <th class="p-2 md:p-4">Rumah</th>
+              <th class="p-2 md:p-4">Iuran/Arisan</th>
+              <th class="p-2 md:p-4">Tunggakan</th>
+              <th class="p-2 md:p-4 text-center">Aksi</th>
             </tr>`;
         } else {
           // superadmin
           thead.innerHTML = `
             <tr>
-              <th class="p-4">ID</th>
-              <th class="p-4">Suami</th>
-              <th class="p-4">Istri</th>
-              <th class="p-4">Rumah</th>
-              <th class="p-4">Iuran/Arisan</th>
-              <th class="p-4">Saldo Tabungan</th>
-              <th class="p-4">Tunggakan</th>
-              <th class="p-4 text-center">Aksi</th>
+              <th class="p-2 md:p-4">ID</th>
+              <th class="p-2 md:p-4">Suami</th>
+              <th class="p-2 md:p-4">Istri</th>
+              <th class="p-2 md:p-4">Rumah</th>
+              <th class="p-2 md:p-4">Iuran/Arisan</th>
+              <th class="p-2 md:p-4">Saldo Tabungan</th>
+              <th class="p-2 md:p-4">Tunggakan</th>
+              <th class="p-2 md:p-4 text-center">Aksi</th>
             </tr>`;
         }
 
@@ -978,30 +978,30 @@
 
           if (role === 'admin_istri') {
             return `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-50 dark:border-gray-800/50">
-              <td class="p-3 md:p-4 font-medium">${w['Nama Istri']}</td>
-              <td class="p-3 md:p-4">${w['No Rumah']}</td>
-              <td class="p-3 md:p-4 font-bold text-gray-700 dark:text-gray-200">${formatRupiah(saldo)}</td>
-              <td class="p-3 md:p-4 text-center">${aksi}</td>
+              <td class="p-2 md:p-4 font-medium">${w['Nama Istri']}</td>
+              <td class="p-2 md:p-4">${w['No Rumah']}</td>
+              <td class="p-2 md:p-4 font-bold text-gray-700 dark:text-gray-200">${formatRupiah(saldo)}</td>
+              <td class="p-2 md:p-4 text-center">${aksi}</td>
             </tr>`;
           } else if (role === 'admin_suami') {
             return `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-50 dark:border-gray-800/50">
-              <td class="p-3 md:p-4 font-medium">${w['Nama Suami']}</td>
-              <td class="p-3 md:p-4">${w['No Rumah']}</td>
-              <td class="p-3 md:p-4 text-xs">Iuran: <span class="${iuran==='YA'?'text-success':'text-danger'} font-bold">${iuran}</span><br>Arisan: <span class="text-primary">${arisan==='YA'? slot+' Slot' : 'TIDAK'}</span></td>
-              <td class="p-3 md:p-4 font-bold ${totalTunggakan > 0 ? 'text-danger' : 'text-success'}">${totalTunggakan > 0 ? formatRupiah(totalTunggakan) + ' (' + tunggakanList.length + ' bln)' : 'Lunas'}</td>
-              <td class="p-3 md:p-4 text-center">${aksi}</td>
+              <td class="p-2 md:p-4 font-medium">${w['Nama Suami']}</td>
+              <td class="p-2 md:p-4">${w['No Rumah']}</td>
+              <td class="p-2 md:p-4 text-xs">Iuran: <span class="${iuran==='YA'?'text-success':'text-danger'} font-bold">${iuran}</span><br>Arisan: <span class="text-primary">${arisan==='YA'? slot+' Slot' : 'TIDAK'}</span></td>
+              <td class="p-2 md:p-4 font-bold ${totalTunggakan > 0 ? 'text-danger' : 'text-success'}">${totalTunggakan > 0 ? formatRupiah(totalTunggakan) + ' (' + tunggakanList.length + ' bln)' : 'Lunas'}</td>
+              <td class="p-2 md:p-4 text-center">${aksi}</td>
             </tr>`;
           } else {
             // superadmin
             return `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-50 dark:border-gray-800/50">
-              <td class="p-3 md:p-4 text-xs font-mono text-primary">${w['ID Warga']}</td>
-              <td class="p-3 md:p-4 font-medium">${w['Nama Suami']}</td>
-              <td class="p-3 md:p-4 font-medium">${w['Nama Istri']}</td>
-              <td class="p-3 md:p-4">${w['No Rumah']}</td>
-              <td class="p-3 md:p-4 text-xs">Iuran: <span class="${iuran==='YA'?'text-success':'text-danger'} font-bold">${iuran}</span><br>Arisan: <span class="text-primary">${arisan==='YA'? slot+' Slot' : 'TIDAK'}</span></td>
-              <td class="p-3 md:p-4 font-bold text-gray-700 dark:text-gray-200">${formatRupiah(saldo)}</td>
-              <td class="p-3 md:p-4 font-bold ${totalTunggakan > 0 ? 'text-danger' : 'text-success'}">${totalTunggakan > 0 ? formatRupiah(totalTunggakan) + ' (' + tunggakanList.length + ' bln)' : 'Lunas'}</td>
-              <td class="p-3 md:p-4 text-center">${aksi}</td>
+              <td class="p-2 md:p-4 text-xs font-mono text-primary">${w['ID Warga']}</td>
+              <td class="p-2 md:p-4 font-medium">${w['Nama Suami']}</td>
+              <td class="p-2 md:p-4 font-medium">${w['Nama Istri']}</td>
+              <td class="p-2 md:p-4">${w['No Rumah']}</td>
+              <td class="p-2 md:p-4 text-xs">Iuran: <span class="${iuran==='YA'?'text-success':'text-danger'} font-bold">${iuran}</span><br>Arisan: <span class="text-primary">${arisan==='YA'? slot+' Slot' : 'TIDAK'}</span></td>
+              <td class="p-2 md:p-4 font-bold text-gray-700 dark:text-gray-200">${formatRupiah(saldo)}</td>
+              <td class="p-2 md:p-4 font-bold ${totalTunggakan > 0 ? 'text-danger' : 'text-success'}">${totalTunggakan > 0 ? formatRupiah(totalTunggakan) + ' (' + tunggakanList.length + ' bln)' : 'Lunas'}</td>
+              <td class="p-2 md:p-4 text-center">${aksi}</td>
             </tr>`;
           }
         }).join('');
@@ -1078,7 +1078,7 @@
       }
     },
 
-    // ===================== PEMBAYARAN (dengan multi‑bulan, hapus massal, update bulan ini) =====================
+    // ===================== PEMBAYARAN =====================
     pembayaran: {
       render() {
         const sel = document.getElementById('pay-warga');
@@ -1413,7 +1413,7 @@
       }
     },
 
-    // ===================== KAS (dengan sinkronisasi hapus pembayaran) =====================
+    // ===================== KAS =====================
     kas: {
       render() {
         const tb = document.getElementById('table-kas');
@@ -1530,7 +1530,6 @@
       async delete(id) {
         if(!(await showConfirmDialog('Hapus transaksi ini? Data pembayaran terkait juga akan dihapus.'))) return;
         
-        const kasData = state.data.kas.find(k => k.KasID === id);
         const linkedPembayaran = state.data.pembayaran.find(p => p.KasID === id);
         
         showLoading();
@@ -1671,21 +1670,23 @@
 </script>
 <script>
   // ===================== TRANSAKSI & BUKU TABUNGAN =====================
+  // Definisikan closeAllModals secara global
+  window.closeAllModals = () => document.getElementById('modals').innerHTML = '';
+
   function renderTransaksi(filter = 'Semua') {
     const tb = document.getElementById('table-transaksi'); if(!tb) return; tb.innerHTML = '';
     const canEdit = (state.user.role === 'superadmin' || state.user.role === 'admin_istri');
     document.getElementById('trx-add-btn').innerHTML = canEdit ? `<button class="bg-primary hover:bg-primary-dark text-white px-4 py-2.5 sm:py-2 rounded-xl flex items-center gap-2 shadow-sm whitespace-nowrap w-full sm:w-auto justify-center font-medium transition-colors" onclick="openModal('modal-transaksi')"><i class="ph ph-plus-circle text-lg"></i> <span>Transaksi Baru</span></button>` : '';
 
-    // Header dinamis
     const thead = document.getElementById('transaksi-thead');
     const showTrxId = state.user.role !== 'admin_istri'; // admin_istri tidak lihat ID Trx
     thead.innerHTML = `<tr>
-      <th class="p-4 w-40">Waktu</th>
-      ${showTrxId ? '<th class="p-4">ID Trx</th>' : ''}
-      <th class="p-4">Warga</th>
-      <th class="p-4">Jenis</th>
-      <th class="p-4">Nominal</th>
-      <th class="p-4 text-center">Aksi</th>
+      <th class="p-2 md:p-4 w-28 md:w-40">Waktu</th>
+      ${showTrxId ? '<th class="p-2 md:p-4 hidden md:table-cell">ID Trx</th>' : ''}
+      <th class="p-2 md:p-4">Warga</th>
+      <th class="p-2 md:p-4">Jenis</th>
+      <th class="p-2 md:p-4">Nominal</th>
+      <th class="p-2 md:p-4 text-center">Aksi</th>
     </tr>`;
 
     let d = state.data.transaksi; if(filter!=='Semua') d = d.filter(t=>t['Jenis Transaksi']===filter);
@@ -1695,12 +1696,12 @@
       let c = t['Jenis Transaksi']==='Setoran' ? 'text-success' : 'text-danger';
       let ic = t['Jenis Transaksi']==='Setoran' ? 'ph-arrow-down-left' : 'ph-arrow-up-right';
       tb.innerHTML += `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-50 dark:border-gray-800/50">
-        <td class="p-3 md:p-4 text-gray-500 text-xs w-40">${formatDateTime(t['Tanggal'])}</td>
-        ${showTrxId ? `<td class="p-3 md:p-4 font-mono text-[10px] md:text-xs">${t['ID Transaksi']}</td>` : ''}
-        <td class="p-3 md:p-4 font-medium">${t['Nama Anggota']}</td>
-        <td class="p-3 md:p-4"><span class="flex items-center gap-1 text-xs font-bold ${c}"><i class="ph ${ic}"></i> ${t['Jenis Transaksi']}</span></td>
-        <td class="p-3 md:p-4 font-bold ${c}">${formatRupiah(t['Nominal'])}</td>
-        <td class="p-3 md:p-4 text-center space-x-1">
+        <td class="p-2 md:p-4 text-gray-500 text-xs w-28 md:w-40">${formatDateTime(t['Tanggal'])}</td>
+        ${showTrxId ? `<td class="p-2 md:p-4 font-mono text-[10px] md:text-xs hidden md:table-cell">${t['ID Transaksi']}</td>` : ''}
+        <td class="p-2 md:p-4 font-medium">${t['Nama Anggota']}</td>
+        <td class="p-2 md:p-4"><span class="flex items-center gap-1 text-xs font-bold ${c}"><i class="ph ${ic}"></i> ${t['Jenis Transaksi']}</span></td>
+        <td class="p-2 md:p-4 font-bold ${c}">${formatRupiah(t['Nominal'])}</td>
+        <td class="p-2 md:p-4 text-center space-x-1">
           ${canEdit ? `
             <button onclick="editTransaksi('${t['ID Transaksi']}')" class="text-blue-500 bg-blue-50 p-2 rounded-lg"><i class="ph ph-pencil-simple"></i></button>
             <button onclick="deleteTransaksi('${t['ID Transaksi']}')" class="text-danger bg-red-50 hover:bg-red-100 dark:bg-red-900/30 p-2 rounded-lg"><i class="ph ph-trash"></i></button>
@@ -1708,6 +1709,7 @@
         </td></tr>`;
     });
   }
+
   window.filterTrx = (val, btn) => {
     document.querySelectorAll('#content-area button').forEach(b => {
       if(b.innerText.includes('Semua')||b.innerText.includes('Setoran')||b.innerText.includes('Penarikan'))
@@ -1716,9 +1718,6 @@
     btn.className = 'px-4 py-1.5 rounded-full bg-primary text-white text-xs sm:text-sm font-medium whitespace-nowrap flex-shrink-0 transition-colors';
     renderTransaksi(val);
   };
-
-  // Fungsi global untuk menutup semua modal
-  window.closeAllModals = () => document.getElementById('modals').innerHTML = '';
 
   // Overwrite openModal untuk filter admin_istri
   const originalOpenModal = window.openModal;
@@ -1751,12 +1750,9 @@
         </div></div>`;
       setTimeout(() => {
         const nominalInput = document.getElementById('f-t-nominal');
-        if (nominalInput) {
-          nominalInput.addEventListener('input', formatInputRibuan);
-        }
+        if (nominalInput) nominalInput.addEventListener('input', formatInputRibuan);
       }, 50);
     } else if (id === 'modal-profile') {
-      // Langsung render modal profil (tidak perlu original openModal karena sudah ditangani di sini)
       const user = state.user;
       document.getElementById('modals').innerHTML = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-md modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
@@ -1789,7 +1785,6 @@
           </div>
         </div></div>`;
     } else {
-      // fallback
       if (originalOpenModal) originalOpenModal(id);
     }
   };
