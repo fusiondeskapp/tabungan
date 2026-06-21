@@ -1717,6 +1717,9 @@
     renderTransaksi(val);
   };
 
+  // Fungsi global untuk menutup semua modal
+  window.closeAllModals = () => document.getElementById('modals').innerHTML = '';
+
   // Overwrite openModal untuk filter admin_istri
   const originalOpenModal = window.openModal;
   window.openModal = function(id) {
@@ -1753,41 +1756,40 @@
         }
       }, 50);
     } else if (id === 'modal-profile') {
-      if (originalOpenModal) originalOpenModal(id);
-      else {
-        const user = state.user;
-        document.getElementById('modals').innerHTML = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-md modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
-            <div class="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
-              <h3 class="font-bold flex items-center gap-2"><i class="ph ph-user-circle-gear text-primary text-xl"></i> Edit Profil</h3>
-              <button onclick="window.closeAllModals()"><i class="ph ph-x text-lg"></i></button>
-            </div>
-            <div class="overflow-y-auto p-4 md:p-6 hide-scroll">
-              <form class="space-y-4" onsubmit="window.submitProfile(event)">
-                <div class="flex items-center gap-4">
-                  <div id="profile-photo-preview">${avatarMarkup(state.user, 'h-24 w-24')}</div>
-                  <div class="min-w-0">
-                    <p class="font-bold dark:text-white truncate">${user['Nama Istri'] || user['Nama Suami'] || '-'}</p>
-                    <p class="text-xs text-gray-500 font-mono">${user['ID Warga'] || '-'}</p>
-                    <span class="inline-flex mt-2 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-primary/10 text-primary">${user.role}</span>
-                  </div>
+      // Langsung render modal profil (tidak perlu original openModal karena sudah ditangani di sini)
+      const user = state.user;
+      document.getElementById('modals').innerHTML = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-md modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
+          <div class="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
+            <h3 class="font-bold flex items-center gap-2"><i class="ph ph-user-circle-gear text-primary text-xl"></i> Edit Profil</h3>
+            <button onclick="window.closeAllModals()"><i class="ph ph-x text-lg"></i></button>
+          </div>
+          <div class="overflow-y-auto p-4 md:p-6 hide-scroll">
+            <form class="space-y-4" onsubmit="window.submitProfile(event)">
+              <div class="flex items-center gap-4">
+                <div id="profile-photo-preview">${avatarMarkup(state.user, 'h-24 w-24')}</div>
+                <div class="min-w-0">
+                  <p class="font-bold dark:text-white truncate">${user['Nama Istri'] || user['Nama Suami'] || '-'}</p>
+                  <p class="text-xs text-gray-500 font-mono">${user['ID Warga'] || '-'}</p>
+                  <span class="inline-flex mt-2 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-primary/10 text-primary">${user.role}</span>
                 </div>
-                <div><label class="block text-xs font-medium mb-1">Nama Suami</label><input type="text" id="p-suami" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${user['Nama Suami'] || ''}"></div>
-                <div><label class="block text-xs font-medium mb-1">Nama Istri</label><input type="text" id="p-istri" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${user['Nama Istri'] || ''}"></div>
-                <div><label class="block text-xs font-medium mb-1">No Rumah</label><input type="text" id="p-rumah" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${user['No Rumah'] || ''}"></div>
-                <div class="grid grid-cols-2 gap-4">
-                  <div><label class="block text-xs font-medium mb-1">No HP Suami</label><input type="text" id="p-hp-suami" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${user['No HP Suami'] || ''}"></div>
-                  <div><label class="block text-xs font-medium mb-1">No HP Istri</label><input type="text" id="p-hp-istri" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${user['No HP Istri'] || ''}"></div>
-                </div>
-                <div><label class="block text-xs font-medium mb-1">Foto Profil</label><input type="file" id="f-p-photo" accept="image/*" onchange="window.previewProfilePhoto(event)" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm"></div>
-                <div><label class="block text-xs font-medium mb-1">Password Baru</label><input type="password" id="f-p-password" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" autocomplete="new-password" placeholder="Kosongkan jika tidak diganti"></div>
-                <div><label class="block text-xs font-medium mb-1">Ulangi Password Baru</label><input type="password" id="f-p-password2" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" autocomplete="new-password"></div>
-                <div class="pt-2"><button type="submit" id="btn-profile-save" class="w-full py-3 rounded-xl bg-primary text-white font-medium text-sm"><i class="ph ph-floppy-disk text-lg"></i> Simpan Profil</button></div>
-              </form>
-            </div>
-          </div></div>`;
-      }
+              </div>
+              <div><label class="block text-xs font-medium mb-1">Nama Suami</label><input type="text" id="p-suami" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${user['Nama Suami'] || ''}"></div>
+              <div><label class="block text-xs font-medium mb-1">Nama Istri</label><input type="text" id="p-istri" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${user['Nama Istri'] || ''}"></div>
+              <div><label class="block text-xs font-medium mb-1">No Rumah</label><input type="text" id="p-rumah" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${user['No Rumah'] || ''}"></div>
+              <div class="grid grid-cols-2 gap-4">
+                <div><label class="block text-xs font-medium mb-1">No HP Suami</label><input type="text" id="p-hp-suami" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${user['No HP Suami'] || ''}"></div>
+                <div><label class="block text-xs font-medium mb-1">No HP Istri</label><input type="text" id="p-hp-istri" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" value="${user['No HP Istri'] || ''}"></div>
+              </div>
+              <div><label class="block text-xs font-medium mb-1">Foto Profil</label><input type="file" id="f-p-photo" accept="image/*" onchange="window.previewProfilePhoto(event)" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm"></div>
+              <div><label class="block text-xs font-medium mb-1">Password Baru</label><input type="password" id="f-p-password" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" autocomplete="new-password" placeholder="Kosongkan jika tidak diganti"></div>
+              <div><label class="block text-xs font-medium mb-1">Ulangi Password Baru</label><input type="password" id="f-p-password2" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" autocomplete="new-password"></div>
+              <div class="pt-2"><button type="submit" id="btn-profile-save" class="w-full py-3 rounded-xl bg-primary text-white font-medium text-sm"><i class="ph ph-floppy-disk text-lg"></i> Simpan Profil</button></div>
+            </form>
+          </div>
+        </div></div>`;
     } else {
+      // fallback
       if (originalOpenModal) originalOpenModal(id);
     }
   };
@@ -2000,6 +2002,87 @@
         <p style="text-align:right; margin-top:20px; font-size:10px;">Dicetak pada: ${formatDateTime(new Date())}</p>
     `;
     html2pdf().set({ margin: 10, filename: `Buku_Tabungan_${id}_${Date.now()}.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).from(div).save();
+  };
+
+  // ===================== PROFILE =====================
+  window.previewProfilePhoto = function(e) {
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+    if(!file.type.startsWith('image/')) { showToast("File harus berupa gambar", "error"); e.target.value = ''; return; }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const preview = document.getElementById('profile-photo-preview');
+      if(preview) preview.innerHTML = `<img src="${reader.result}" class="h-24 w-24 rounded-2xl object-cover border border-gray-200 dark:border-gray-700 shadow-lg" alt="Preview Foto">`;
+    };
+    reader.readAsDataURL(file);
+  };
+
+  function resizeProfilePhoto(file) {
+    return new Promise((resolve, reject) => {
+      if(!file) { resolve(null); return; }
+      if(!file.type.startsWith('image/')) { reject(new Error("File harus gambar.")); return; }
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = () => {
+          const size = 512;
+          const canvas = document.createElement('canvas');
+          canvas.width = size; canvas.height = size;
+          const ctx = canvas.getContext('2d');
+          const scale = Math.max(size / img.width, size / img.height);
+          ctx.drawImage(img, (size - img.width*scale)/2, (size - img.height*scale)/2, img.width*scale, img.height*scale);
+          resolve({ name: file.name, mimeType: 'image/jpeg', data: canvas.toDataURL('image/jpeg', 0.82) });
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  window.submitProfile = async (e) => {
+    e.preventDefault();
+    const password = document.getElementById('f-p-password').value.trim();
+    const password2 = document.getElementById('f-p-password2').value.trim();
+    const file = document.getElementById('f-p-photo').files[0];
+    const namaSuami = document.getElementById('p-suami').value.trim();
+    const namaIstri = document.getElementById('p-istri').value.trim();
+    const noRumah = document.getElementById('p-rumah').value.trim();
+    const noHpSuami = document.getElementById('p-hp-suami').value.trim();
+    const noHpIstri = document.getElementById('p-hp-istri').value.trim();
+
+    if(password || password2) {
+      if(password.length < 4) { showToast("Password minimal 4 karakter", "error"); return; }
+      if(password !== password2) { showToast("Konfirmasi password tidak sama", "error"); return; }
+    }
+    if(!namaIstri) { showToast("Nama Istri tidak boleh kosong", "error"); return; }
+    if(!noRumah) { showToast("No Rumah tidak boleh kosong", "error"); return; }
+
+    const photo = file ? await resizeProfilePhoto(file) : null;
+    const payload = {
+      namaSuami,
+      namaIstri,
+      noRumah,
+      noHpSuami,
+      noHpIstri,
+      password: password || undefined,
+      photo
+    };
+    showLoading();
+    const res = await fetchAPI('update_profile', payload);
+    hideLoading();
+    if(!res.success) { showToast(res.message || "Gagal memperbarui profil", "error"); return; }
+    state.user = { ...state.user, ...(res.data || {}), role: state.user.role || normalizeRole(res.data?.Role) };
+    state.user['Nama Suami'] = namaSuami;
+    state.user['Nama Istri'] = namaIstri;
+    state.user['No Rumah'] = noRumah;
+    state.user['No HP Suami'] = noHpSuami;
+    state.user['No HP Istri'] = noHpIstri;
+    if (res.data && res.data['Foto Profil']) state.user['Foto Profil'] = res.data['Foto Profil'];
+    persistSession();
+    document.body.setAttribute('data-role', state.user.role);
+    showToast("Profil diperbarui");
+    window.closeAllModals();
+    await loadData();
   };
 
   // ===================== INISIALISASI =====================
