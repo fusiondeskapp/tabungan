@@ -1520,7 +1520,9 @@ kas: {
   render() {
     const tb = document.getElementById('table-kas');
     const tf = document.getElementById('kas-footer');
-    let kas = [...(state.data.kas||[])];
+    if (!tb) return; // pastikan elemen ada
+
+    let kas = [...(state.data.kas || [])];
     const dari = document.getElementById('kas-dari')?.value;
     const sampai = document.getElementById('kas-sampai')?.value;
     if (dari) kas = kas.filter(k => new Date(k.Tanggal) >= new Date(dari));
@@ -1529,13 +1531,14 @@ kas: {
 
     const canEdit = (state.user.role === 'superadmin' || state.user.role === 'admin_suami');
 
+    // Tombol aksi atas
     document.getElementById('kas-action-btns').innerHTML = canEdit ? `
       <button onclick="window.ekas.kas.openModal('Pemasukan')" class="bg-success hover:bg-green-700 text-white px-3 py-2 rounded-xl text-xs font-medium flex items-center shadow-md transition-colors"><i class="ph ph-plus-circle text-sm mr-1"></i> Pemasukan</button>
       <button onclick="window.ekas.kas.openModal('Pengeluaran')" class="bg-danger hover:bg-red-700 text-white px-3 py-2 rounded-xl text-xs font-medium flex items-center shadow-md transition-colors"><i class="ph ph-minus-circle text-sm mr-1"></i> Pengeluaran</button>
       <button onclick="window.ekas.kas.cetakPDF()" class="bg-gray-800 hover:bg-gray-900 text-white px-3 py-2 rounded-xl text-xs font-medium flex items-center shadow-md transition-colors"><i class="ph ph-printer text-sm mr-1"></i> Cetak</button>
     ` : '';
 
-    // Atur header sesuai role
+    // Header tabel – dibuat ulang setiap render agar kolom sinkron
     const thead = document.querySelector('#kas-table thead');
     if (thead) {
       thead.innerHTML = `
@@ -1548,13 +1551,13 @@ kas: {
         </tr>`;
     }
 
-    if(kas.length===0) { 
+    // Isi tabel
+    if (kas.length === 0) {
       const colspan = canEdit ? 5 : 4;
-      tb.innerHTML = `<tr><td colspan="${colspan}" class="px-6 py-10 text-center text-gray-500">Belum ada transaksi.</td></tr>`; 
-      tf.innerHTML = '';
+      tb.innerHTML = `<tr><td colspan="${colspan}" class="px-6 py-10 text-center text-gray-500">Belum ada transaksi.</td></tr>`;
     } else {
       tb.innerHTML = kas.map(k => {
-        const isMasuk = k.Jenis==='Pemasukan';
+        const isMasuk = k.Jenis === 'Pemasukan';
         const aksiHtml = canEdit ? `
           <td class="px-6 py-4 text-right space-x-1">
             <button onclick="window.ekas.kas.openModal(null,'${k.KasID}')" class="text-blue-500 bg-blue-50 p-2 rounded-lg"><i class="ph ph-pencil-simple"></i></button>
@@ -1562,47 +1565,58 @@ kas: {
           </td>` : '';
         return `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-50">
           <td class="px-6 py-4 text-xs text-gray-500">${formatDateTime(k.Tanggal)}</td>
-          <td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-xs font-bold ${isMasuk?'bg-emerald-100 text-success':'bg-red-100 text-danger'}">${k.Kategori}</span></td>
+          <td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-xs font-bold ${isMasuk ? 'bg-emerald-100 text-success' : 'bg-red-100 text-danger'}">${k.Kategori}</span></td>
           <td class="px-6 py-4 text-sm font-medium">${k.Keterangan}</td>
-          <td class="px-6 py-4 text-right font-black ${isMasuk?'text-success':'text-danger'}">${isMasuk?'+':'-'}${formatRupiah(k.Nominal)}</td>
+          <td class="px-6 py-4 text-right font-black ${isMasuk ? 'text-success' : 'text-danger'}">${isMasuk ? '+' : '-'}${formatRupiah(k.Nominal)}</td>
           ${aksiHtml}
         </tr>`;
       }).join('');
     }
 
-    // Footer tetap 4 kolom (tidak ada kolom aksi)
+    // Footer ringkasan (selalu 4 kolom, tidak ada kolom aksi)
     let totalMasuk = 0, totalKeluar = 0;
-    kas.forEach(k => { const nom = Number(k.Nominal)||0; if (k.Jenis === 'Pemasukan') totalMasuk += nom; else totalKeluar += nom; });
+    kas.forEach(k => { const nom = Number(k.Nominal) || 0; if (k.Jenis === 'Pemasukan') totalMasuk += nom; else totalKeluar += nom; });
     const surplus = totalMasuk - totalKeluar;
     let saldoAkhir = 0;
     const sampaiDate = sampai ? new Date(sampai + 'T23:59:59') : new Date();
-    state.data.kas.forEach(k => { if(!k.Tanggal) return; const t = new Date(k.Tanggal); if (t <= sampaiDate) { const nom = Number(k.Nominal)||0; saldoAkhir += (k.Jenis === 'Pemasukan' ? nom : -nom); } });
-    const totalTunggakan = (state.data.tunggakan || []).reduce((sum, t) => sum + Number(t['Iuran']||0) + Number(t['Arisan']||0), 0);
-    
+    state.data.kas.forEach(k => {
+      if (!k.Tanggal) return;
+      const t = new Date(k.Tanggal);
+      if (t <= sampaiDate) {
+        const nom = Number(k.Nominal) || 0;
+        saldoAkhir += (k.Jenis === 'Pemasukan' ? nom : -nom);
+      }
+    });
+    const totalTunggakan = (state.data.tunggakan || []).reduce((sum, t) => sum + Number(t['Iuran'] || 0) + Number(t['Arisan'] || 0), 0);
+
     tf.innerHTML = `
       <tr class="font-bold text-xs md:text-sm">
         <td class="px-6 py-3" colspan="3">Total Pemasukan</td>
         <td class="px-6 py-3 text-right text-success">${formatRupiah(totalMasuk)}</td>
+        ${canEdit ? '<td></td>' : ''}
       </tr>
       <tr class="font-bold text-xs md:text-sm">
         <td class="px-6 py-3" colspan="3">Total Pengeluaran</td>
         <td class="px-6 py-3 text-right text-danger">${formatRupiah(totalKeluar)}</td>
+        ${canEdit ? '<td></td>' : ''}
       </tr>
       <tr class="font-bold text-xs md:text-sm">
         <td class="px-6 py-3" colspan="3">Surplus/Defisit</td>
-        <td class="px-6 py-3 text-right ${surplus>=0?'text-success':'text-danger'}">${formatRupiah(surplus)}</td>
+        <td class="px-6 py-3 text-right ${surplus >= 0 ? 'text-success' : 'text-danger'}">${formatRupiah(surplus)}</td>
+        ${canEdit ? '<td></td>' : ''}
       </tr>
       <tr class="font-bold text-xs md:text-sm border-t border-gray-300 dark:border-gray-600">
         <td class="px-6 py-3" colspan="3">Saldo Akhir</td>
         <td class="px-6 py-3 text-right text-primary">${formatRupiah(saldoAkhir)}</td>
+        ${canEdit ? '<td></td>' : ''}
       </tr>
       <tr class="font-bold text-xs md:text-sm">
         <td class="px-6 py-3" colspan="3">Total Saldo Tertunggak</td>
         <td class="px-6 py-3 text-right text-warning">${formatRupiah(totalTunggakan)}</td>
+        ${canEdit ? '<td></td>' : ''}
       </tr>
     `;
-  }
-}
+  },
       openModal(jenis, id=null) {
         if (state.user.role !== 'superadmin' && state.user.role !== 'admin_suami') return;
         const k = id ? state.data.kas.find(x=>x.KasID===id) : null;
