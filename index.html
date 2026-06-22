@@ -1989,7 +1989,7 @@ if (state.user.role === 'admin_istri') {
   };
 
   // ===================== BUKU TABUNGAN =====================
-  function updateRingkasanTabungan() {
+function updateRingkasanTabungan() {
   const now = new Date();
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const todayEnd = new Date(todayStart.getTime() + 24 * 60 * 60 * 1000);
@@ -2000,14 +2000,17 @@ if (state.user.role === 'admin_istri') {
     totalSaldo += calculateSaldo(w['ID Warga']);
   });
   
+  // Warga yang memiliki saldo tabungan > 0 (pernah menabung dan masih ada saldo)
+  let wargaNabungCount = 0;
+  state.data.warga.forEach(w => {
+    if (calculateSaldo(w['ID Warga']) > 0) wargaNabungCount++;
+  });
+  
   // Transaksi hari ini
   const todayTrx = state.data.transaksi.filter(t => {
     const tgl = new Date(t.Tanggal);
     return tgl >= todayStart && tgl < todayEnd;
   });
-  
-  // Warga unik yang nabung hari ini
-  const wargaNabung = new Set(todayTrx.map(t => t['ID Anggota'])).size;
   
   // Total tabungan hari ini (hanya setoran)
   let totalHariIni = 0;
@@ -2023,7 +2026,7 @@ if (state.user.role === 'admin_istri') {
   const elHariIni = document.getElementById('buku-total-hari-ini');
   
   if (elTotal) elTotal.textContent = formatRupiah(totalSaldo);
-  if (elWarga) elWarga.textContent = wargaNabung;
+  if (elWarga) elWarga.textContent = wargaNabungCount;
   if (elHariIni) elHariIni.textContent = formatRupiah(totalHariIni);
 }
 function setupBukuTabungan() {
