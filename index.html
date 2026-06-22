@@ -319,10 +319,36 @@
 <template id="tpl-buku">
   <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
     <h2 class="text-2xl font-bold hidden lg:block dark:text-white">Buku Tabungan Digital</h2>
-    <div class="bg-white dark:bg-darkcard p-3 md:p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800" id="buku-selector-wrapper">
+<div class="bg-white dark:bg-darkcard p-4 md:p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800" id="buku-selector-wrapper">
+  <div class="flex flex-col lg:flex-row gap-4">
+    <!-- Kolom Kiri: Pilih Warga -->
+    <div class="flex-1 min-w-0">
       <label class="block text-xs font-medium text-gray-500 mb-1">Pilih Warga:</label>
       <select id="select-buku-anggota" class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none bg-white" onchange="renderBukuTabungan()"></select>
     </div>
+    
+    <!-- Kolom Kanan: Ringkasan -->
+    <div class="grid grid-cols-3 gap-3 flex-shrink-0">
+      <!-- Total Saldo Semua Warga -->
+      <div class="bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 rounded-xl p-3 text-center min-w-[100px] flex flex-col justify-center">
+        <p class="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Total Saldo</p>
+        <p class="text-sm font-bold text-primary dark:text-primary-light" id="buku-total-saldo">Rp 0</p>
+      </div>
+      
+      <!-- Warga Menabung Hari Ini -->
+      <div class="bg-gradient-to-br from-success/10 to-success/5 dark:from-success/20 dark:to-success/10 rounded-xl p-3 text-center min-w-[100px] flex flex-col justify-center">
+        <p class="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Warga Nabung</p>
+        <p class="text-sm font-bold text-success" id="buku-warga-nabung">0</p>
+      </div>
+      
+      <!-- Total Tabungan Hari Ini -->
+      <div class="bg-gradient-to-br from-warning/10 to-warning/5 dark:from-warning/20 dark:to-warning/10 rounded-xl p-3 text-center min-w-[100px] flex flex-col justify-center">
+        <p class="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Tabung Hari Ini</p>
+        <p class="text-sm font-bold text-warning" id="buku-total-hari-ini">Rp 0</p>
+      </div>
+    </div>
+  </div>
+</div>
     <div id="passbook-area" class="hidden flex-1 flex-col gap-4 min-w-0 w-full overflow-y-auto hide-scroll pb-10">
 <div class="bg-gradient-to-br from-primary to-primary-dark p-4 md:p-5 rounded-2xl shadow-md text-white relative overflow-hidden">
   <div class="absolute -right-6 -top-6 opacity-10 pointer-events-none"><i class="ph ph-wallet" style="font-size:140px;"></i></div>
@@ -1891,26 +1917,70 @@ if (state.user.role === 'admin_istri') {
   };
 
   // ===================== BUKU TABUNGAN =====================
-  function setupBukuTabungan() {
-    if (!state.user) return;
-    let sel = document.getElementById('select-buku-anggota');
-    sel.innerHTML = '<option value="">-- Pilih Warga --</option>';
-    if (state.user.role === 'user') {
-      sel.innerHTML = `<option value="${state.user['ID Warga']}">${state.user['ID Warga']} - ${state.user['Nama Istri']}</option>`;
-      sel.value = state.user['ID Warga'];
-      document.getElementById('buku-selector-wrapper').classList.add('hidden');
-      renderBukuTabungan();
-    } else {
-      document.getElementById('buku-selector-wrapper').classList.remove('hidden');
-      state.data.warga.forEach(w => sel.innerHTML += `<option value="${w['ID Warga']}">${w['ID Warga']} - ${w['Nama Istri']}</option>`);
+  function updateRingkasanTabungan() {
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const todayEnd = new Date(todayStart.getTime() + 24 * 60 * 60 * 1000);
+  
+  // Total saldo semua warga
+  let totalSaldo = 0;
+  state.data.warga.forEach(w => {
+    totalSaldo += calculateSaldo(w['ID Warga']);
+  });
+  
+  // Transaksi hari ini
+  const todayTrx = state.data.transaksi.filter(t => {
+    const tgl = new Date(t.Tanggal);
+    return tgl >= todayStart && tgl < todayEnd;
+  });
+  
+  // Warga unik yang nabung hari ini
+  const wargaNabung = new Set(todayTrx.map(t => t['ID Anggota'])).size;
+  
+  // Total tabungan hari ini (hanya setoran)
+  let totalHariIni = 0;
+  todayTrx.forEach(t => {
+    if (t['Jenis Transaksi'] === 'Setoran') {
+      totalHariIni += Number(t['Nominal']);
     }
+  });
+  
+  // Update tampilan
+  const elTotal = document.getElementById('buku-total-saldo');
+  const elWarga = document.getElementById('buku-warga-nabung');
+  const elHariIni = document.getElementById('buku-total-hari-ini');
+  
+  if (elTotal) elTotal.textContent = formatRupiah(totalSaldo);
+  if (elWarga) elWarga.textContent = wargaNabung;
+  if (elHariIni) elHariIni.textContent = formatRupiah(totalHariIni);
+}
+function setupBukuTabungan() {
+  if (!state.user) return;
+  let sel = document.getElementById('select-buku-anggota');
+  sel.innerHTML = '<option value="">-- Pilih Warga --</option>';
+  if (state.user.role === 'user') {
+    sel.innerHTML = `<option value="${state.user['ID Warga']}">${state.user['ID Warga']} - ${state.user['Nama Istri']}</option>`;
+    sel.value = state.user['ID Warga'];
+    document.getElementById('buku-selector-wrapper').classList.add('hidden');
+    renderBukuTabungan();
+  } else {
+    document.getElementById('buku-selector-wrapper').classList.remove('hidden');
+    state.data.warga.forEach(w => sel.innerHTML += `<option value="${w['ID Warga']}">${w['ID Warga']} - ${w['Nama Istri']}</option>`);
+    // Tambahkan ini
+    updateRingkasanTabungan();
   }
+}
 
-  window.renderBukuTabungan = () => {
-    let id = document.getElementById('select-buku-anggota')?.value || state.user['ID Warga'];
-    let area = document.getElementById('passbook-area'), emp = document.getElementById('passbook-empty');
-    if(!id){ area.classList.add('hidden'); emp.classList.remove('hidden'); return; }
-    area.classList.remove('hidden'); emp.classList.add('hidden'); area.classList.add('flex');
+window.renderBukuTabungan = () => {
+  let id = document.getElementById('select-buku-anggota')?.value || state.user['ID Warga'];
+  let area = document.getElementById('passbook-area'), emp = document.getElementById('passbook-empty');
+  if(!id){ area.classList.add('hidden'); emp.classList.remove('hidden'); return; }
+  area.classList.remove('hidden'); emp.classList.add('hidden'); area.classList.add('flex');
+  
+  // Tambahkan ini untuk update ringkasan setiap render
+  updateRingkasanTabungan();
+  
+  // ... sisa kode renderBukuTabungan tetap sama
     let w = state.data.warga.find(x=>String(x['ID Warga'])===String(id));
     if(!w){ area.classList.add('hidden'); emp.classList.remove('hidden'); showToast("Warga tidak ditemukan", "error"); return; }
     document.getElementById('buku-nama').innerText=w['Nama Istri'];
