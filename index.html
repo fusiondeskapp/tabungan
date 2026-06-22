@@ -1683,28 +1683,43 @@ kas: {
           showToast(resKas.message, 'error');
         }
       },
-      cetakPDF() {
-        const printArea = document.getElementById('kas-print-area');
-        if (!printArea) return;
-        const timestamp = formatDateTime(new Date());
-        const cloned = printArea.cloneNode(true);
-        const wrapper = document.createElement('div');
-        wrapper.style.padding = '20px';
-        wrapper.style.background = 'white';
-        wrapper.style.color = 'black';
-        wrapper.style.fontFamily = 'sans-serif';
-        wrapper.innerHTML = `
-          <h2 style="text-align:center; margin-bottom:5px;">Laporan Buku Kas</h2>
-          <p style="text-align:center; font-size:12px; color:#666; margin-bottom:20px;">Dicetak pada: ${timestamp}</p>
-        `;
-        wrapper.appendChild(cloned);
-        html2pdf().set({
-          margin: 10,
-          filename: `Buku_Kas_${new Date().toISOString().slice(0,10)}.pdf`,
-          html2canvas: { scale: 2 },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        }).from(wrapper).save();
-      }
+cetakPDF() {
+    const printArea = document.getElementById('kas-print-area');
+    if (!printArea) return;
+    const timestamp = formatDateTime(new Date());
+    const cloned = printArea.cloneNode(true);
+
+    // Hapus kolom aksi dari semua baris di tabel hasil clone
+    const table = cloned.querySelector('table');
+    if (table) {
+        const rows = table.querySelectorAll('tr');
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('th, td');
+            if (cells.length > 4) {
+                // Hapus sel terakhir (kolom Aksi)
+                row.removeChild(cells[cells.length - 1]);
+            }
+        });
+    }
+
+    const wrapper = document.createElement('div');
+    wrapper.style.padding = '20px';
+    wrapper.style.background = 'white';
+    wrapper.style.color = 'black';
+    wrapper.style.fontFamily = 'sans-serif';
+    wrapper.innerHTML = `
+        <h2 style="text-align:center; margin-bottom:5px;">Laporan Buku Kas</h2>
+        <p style="text-align:center; font-size:12px; color:#666; margin-bottom:20px;">Dicetak pada: ${timestamp}</p>
+    `;
+    wrapper.appendChild(cloned);
+
+    html2pdf().set({
+        margin: 10,
+        filename: `Buku_Kas_${new Date().toISOString().slice(0,10)}.pdf`,
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    }).from(wrapper).save();
+}
     },
 
     // ===================== BIAYA =====================
