@@ -1986,10 +1986,18 @@ function setupBukuTabungan() {
     renderBukuTabungan();
   } else {
     document.getElementById('buku-selector-wrapper').classList.remove('hidden');
-    state.data.warga.forEach(w => sel.innerHTML += `<option value="${w['ID Warga']}">${w['ID Warga']} - ${w['Nama Istri']}</option>`);
-    // Tambahkan ini
+    // Urutkan warga berdasarkan Nama Istri ascending (A-Z)
+    const sorted = [...state.data.warga].sort((a, b) => 
+        (a['Nama Istri'] || '').localeCompare(b['Nama Istri'] || '')
+    );
+    // Isi dropdown dengan format: Nama Istri (No Rumah)
+    sorted.forEach(w => {
+        const namaIstri = w['Nama Istri'] || 'Tanpa Nama';
+        const noRumah = w['No Rumah'] || '-';
+        sel.innerHTML += `<option value="${w['ID Warga']}">${namaIstri} (${noRumah})</option>`;
+    });
     updateRingkasanTabungan();
-  }
+}
 }
 
 window.renderBukuTabungan = () => {
