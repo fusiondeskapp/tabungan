@@ -42,11 +42,7 @@
     .hide-scroll::-webkit-scrollbar { display:none; }
     .hide-scroll { -ms-overflow-style:none; scrollbar-width:none; }
     .profile-avatar-img { object-fit:cover; }
-    /* Agar tabel di mobile tidak terlalu sempit dan bisa di-scroll vertikal */
-    .table-responsive-wrap {
-      max-height: 60vh;
-      overflow-y: auto;
-    }
+    .table-responsive-wrap { max-height: 60vh; overflow-y: auto; }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-800 dark:bg-darkbg dark:text-gray-200 transition-colors duration-300 antialiased overflow-hidden selection:bg-primary/30">
@@ -344,8 +340,8 @@
               <p class="text-white/60 text-[10px] uppercase tracking-wide">Saldo Akhir</p>
               <h2 class="text-2xl md:text-3xl font-bold text-white" id="buku-saldo">Rp 0</h2>
             </div>
-            <button onclick="cetakBukuTabunganPDF()" class="bg-white/15 hover:bg-white/25 text-white border border-white/25 px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition-colors">
-              <i class="ph ph-file-pdf text-lg"></i> Unduh PDF
+            <button onclick="cetakBukuTabunganPDF()" class="bg-white/15 hover:bg-white/25 text-white border border-white/25 px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1.5 transition-colors">
+              <i class="ph ph-file-pdf text-sm"></i> Unduh PDF
             </button>
           </div>
         </div>
@@ -720,8 +716,8 @@
         <div class="absolute -right-6 -top-6 opacity-10"><i class="ph ph-user-circle" style="font-size: 150px;"></i></div>
         <div class="z-10 flex flex-col items-center gap-2">
           <div class="flex-shrink-0">${avatarMarkup(state.user, 'h-20 w-20 md:h-24 md:w-24')}</div>
-          <button onclick="openModal('modal-profile')" class="bg-white/15 hover:bg-white/25 text-white border border-white/25 px-4 py-2 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-colors w-full" style="min-width: 5rem; max-width: 6rem;">
-            <i class="ph ph-user-circle-gear text-lg"></i> Edit
+          <button onclick="openModal('modal-profile')" class="bg-white/15 hover:bg-white/25 text-white border border-white/25 px-3 py-1.5 rounded-xl text-xs font-medium flex items-center justify-center gap-1.5 transition-colors">
+            <i class="ph ph-user-circle-gear text-sm"></i> Edit
           </button>
         </div>
         <div class="flex-1 z-10 w-full min-w-0">
@@ -955,7 +951,7 @@
         }
 
         document.getElementById('warga-add-btn').innerHTML = canManage ? 
-          `<button class="bg-primary hover:bg-primary-dark text-white px-4 py-2.5 rounded-xl flex items-center gap-2" onclick="window.ekas.warga.openModal()"><i class="ph ph-plus-circle text-lg"></i> Tambah Warga</button>` : '';
+          `<button class="bg-primary hover:bg-primary-dark text-white px-3 py-2 rounded-xl flex items-center gap-1.5 text-xs font-medium" onclick="window.ekas.warga.openModal()"><i class="ph ph-plus-circle text-sm"></i> Tambah Warga</button>` : '';
 
         if(data.length===0) {
           let colSpan = (role === 'admin_istri') ? 4 : (role === 'admin_suami') ? 5 : 8;
@@ -1009,6 +1005,8 @@
       openModal(id = null) {
         if (!['superadmin', 'admin_istri', 'admin_suami'].includes(state.user.role)) return;
         const w = id ? state.data.warga.find(x=>x['ID Warga']===id) : null;
+        const isEdit = !!id;
+        const isSuperadmin = state.user.role === 'superadmin';
         let html = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-md modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
             <div class="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
@@ -1031,13 +1029,15 @@
                 </div>
                 <div><label class="block text-xs font-medium mb-1">Slot Arisan</label><input type="number" id="w-slot" value="${w?w['Slot Arisan']:'1'}" min="0" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm"></div>
                 <div><label class="block text-xs font-medium mb-1">Password (kosongkan jika tidak diubah)</label><input type="password" id="w-password" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm" placeholder="Password baru"></div>
+                ${isSuperadmin ? `
                 <div><label class="block text-xs font-medium mb-1">Role</label><select id="w-role" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm">
                   <option value="user" ${w&&w['Role']==='user'?'selected':''}>User</option>
                   <option value="admin_istri" ${w&&w['Role']==='admin_istri'?'selected':''}>Admin Istri</option>
                   <option value="admin_suami" ${w&&w['Role']==='admin_suami'?'selected':''}>Admin Suami</option>
                   <option value="superadmin" ${w&&w['Role']==='superadmin'?'selected':''}>Superadmin</option>
                 </select></div>
-                <div id="div-status" class="${id?'':'hidden'}"><label class="block text-xs font-medium mb-1">Status</label><select id="w-status" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm"><option value="Aktif" ${w&&w.Status==='Aktif'?'selected':''}>Aktif</option><option value="Nonaktif" ${w&&w.Status==='Nonaktif'?'selected':''}>Nonaktif</option></select></div>
+                ` : `<input type="hidden" id="w-role" value="user">`}
+                <div id="div-status" class="${(!isSuperadmin || isEdit) ? '' : 'hidden'}"><label class="block text-xs font-medium mb-1">Status</label><select id="w-status" class="w-full p-2.5 rounded-xl border dark:border-gray-700 dark:bg-gray-900 text-sm"><option value="Aktif" ${w&&w.Status==='Aktif'?'selected':''}>Aktif</option><option value="Nonaktif" ${w&&w.Status==='Nonaktif'?'selected':''}>Nonaktif</option></select></div>
                 <div class="pt-4"><button type="submit" class="w-full py-3 rounded-xl bg-primary text-white font-medium text-sm">Simpan</button></div>
               </form>
             </div>
@@ -1047,6 +1047,7 @@
       async submit(e) {
         e.preventDefault();
         if (!['superadmin', 'admin_istri', 'admin_suami'].includes(state.user.role)) return;
+        const isSuperadmin = state.user.role === 'superadmin';
         const payload = {
           id: document.getElementById('w-id').value,
           namaSuami: document.getElementById('w-suami').value,
@@ -1058,7 +1059,7 @@
           ikutArisan: document.getElementById('w-arisan').value,
           slotArisan: Number(document.getElementById('w-slot').value),
           password: document.getElementById('w-password').value,
-          role: document.getElementById('w-role').value,
+          role: isSuperadmin ? document.getElementById('w-role').value : 'user',
           status: document.getElementById('w-status') ? document.getElementById('w-status').value : 'Aktif'
         };
         showLoading();
@@ -1426,9 +1427,9 @@
         kas.sort((a,b)=>new Date(b.Tanggal)-new Date(a.Tanggal));
         const canEdit = (state.user.role === 'superadmin' || state.user.role === 'admin_suami');
         document.getElementById('kas-action-btns').innerHTML = canEdit ? `
-          <button onclick="window.ekas.kas.openModal('Pemasukan')" class="bg-success hover:bg-green-700 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-medium flex items-center shadow-md transition-colors"><i class="ph ph-plus-circle text-lg sm:mr-2"></i> <span class="hidden sm:block">Pemasukan</span></button>
-          <button onclick="window.ekas.kas.openModal('Pengeluaran')" class="bg-danger hover:bg-red-700 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-medium flex items-center shadow-md transition-colors"><i class="ph ph-minus-circle text-lg sm:mr-2"></i> <span class="hidden sm:block">Pengeluaran</span></button>
-          <button onclick="window.ekas.kas.cetakPDF()" class="bg-gray-800 hover:bg-gray-900 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-medium flex items-center shadow-md transition-colors"><i class="ph ph-printer text-lg sm:mr-2"></i> <span class="hidden sm:block">Cetak</span></button>
+          <button onclick="window.ekas.kas.openModal('Pemasukan')" class="bg-success hover:bg-green-700 text-white px-3 py-2 rounded-xl text-xs font-medium flex items-center shadow-md transition-colors"><i class="ph ph-plus-circle text-sm mr-1"></i> Pemasukan</button>
+          <button onclick="window.ekas.kas.openModal('Pengeluaran')" class="bg-danger hover:bg-red-700 text-white px-3 py-2 rounded-xl text-xs font-medium flex items-center shadow-md transition-colors"><i class="ph ph-minus-circle text-sm mr-1"></i> Pengeluaran</button>
+          <button onclick="window.ekas.kas.cetakPDF()" class="bg-gray-800 hover:bg-gray-900 text-white px-3 py-2 rounded-xl text-xs font-medium flex items-center shadow-md transition-colors"><i class="ph ph-printer text-sm mr-1"></i> Cetak</button>
         ` : '';
         if(kas.length===0) { 
           tb.innerHTML = '<tr><td colspan="5" class="px-6 py-10 text-center text-gray-500">Belum ada transaksi.</td></tr>'; 
@@ -1676,10 +1677,10 @@
   function renderTransaksi(filter = 'Semua') {
     const tb = document.getElementById('table-transaksi'); if(!tb) return; tb.innerHTML = '';
     const canEdit = (state.user.role === 'superadmin' || state.user.role === 'admin_istri');
-    document.getElementById('trx-add-btn').innerHTML = canEdit ? `<button class="bg-primary hover:bg-primary-dark text-white px-4 py-2.5 sm:py-2 rounded-xl flex items-center gap-2 shadow-sm whitespace-nowrap w-full sm:w-auto justify-center font-medium transition-colors" onclick="openModal('modal-transaksi')"><i class="ph ph-plus-circle text-lg"></i> <span>Transaksi Baru</span></button>` : '';
+    document.getElementById('trx-add-btn').innerHTML = canEdit ? `<button class="bg-primary hover:bg-primary-dark text-white px-3 py-2 rounded-xl flex items-center gap-1.5 shadow-sm whitespace-nowrap w-full sm:w-auto justify-center text-xs font-medium transition-colors" onclick="openModal('modal-transaksi')"><i class="ph ph-plus-circle text-sm"></i> <span>Transaksi Baru</span></button>` : '';
 
     const thead = document.getElementById('transaksi-thead');
-    const showTrxId = state.user.role !== 'admin_istri'; // admin_istri tidak lihat ID Trx
+    const showTrxId = state.user.role !== 'admin_istri';
     thead.innerHTML = `<tr>
       <th class="p-2 md:p-4 w-28 md:w-40">Waktu</th>
       ${showTrxId ? '<th class="p-2 md:p-4 hidden md:table-cell">ID Trx</th>' : ''}
@@ -1720,7 +1721,6 @@
   };
 
   // Overwrite openModal untuk filter admin_istri
-  const originalOpenModal = window.openModal;
   window.openModal = function(id) {
     if (id === 'modal-transaksi') {
       if (state.user.role !== 'superadmin' && state.user.role !== 'admin_istri') return;
@@ -1784,8 +1784,6 @@
             </form>
           </div>
         </div></div>`;
-    } else {
-      if (originalOpenModal) originalOpenModal(id);
     }
   };
 
