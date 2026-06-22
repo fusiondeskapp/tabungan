@@ -162,7 +162,7 @@
     <div id="dashboard-mutasi"></div>
     <div id="admin-container" class="space-y-4 md:space-y-6" style="display:none;">
       <div id="dashboard-stats" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 w-full"></div>
-      <div id="admin-charts" class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mt-4 w-full">
+      <div id="admin-charts" class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mt-4 w-full" style="display:none;">
         <div class="bg-white dark:bg-darkcard p-4 md:p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 w-full min-w-0">
           <h3 class="font-bold text-gray-700 dark:text-gray-200 mb-4 text-sm md:text-base">Statistik Tabungan</h3>
           <div class="h-56 md:h-64 w-full relative"><canvas id="chartTransaksi"></canvas></div>
@@ -898,44 +898,90 @@ const formatDateTime = (iso) => {
       mutasiDiv.style.display = 'none';
     }
 
+    // --- ADMIN CONTAINER (diperluas untuk admin_istri & admin_suami) ---
     const adminContainer = document.getElementById('admin-container');
-    if (state.user.role === 'superadmin') {
+    const role = state.user.role;
+    if (role === 'superadmin' || role === 'admin_istri' || role === 'admin_suami') {
       adminContainer.style.display = 'block';
-      let saldoKas=0, masuk=0, keluar=0;
-      const now = new Date();
-      const chartKasMasuk = Array(12).fill(0), chartKasKeluar = Array(12).fill(0);
-      state.data.kas.forEach(k => {
-        if(!k.Tanggal) return;
-        const tgl = new Date(k.Tanggal); const m = tgl.getMonth(); const nom = Number(k.Nominal)||0;
-        if(k.Jenis==='Pemasukan') {
-          saldoKas+=nom; chartKasMasuk[m]+=nom;
-          if(m===now.getMonth() && tgl.getFullYear()===now.getFullYear()) masuk+=nom;
-        } else {
-          saldoKas-=nom; chartKasKeluar[m]+=nom;
-          if(m===now.getMonth() && tgl.getFullYear()===now.getFullYear()) keluar+=nom;
-        }
-      });
+      const statsDiv = document.getElementById('dashboard-stats');
+      const chartsDiv = document.getElementById('admin-charts');
+      // Sembunyikan chart dulu, akan ditampilkan hanya untuk superadmin
+      chartsDiv.style.display = 'none';
 
-      document.getElementById('dashboard-stats').innerHTML = `
-        <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Total Warga</p><h3 class="text-xl font-bold">${state.data.warga.length}</h3></div>
-        <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Saldo Kas</p><h3 class="text-xl font-bold text-primary">${formatRupiah(saldoKas)}</h3></div>
-        <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Masuk Bulan Ini</p><h3 class="text-xl font-bold text-success">${formatRupiah(masuk)}</h3></div>
-        <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Keluar Bulan Ini</p><h3 class="text-xl font-bold text-danger">${formatRupiah(keluar)}</h3></div>
-      `;
-      const ctx1 = document.getElementById('chartTransaksi');
-      if(ctx1) {
-        if(chartInstance) chartInstance.destroy();
-        let st=0, pt=0;
-        state.data.transaksi.forEach(t => { let n = Number(t['Nominal']); if(t['Jenis Transaksi']==='Setoran') st+=n; else pt+=n; });
-        chartInstance = new Chart(ctx1, { type: 'bar', data: { labels: ['Setoran','Penarikan'], datasets: [{ data: [st, pt], backgroundColor: ['#14B8A6','#DC2626'] }] }, options: { responsive: true, maintainAspectRatio: false } });
-      }
-      const ctx2 = document.getElementById('chartEkas');
-      if(ctx2) {
-        if(chartEkasInstance) chartEkasInstance.destroy();
-        chartEkasInstance = new Chart(ctx2, { type: 'line', data: { labels: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'], datasets: [
-          { label: 'Pemasukan', data: chartKasMasuk, borderColor: '#16A34A', backgroundColor: 'rgba(22,163,74,0.1)', tension: 0.3, fill: true },
-          { label: 'Pengeluaran', data: chartKasKeluar, borderColor: '#DC2626', backgroundColor: 'rgba(220,38,38,0.1)', tension: 0.3, fill: true }
-        ] }, options: { responsive: true, maintainAspectRatio: false } });
+      if (role === 'superadmin') {
+        // Statistik superadmin: total warga, saldo kas, masuk/keluar bulan ini
+        let saldoKas=0, masuk=0, keluar=0;
+        const now = new Date();
+        state.data.kas.forEach(k => {
+          if(!k.Tanggal) return;
+          const tgl = new Date(k.Tanggal); const m = tgl.getMonth(); const nom = Number(k.Nominal)||0;
+          if(k.Jenis==='Pemasukan') {
+            saldoKas+=nom;
+            if(m===now.getMonth() && tgl.getFullYear()===now.getFullYear()) masuk+=nom;
+          } else {
+            saldoKas-=nom;
+            if(m===now.getMonth() && tgl.getFullYear()===now.getFullYear()) keluar+=nom;
+          }
+        });
+        statsDiv.innerHTML = `
+          <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Total Warga</p><h3 class="text-xl font-bold">${state.data.warga.length}</h3></div>
+          <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Saldo Kas</p><h3 class="text-xl font-bold text-primary">${formatRupiah(saldoKas)}</h3></div>
+          <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Masuk Bulan Ini</p><h3 class="text-xl font-bold text-success">${formatRupiah(masuk)}</h3></div>
+          <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Keluar Bulan Ini</p><h3 class="text-xl font-bold text-danger">${formatRupiah(keluar)}</h3></div>
+        `;
+        // Grafik hanya untuk superadmin
+        chartsDiv.style.display = '';
+        const ctx1 = document.getElementById('chartTransaksi');
+        if(ctx1) {
+          if(chartInstance) chartInstance.destroy();
+          let st=0, pt=0;
+          state.data.transaksi.forEach(t => { let n = Number(t['Nominal']); if(t['Jenis Transaksi']==='Setoran') st+=n; else pt+=n; });
+          chartInstance = new Chart(ctx1, { type: 'bar', data: { labels: ['Setoran','Penarikan'], datasets: [{ data: [st, pt], backgroundColor: ['#14B8A6','#DC2626'] }] }, options: { responsive: true, maintainAspectRatio: false } });
+        }
+        const ctx2 = document.getElementById('chartEkas');
+        if(ctx2) {
+          if(chartEkasInstance) chartEkasInstance.destroy();
+          const chartKasMasuk = Array(12).fill(0), chartKasKeluar = Array(12).fill(0);
+          const now = new Date();
+          state.data.kas.forEach(k => {
+            if(!k.Tanggal) return;
+            const tgl = new Date(k.Tanggal); const m = tgl.getMonth(); const nom = Number(k.Nominal)||0;
+            if(k.Jenis==='Pemasukan') chartKasMasuk[m]+=nom;
+            else chartKasKeluar[m]+=nom;
+          });
+          chartEkasInstance = new Chart(ctx2, { type: 'line', data: { labels: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'], datasets: [
+            { label: 'Pemasukan', data: chartKasMasuk, borderColor: '#16A34A', backgroundColor: 'rgba(22,163,74,0.1)', tension: 0.3, fill: true },
+            { label: 'Pengeluaran', data: chartKasKeluar, borderColor: '#DC2626', backgroundColor: 'rgba(220,38,38,0.1)', tension: 0.3, fill: true }
+          ] }, options: { responsive: true, maintainAspectRatio: false } });
+        }
+      } else if (role === 'admin_istri') {
+        // Admin Istri: total warga, total setoran, total penarikan, total saldo tabungan semua warga
+        const totalWarga = state.data.warga.length;
+        let totalSetoran = 0, totalPenarikan = 0, totalTabungan = 0;
+        state.data.transaksi.forEach(t => {
+          const n = Number(t['Nominal']);
+          if(t['Jenis Transaksi'] === 'Setoran') totalSetoran += n;
+          else totalPenarikan += n;
+        });
+        state.data.warga.forEach(w => { totalTabungan += calculateSaldo(w['ID Warga']); });
+        statsDiv.innerHTML = `
+          <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Total Warga</p><h3 class="text-xl font-bold">${totalWarga}</h3></div>
+          <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Total Setoran</p><h3 class="text-xl font-bold text-success">${formatRupiah(totalSetoran)}</h3></div>
+          <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Total Penarikan</p><h3 class="text-xl font-bold text-danger">${formatRupiah(totalPenarikan)}</h3></div>
+          <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Total Saldo</p><h3 class="text-xl font-bold text-primary">${formatRupiah(totalTabungan)}</h3></div>
+        `;
+      } else if (role === 'admin_suami') {
+        // Admin Suami: total pemasukan kas, pengeluaran kas, saldo kas, total tunggakan
+        let totalMasuk = 0, totalKeluar = 0;
+        state.data.kas.forEach(k => { const n = Number(k.Nominal); if(k.Jenis === 'Pemasukan') totalMasuk += n; else totalKeluar += n; });
+        const saldoKas = totalMasuk - totalKeluar;
+        const totalTunggakanSemua = state.data.tunggakan.reduce((sum, t) => sum + Number(t['Iuran']||0) + Number(t['Arisan']||0), 0);
+        statsDiv.innerHTML = `
+          <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Pemasukan Kas</p><h3 class="text-xl font-bold text-success">${formatRupiah(totalMasuk)}</h3></div>
+          <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Pengeluaran Kas</p><h3 class="text-xl font-bold text-danger">${formatRupiah(totalKeluar)}</h3></div>
+          <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Saldo Kas</p><h3 class="text-xl font-bold text-primary">${formatRupiah(saldoKas)}</h3></div>
+          <div class="bg-white dark:bg-darkcard p-4 rounded-2xl shadow-sm border"><p class="text-xs text-gray-500">Total Tertunggak</p><h3 class="text-xl font-bold text-warning">${formatRupiah(totalTunggakanSemua)}</h3></div>
+        `;
       }
     } else {
       adminContainer.style.display = 'none';
@@ -2006,7 +2052,7 @@ window.renderBukuTabungan = () => {
   if(!id){ area.classList.add('hidden'); emp.classList.remove('hidden'); return; }
   area.classList.remove('hidden'); emp.classList.add('hidden'); area.classList.add('flex');
   
-  // Tambahkan ini untuk update ringkasan setiap render
+  // Update ringkasan saat render
   updateRingkasanTabungan();
   
   // ... sisa kode renderBukuTabungan tetap sama
@@ -2157,7 +2203,14 @@ window.renderBukuTabungan = () => {
     if(!namaIstri) { showToast("Nama Istri tidak boleh kosong", "error"); return; }
     if(!noRumah) { showToast("No Rumah tidak boleh kosong", "error"); return; }
 
-    const photo = file ? await resizeProfilePhoto(file) : null;
+    let photo = null;
+    try {
+      photo = file ? await resizeProfilePhoto(file) : null;
+    } catch(err) {
+      showToast(err.message || "Gagal memproses foto", "error");
+      return;
+    }
+    
     const payload = {
       namaSuami,
       namaIstri,
