@@ -317,76 +317,97 @@
 </template>
 
 <template id="tpl-buku">
-  <div class="space-y-4 animate-fade-in h-full flex flex-col w-full">
-    <h2 class="text-2xl font-bold hidden lg:block dark:text-white">Buku Tabungan Digital</h2>
-<div class="bg-white dark:bg-darkcard p-4 md:p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800" id="buku-selector-wrapper">
-  <div class="flex flex-col lg:flex-row gap-4">
-    <!-- Kolom Kiri: Pilih Warga -->
-    <div class="flex-1 min-w-0">
-      <label class="block text-xs font-medium text-gray-500 mb-1">Pilih Warga:</label>
-      <select id="select-buku-anggota" class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none bg-white" onchange="renderBukuTabungan()"></select>
-    </div>
+  <div class="flex flex-col h-full min-h-0 space-y-4 animate-fade-in">
     
-    <!-- Kolom Kanan: Ringkasan -->
-    <div class="grid grid-cols-3 gap-3 flex-shrink-0">
-      <!-- Total Saldo Semua Warga -->
-      <div class="bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 rounded-xl p-3 text-center min-w-[100px] flex flex-col justify-center">
-        <p class="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Total Saldo</p>
-        <p class="text-sm font-bold text-primary dark:text-primary-light" id="buku-total-saldo">Rp 0</p>
-      </div>
-      
-      <!-- Warga Menabung Hari Ini -->
-      <div class="bg-gradient-to-br from-success/10 to-success/5 dark:from-success/20 dark:to-success/10 rounded-xl p-3 text-center min-w-[100px] flex flex-col justify-center">
-        <p class="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Warga Nabung</p>
-        <p class="text-sm font-bold text-success" id="buku-warga-nabung">0</p>
-      </div>
-      
-      <!-- Total Tabungan Hari Ini -->
-      <div class="bg-gradient-to-br from-warning/10 to-warning/5 dark:from-warning/20 dark:to-warning/10 rounded-xl p-3 text-center min-w-[100px] flex flex-col justify-center">
-        <p class="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Tabung Hari Ini</p>
-        <p class="text-sm font-bold text-warning" id="buku-total-hari-ini">Rp 0</p>
-      </div>
-    </div>
-  </div>
-</div>
-    <div id="passbook-area" class="hidden flex-1 flex-col gap-4 min-w-0 w-full overflow-y-auto hide-scroll pb-10">
-<div class="bg-gradient-to-br from-primary to-primary-dark p-4 md:p-5 rounded-2xl shadow-md text-white relative overflow-hidden">
-  <div class="absolute -right-6 -top-6 opacity-10 pointer-events-none"><i class="ph ph-wallet" style="font-size:140px;"></i></div>
-  <div class="relative z-10 flex flex-col gap-3 w-full">
-    <!-- Baris atas: Nama + Info + Tombol PDF -->
-    <div class="flex justify-between items-start">
-      <div class="flex-1 min-w-0">
-        <p class="text-white/80 text-[10px] uppercase font-bold tracking-wide mb-1">Buku Tabungan RT</p>
-        <h3 class="text-xl font-bold truncate pr-8" id="buku-nama">-</h3>
-        <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs text-white/70">
-          <span class="flex items-center gap-1"><i class="ph ph-identification-card text-sm"></i> <span id="buku-id" class="font-mono">-</span></span>
-          <span class="flex items-center gap-1"><i class="ph ph-house text-sm"></i> <span id="buku-norumah">-</span></span>
+    <!-- Selector + Ringkasan -->
+    <div class="bg-white dark:bg-darkcard p-4 md:p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800" id="buku-selector-wrapper">
+      <div class="flex flex-col lg:flex-row gap-4">
+        <!-- Kolom Kiri: Pilih Warga -->
+        <div class="flex-1 min-w-0">
+          <label class="block text-xs font-medium text-gray-500 mb-1">Pilih Warga:</label>
+          <select id="select-buku-anggota" class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none bg-white" onchange="renderBukuTabungan()"></select>
+        </div>
+        
+        <!-- Kolom Kanan: Ringkasan -->
+        <div class="grid grid-cols-3 gap-3 flex-shrink-0">
+          <!-- Total Saldo Semua Warga -->
+          <div class="bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 rounded-xl p-3 text-center min-w-[100px] flex flex-col justify-center">
+            <p class="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Total Saldo</p>
+            <p class="text-sm font-bold text-primary" id="buku-total-saldo">Rp 0</p>
+          </div>
+          
+          <!-- Warga Menabung Hari Ini -->
+          <div class="bg-gradient-to-br from-success/10 to-success/5 dark:from-success/20 dark:to-success/10 rounded-xl p-3 text-center min-w-[100px] flex flex-col justify-center">
+            <p class="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Warga Nabung</p>
+            <p class="text-sm font-bold text-success" id="buku-warga-nabung">0</p>
+          </div>
+          
+          <!-- Total Tabungan Hari Ini -->
+          <div class="bg-gradient-to-br from-warning/10 to-warning/5 dark:from-warning/20 dark:to-warning/10 rounded-xl p-3 text-center min-w-[100px] flex flex-col justify-center">
+            <p class="text-[10px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Tabung Hari Ini</p>
+            <p class="text-sm font-bold text-warning" id="buku-total-hari-ini">Rp 0</p>
+          </div>
         </div>
       </div>
-      <button onclick="cetakBukuTabunganPDF()" class="bg-white/15 hover:bg-white/25 text-white p-2 rounded-xl flex items-center justify-center transition-colors flex-shrink-0" title="Unduh PDF">
-        <i class="ph ph-file-pdf text-lg"></i>
-      </button>
     </div>
-    <!-- Baris bawah: Saldo -->
-    <div class="flex justify-between items-center bg-white/10 backdrop-blur-sm p-3 rounded-xl">
-      <span class="text-white/60 text-xs uppercase tracking-wide">Saldo Akhir</span>
-      <h2 class="text-xl font-bold text-white" id="buku-saldo">Rp 0</h2>
-    </div>
-  </div>
-</div>
+
+    <!-- Passbook Area -->
+    <div id="passbook-area" class="hidden flex-1 flex-col gap-4 min-w-0 w-full overflow-y-auto hide-scroll pb-10">
+      <!-- Card Profil -->
+      <div class="bg-gradient-to-br from-primary to-primary-dark p-4 md:p-5 rounded-2xl shadow-md text-white relative overflow-hidden">
+        <div class="absolute -right-6 -top-6 opacity-10 pointer-events-none"><i class="ph ph-wallet" style="font-size:140px;"></i></div>
+        <div class="relative z-10 flex flex-col gap-3 w-full">
+          <!-- Baris atas: Nama + Info + Tombol PDF -->
+          <div class="flex justify-between items-start">
+            <div class="flex-1 min-w-0">
+              <p class="text-white/80 text-[10px] uppercase font-bold tracking-wide mb-1">Buku Tabungan RT</p>
+              <h3 class="text-xl font-bold truncate pr-8" id="buku-nama">-</h3>
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs text-white/70">
+                <span class="flex items-center gap-1"><i class="ph ph-identification-card text-sm"></i> <span id="buku-id" class="font-mono">-</span></span>
+                <span class="flex items-center gap-1"><i class="ph ph-house text-sm"></i> <span id="buku-norumah">-</span></span>
+              </div>
+            </div>
+            <button onclick="cetakBukuTabunganPDF()" class="bg-white/15 hover:bg-white/25 text-white p-2 rounded-xl flex items-center justify-center transition-colors flex-shrink-0" title="Unduh PDF">
+              <i class="ph ph-file-pdf text-lg"></i>
+            </button>
+          </div>
+          <!-- Baris bawah: Saldo -->
+          <div class="flex justify-between items-center bg-white/10 backdrop-blur-sm p-3 rounded-xl">
+            <span class="text-white/60 text-xs uppercase tracking-wide">Saldo Akhir</span>
+            <h2 class="text-xl font-bold text-white" id="buku-saldo">Rp 0</h2>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabel Riwayat Mutasi -->
       <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-hidden flex flex-col min-w-0">
-        <div class="p-3 md:p-4 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50"><h4 class="font-bold text-sm text-primary flex items-center gap-2"><i class="ph ph-list-bullets text-lg"></i> Tabel Riwayat Mutasi</h4></div>
+        <div class="p-3 md:p-4 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
+          <h4 class="font-bold text-sm text-primary flex items-center gap-2"><i class="ph ph-list-bullets text-lg"></i> Tabel Riwayat Mutasi</h4>
+        </div>
         <div class="overflow-x-auto w-full flex-1 overflow-y-auto">
           <table class="w-full text-left text-xs md:text-sm min-w-full md:min-w-[650px]">
             <thead class="bg-white dark:bg-darkcard text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
-              <tr><th class="p-3 font-medium">Tanggal</th><th class="p-3 font-medium">Keterangan</th><th class="p-3 font-medium text-right">Debit (Masuk)</th><th class="p-3 font-medium text-right">Kredit (Keluar)</th><th class="p-3 font-medium text-right bg-gray-50 dark:bg-gray-800/30">Saldo</th><th class="p-3 font-medium text-center">Aksi</th></tr>
+              <tr>
+                <th class="p-3 font-medium">Tanggal</th>
+                <th class="p-3 font-medium">Keterangan</th>
+                <th class="p-3 font-medium text-right">Debit (Masuk)</th>
+                <th class="p-3 font-medium text-right">Kredit (Keluar)</th>
+                <th class="p-3 font-medium text-right bg-gray-50 dark:bg-gray-800/30">Saldo</th>
+                <th class="p-3 font-medium text-center">Aksi</th>
+              </tr>
             </thead>
             <tbody id="table-buku" class="divide-y divide-gray-100 dark:divide-gray-800 font-mono bg-white dark:bg-darkcard"></tbody>
           </table>
         </div>
       </div>
     </div>
-    <div id="passbook-empty" class="flex-1 flex flex-col items-center justify-center text-gray-400 pb-10 text-center px-4"><i class="ph ph-book-open text-6xl mb-4 opacity-50 text-primary"></i><h3 class="font-bold text-gray-600 dark:text-gray-300 mb-1">Pilih Warga Terlebih Dahulu</h3><p class="text-sm">Riwayat mutasi transaksi akan muncul di sini.</p></div>
+
+    <!-- Passbook Empty -->
+    <div id="passbook-empty" class="flex-1 flex flex-col items-center justify-center text-gray-400 pb-10 text-center px-4">
+      <i class="ph ph-book-open text-6xl mb-4 opacity-50 text-primary"></i>
+      <h3 class="font-bold text-gray-600 dark:text-gray-300 mb-1">Pilih Warga Terlebih Dahulu</h3>
+      <p class="text-sm">Riwayat mutasi transaksi akan muncul di sini.</p>
+    </div>
   </div>
 </template>
 
