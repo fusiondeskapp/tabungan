@@ -324,28 +324,30 @@
       <select id="select-buku-anggota" class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 text-sm focus:ring-primary focus:outline-none bg-white" onchange="renderBukuTabungan()"></select>
     </div>
     <div id="passbook-area" class="hidden flex-1 flex-col gap-4 min-w-0 w-full overflow-y-auto hide-scroll pb-10">
-      <div class="bg-gradient-to-br from-primary to-primary-dark p-5 md:p-6 rounded-2xl shadow-md text-white relative overflow-hidden">
-        <div class="absolute -right-6 -top-6 opacity-10 pointer-events-none"><i class="ph ph-wallet" style="font-size:140px;"></i></div>
-        <div class="relative z-10 flex flex-col md:flex-row gap-4">
-          <div class="flex-1 min-w-0">
-            <p class="text-white/80 text-[10px] uppercase font-bold tracking-wider mb-1">Buku Tabungan RT</p>
-            <h3 class="text-xl md:text-2xl font-bold truncate pr-10" id="buku-nama">-</h3>
-            <div class="grid grid-cols-2 gap-2 text-sm mt-2" id="buku-detail-grid">
-              <div><p class="text-white/60 text-[10px]">ID Warga</p><p class="font-medium font-mono text-xs md:text-sm truncate" id="buku-id">-</p></div>
-              <div><p class="text-white/60 text-[10px]">No Rumah</p><p class="font-medium font-mono text-xs md:text-sm" id="buku-norumah">-</p></div>
-            </div>
-          </div>
-          <div class="flex flex-col items-start md:items-end justify-center gap-3">
-            <div class="text-right">
-              <p class="text-white/60 text-[10px] uppercase tracking-wide">Saldo Akhir</p>
-              <h2 class="text-2xl md:text-3xl font-bold text-white" id="buku-saldo">Rp 0</h2>
-            </div>
-            <button onclick="cetakBukuTabunganPDF()" class="bg-white/15 hover:bg-white/25 text-white border border-white/25 px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-1.5 transition-colors">
-              <i class="ph ph-file-pdf text-sm"></i> Unduh PDF
-            </button>
-          </div>
+<div class="bg-gradient-to-br from-primary to-primary-dark p-4 md:p-5 rounded-2xl shadow-md text-white relative overflow-hidden">
+  <div class="absolute -right-6 -top-6 opacity-10 pointer-events-none"><i class="ph ph-wallet" style="font-size:140px;"></i></div>
+  <div class="relative z-10 flex flex-col gap-3 w-full">
+    <!-- Baris atas: Nama + Info + Tombol PDF -->
+    <div class="flex justify-between items-start">
+      <div class="flex-1 min-w-0">
+        <p class="text-white/80 text-[10px] uppercase font-bold tracking-wide mb-1">Buku Tabungan RT</p>
+        <h3 class="text-xl font-bold truncate pr-8" id="buku-nama">-</h3>
+        <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs text-white/70">
+          <span class="flex items-center gap-1"><i class="ph ph-identification-card text-sm"></i> <span id="buku-id" class="font-mono">-</span></span>
+          <span class="flex items-center gap-1"><i class="ph ph-house text-sm"></i> <span id="buku-norumah">-</span></span>
         </div>
       </div>
+      <button onclick="cetakBukuTabunganPDF()" class="bg-white/15 hover:bg-white/25 text-white p-2 rounded-xl flex items-center justify-center transition-colors flex-shrink-0" title="Unduh PDF">
+        <i class="ph ph-file-pdf text-lg"></i>
+      </button>
+    </div>
+    <!-- Baris bawah: Saldo -->
+    <div class="flex justify-between items-center bg-white/10 backdrop-blur-sm p-3 rounded-xl">
+      <span class="text-white/60 text-xs uppercase tracking-wide">Saldo Akhir</span>
+      <h2 class="text-xl font-bold text-white" id="buku-saldo">Rp 0</h2>
+    </div>
+  </div>
+</div>
       <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 flex-1 overflow-hidden flex flex-col min-w-0">
         <div class="p-3 md:p-4 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50"><h4 class="font-bold text-sm text-primary flex items-center gap-2"><i class="ph ph-list-bullets text-lg"></i> Tabel Riwayat Mutasi</h4></div>
         <div class="overflow-x-auto w-full flex-1 overflow-y-auto max-h-[60vh]">
@@ -1904,11 +1906,9 @@
     let w = state.data.warga.find(x=>String(x['ID Warga'])===String(id));
     if(!w){ area.classList.add('hidden'); emp.classList.remove('hidden'); showToast("Warga tidak ditemukan", "error"); return; }
     document.getElementById('buku-nama').innerText=w['Nama Istri'];
+    document.getElementById('buku-id').innerText = w['ID Warga'] || '-';
+    document.getElementById('buku-norumah').innerText = w['No Rumah'] || '-';
     document.getElementById('buku-saldo').innerText=formatRupiah(calculateSaldo(id));
-
-    // Sembunyikan ID Warga & No Rumah
-    const detailGrid = document.getElementById('buku-detail-grid');
-    if (detailGrid) detailGrid.style.display = 'none';
 
     let tb = document.getElementById('table-buku'); tb.innerHTML='';
     let trx = state.data.transaksi.filter(t=>String(t['ID Anggota'])===String(id)).sort((x,y)=>new Date(x['Tanggal'])-new Date(y['Tanggal']));
