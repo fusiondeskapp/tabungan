@@ -1726,12 +1726,16 @@
   window.openModal = function(id) {
     if (id === 'modal-transaksi') {
       if (state.user.role !== 'superadmin' && state.user.role !== 'admin_istri') return;
-      let wargaList = state.data.warga;
-      if (state.user.role === 'admin_istri') {
-        wargaList = getEffectiveWarga();
-      }
-      let opts = '<option value="">-- Pilih Warga --</option>';
-      wargaList.forEach(w => opts += `<option value="${w['ID Warga']}">${w['ID Warga']} - ${w['Nama Istri']}</option>`);
+let opts = '<option value="">-- Pilih Warga --</option>';
+if (state.user.role === 'admin_istri') {
+    const aktifWarga = state.data.warga
+        .filter(w => String(w.Status || '').toLowerCase() === 'aktif')
+        .sort((a, b) => (a['Nama Istri'] || '').localeCompare(b['Nama Istri'] || ''));
+    aktifWarga.forEach(w => opts += `<option value="${w['ID Warga']}">${w['Nama Istri']} (${w['No Rumah']})</option>`);
+} else {
+    // superadmin tetap seperti semula
+    state.data.warga.forEach(w => opts += `<option value="${w['ID Warga']}">${w['ID Warga']} - ${w['Nama Istri']}</option>`);
+}
       document.getElementById('modals').innerHTML = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-md modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
           <div class="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
@@ -1793,12 +1797,15 @@
     if (state.user.role !== 'superadmin' && state.user.role !== 'admin_istri') return;
     const trx = state.data.transaksi.find(t => t['ID Transaksi'] === idTransaksi);
     if (!trx) return showToast('Transaksi tidak ditemukan', 'error');
-    let wargaList = state.data.warga;
-    if (state.user.role === 'admin_istri') {
-      wargaList = getEffectiveWarga();
-    }
-    let opts = '<option value="">-- Pilih Warga --</option>';
-    wargaList.forEach(w => opts += `<option value="${w['ID Warga']}" ${w['ID Warga']===trx['ID Anggota']?'selected':''}>${w['ID Warga']} - ${w['Nama Istri']}</option>`);
+let opts = '<option value="">-- Pilih Warga --</option>';
+if (state.user.role === 'admin_istri') {
+    const aktifWarga = state.data.warga
+        .filter(w => String(w.Status || '').toLowerCase() === 'aktif')
+        .sort((a, b) => (a['Nama Istri'] || '').localeCompare(b['Nama Istri'] || ''));
+    aktifWarga.forEach(w => opts += `<option value="${w['ID Warga']}" ${w['ID Warga']===trx['ID Anggota']?'selected':''}>${w['Nama Istri']} (${w['No Rumah']})</option>`);
+} else {
+    state.data.warga.forEach(w => opts += `<option value="${w['ID Warga']}" ${w['ID Warga']===trx['ID Anggota']?'selected':''}>${w['ID Warga']} - ${w['Nama Istri']}</option>`);
+}
     document.getElementById('modals').innerHTML = `<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div class="bg-white dark:bg-darkcard rounded-2xl w-[calc(100%-2rem)] max-w-md modal-animate overflow-hidden max-h-[90dvh] flex flex-col">
         <div class="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
