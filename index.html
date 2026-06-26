@@ -620,19 +620,34 @@ const formatDateTime = (iso) => {
 
   async function fetchAPI(action, payload = {}) {
     const gasUrl = getGasUrl();
-    if (gasUrl) {
-      try {
-        const request = { action, payload, user: state.user ? state.user.username : 'Guest' };
-        if (state.user && state.user.token) request.auth = { token: state.user.token };
-        const res = await fetch(gasUrl, { method: 'POST', body: JSON.stringify(request), headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow' });
-        const text = await res.text();
-        let data;
-        try { data = JSON.parse(text); } catch(e) { throw new Error('Respons server bukan JSON.'); }
-        if (!res.ok) return { success: false, message: data.message || `Server error ${res.status}` };
-        return data;
-      } catch(e) { console.error(e); return { success: false, message: e.message || "Koneksi ke Server gagal." }; }
+    if (!gasUrl) return { success: false, message: "URL Backend tidak diatur. Silakan atur di menu Pengaturan." };
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+    try {
+      const request = { action, payload, user: state.user ? state.user.username : 'Guest' };
+      if (state.user && state.user.token) request.auth = { token: state.user.token };
+      const res = await fetch(gasUrl, {
+        method: 'POST',
+        body: JSON.stringify(request),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        redirect: 'follow',
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+      const text = await res.text();
+      let data;
+      try { data = JSON.parse(text); } catch(e) { throw new Error('Respons server bukan JSON. Pastikan URL GAS sudah benar.'); }
+      if (!res.ok) return { success: false, message: data.message || `Server error ${res.status}` };
+      return data;
+    } catch(e) {
+      clearTimeout(timeoutId);
+      console.error('[fetchAPI]', e);
+      if (e.name === 'AbortError') return { success: false, message: 'Koneksi timeout (30 detik). Server mungkin sedang cold start, coba ulangi.' };
+      if (e.message === 'Failed to fetch') return { success: false, message: 'Tidak dapat terhubung ke server. Periksa URL GAS di Pengaturan atau koneksi internet Anda.' };
+      return { success: false, message: e.message || "Koneksi ke Server gagal." };
     }
-    return { success: false, message: "URL Backend tidak diatur." };
   }
 
   async function restoreSession() {
