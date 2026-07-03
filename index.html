@@ -1211,6 +1211,51 @@ function updateNavigationVisibility() {
   });
 }
 
+// ===================== WARGA FILTER HELPERS =====================
+/**
+ * Mendapatkan daftar warga dengan status aktif
+ * Mengabaikan warga dengan status "Nonaktif" (case-insensitive)
+ * @returns {Array} Daftar warga aktif
+ */
+function getWargaAktif() {
+  return state.data.warga.filter(w => {
+    const status = String(w['Status'] || 'Aktif').trim();
+    return status.toLowerCase() !== 'nonaktif';
+  });
+}
+
+/**
+ * Mendapatkan daftar warga aktif yang memiliki kewajiban (iuran/arisan/biaya tambahan)
+ * @returns {Array} Daftar warga aktif dengan kewajiban
+ */
+function getWargaWithKewajiban() {
+  return getWargaAktif().filter(w => {
+    return w['Bayar Iuran?'] === 'YA' || 
+           w['Ikut Arisan?'] === 'YA' || 
+           state.data.biaya.some(b => b.WargaID === w['ID Warga']);
+  });
+}
+
+/**
+ * Mengecek apakah seorang warga aktif berdasarkan ID
+ * @param {string} wargaId - ID Warga
+ * @returns {boolean} True jika warga aktif
+ */
+function isWargaAktif(wargaId) {
+  const warga = state.data.warga.find(w => w['ID Warga'] === wargaId);
+  if (!warga) return false;
+  const status = String(warga['Status'] || 'Aktif').trim();
+  return status.toLowerCase() !== 'nonaktif';
+}
+
+/**
+ * Mendapatkan ID warga aktif dalam bentuk Set untuk pengecekan cepat
+ * @returns {Set} Set berisi ID warga aktif
+ */
+function getWargaAktifIds() {
+  return new Set(getWargaAktif().map(w => w['ID Warga']));
+}
+
 // ===================== STORAGE =====================
 const readStorage = (key, fallback = '') => { try { return localStorage.getItem(key) || fallback; } catch(e) { return fallback; } };
 const writeStorage = (key, value) => { try { localStorage.setItem(key, value); } catch(e) {} };
@@ -1599,10 +1644,10 @@ function renderCharts() {
   // Pie Chart: Warga Lunas vs Nunggak
   const ctxPie = document.getElementById('chartPieTunggakan');
   if (ctxPie) {
-    const totalWarga = state.data.warga.filter(w => String(w.Status||'').toLowerCase() !== 'nonaktif').length;
+    const totalWarga = getWargaAktif().length;
     const tunggakanSet = new Set(state.data.tunggakan.map(t => t['ID Warga']));
     let wargaNunggak = 0;
-    state.data.warga.forEach(w => { if (tunggakanSet.has(w['ID Warga'])) wargaNunggak++; });
+    getWargaAktif().forEach(w => { if (tunggakanSet.has(w['ID Warga'])) wargaNunggak++; });
     const wargaLunas = totalWarga - wargaNunggak;
     
     chartPieTunggakan = new Chart(ctxPie, {
@@ -1794,7 +1839,11 @@ window.ekas = window.ekas || {};
 window.ekas.warga = {
   render() {
     const tb = document.getElementById('table-warga'); if(!tb) return;
-    const data = state.data.warga || [], role = state.user.role;
+    // ✅ Hanya tampilkan warga aktif untuk admin_istri dan admin_suami
+    const role = state.user.role;
+    const data = (role === 'admin_istri' || role === 'admin_suami') 
+      ? getWargaAktif() 
+      : (state.data.warga || []);
     const canManage = ['superadmin','admin_istri','admin_suami'].includes(role);
     document.getElementById('warga-add-btn').innerHTML = canManage ? `<button class="bg-primary hover:bg-primary-dark text-white px-3 py-2 rounded-xl flex items-center gap-1.5 text-xs font-medium" onclick="window.ekas.warga.openModal()" aria-label="Tambah Warga"><i class="ph ph-plus-circle text-sm" aria-hidden="true"></i> Tambah Warga</button>` : '';
     document.getElementById('warga-tunggakan-btn').innerHTML = '';
@@ -1889,7 +1938,9 @@ function openModalTransaksi(editData=null) {
     document.getElementById('modal-trx-title').innerText = isEdit ? 'Edit Transaksi' : 'Transaksi Baru';
     const sel = document.getElementById('f-t-warga');
     let opts = '<option value="">-- Pilih Warga --</option>';
-    if(state.user.role==='admin_istri') { state.data.warga.filter(w=>String(w.Status||'').toLowerCase()==='aktif').sort((a,b)=>(a['Nama Istri']||'').localeCompare(b['Nama Istri']||'')).forEach(w=>opts+=`<option value="${escHtml(w['ID Warga'])}" ${editData&&editData['ID Anggota']===w['ID Warga']?'selected':''}>${escHtml(w['Nama Istri'])} (${escHtml(w['No Rumah'])})</option>`); }
+    if(state.user.role==='admin_istri') { 
+    getWargaAktif().sort((a,b)=>(a['Nama Istri']||'').localeCompare(b['Nama Istri']||'')).forEach(w=>opts+=`<option value="${escHtml(w['ID Warga'])}" ${editData&&editData['ID Anggota']===w['ID Warga']?'selected':''}>${escHtml(w['Nama Istri'])} (${escHtml(w['No Rumah'])})</option>`); 
+    }
     else { state.data.warga.forEach(w=>opts+=`<option value="${escHtml(w['ID Warga'])}" ${editData&&editData['ID Anggota']===w['ID Warga']?'selected':''}>${escHtml(w['ID Warga'])} - ${escHtml(w['Nama Istri'])}</option>`); }
     sel.innerHTML = opts;
     
@@ -1948,13 +1999,28 @@ async function deleteTransaksi(id) {
 <!-- ==================== JAVASCRIPT: PEMBAYARAN & TUNGGAKAN ==================== -->
 <script>
 window.ekas.pembayaran = {
-  render() {
+render() {
     const sel = document.getElementById('pay-warga'); if(!sel) return;
     const tunggakanMap = {};
     state.data.tunggakan.forEach(t => { if(!tunggakanMap[t['ID Warga']]) tunggakanMap[t['ID Warga']]=0; tunggakanMap[t['ID Warga']]+=Number(t['Iuran']||0)+Number(t['Arisan']||0); });
-    let wargaList = state.data.warga;
-    if(state.user.role==='admin_suami') wargaList = wargaList.filter(w=>w['Bayar Iuran?']==='YA'||w['Ikut Arisan?']==='YA'||state.data.biaya.some(b=>b.WargaID===w['ID Warga'])).sort((a,b)=>(a['Nama Suami']||'').localeCompare(b['Nama Suami']||''));
-    sel.innerHTML = '<option value="">-- Pilih Warga --</option>' + wargaList.map(w=>{ const adaTunggakan = tunggakanMap[w['ID Warga']]>0; return `<option value="${escHtml(w['ID Warga'])}">${escHtml(w['Nama Suami'])} (${escHtml(w['No Rumah'])})${adaTunggakan?' ⚠️ Nunggak':''}</option>`; }).join('');
+    
+    // ✅ Gunakan helper functions untuk konsistensi
+    let wargaList;
+    if (['admin_suami', 'superadmin'].includes(state.user.role)) {
+        wargaList = getWargaWithKewajiban();
+        wargaList.sort((a, b) => (a['Nama Suami'] || '').localeCompare(b['Nama Suami'] || ''));
+    } else {
+        wargaList = getWargaAktif();
+        wargaList.sort((a, b) => (a['Nama Istri'] || '').localeCompare(b['Nama Istri'] || ''));
+    }
+    
+    sel.innerHTML = '<option value="">-- Pilih Warga --</option>' + wargaList.map(w => {
+        const adaTunggakan = tunggakanMap[w['ID Warga']] > 0;
+        const namaTampil = ['admin_suami', 'superadmin'].includes(state.user.role) 
+            ? `${w['Nama Suami']} (${w['No Rumah']})` 
+            : `${w['Nama Istri']} (${w['No Rumah']})`;
+        return `<option value="${escHtml(w['ID Warga'])}">${escHtml(namaTampil)}${adaTunggakan ? ' ⚠️ Nunggak' : ''}</option>`;
+    }).join('');
     
     const tb = document.getElementById('table-pembayaran');
     let pay = [...(state.data.pembayaran||[])].sort((a,b)=>new Date(b.Tanggal)-new Date(a.Tanggal));
@@ -2016,28 +2082,49 @@ window.ekas.pembayaran = {
   async delete(id) { if(!(await showConfirmDialog('Hapus pembayaran ini? Data terkait di Buku Kas juga akan dihapus.'))) return; showLoading(); const res = await fetchAPI('delete_pembayaran',{id}); hideLoading(); if(res.success){await loadData();showToast('Dihapus');}else showToast(res.message,'error'); },
   
   // ==================== TUNGGAKAN MANUAL ====================
-  openTunggakanModal() {
-    if(!['superadmin','admin_suami'].includes(state.user.role)) return;
+openTunggakanModal() {
+    if (!['superadmin', 'admin_suami'].includes(state.user.role)) return;
+    
     ModalHelper.open('tpl-modal-tunggakan', () => {
-      // Isi dropdown warga
       const sel = document.getElementById('tung-warga');
-      sel.innerHTML = '<option value="">-- Pilih Warga --</option>' + 
-        state.data.warga.filter(w=>String(w.Status||'').toLowerCase()==='aktif')
-        .sort((a,b)=>(a['Nama Suami']||'').localeCompare(b['Nama Suami']||''))
-        .map(w=>`<option value="${escHtml(w['ID Warga'])}">${escHtml(w['Nama Suami'])} (${escHtml(w['No Rumah'])})</option>`).join('');
       
-      // Set tahun default
-      document.getElementById('tung-tahun').value = new Date().getFullYear();
+      // ✅ Gunakan helper function
+      const wargaAktif = getWargaAktif().sort((a, b) => (a['Nama Suami'] || '').localeCompare(b['Nama Suami'] || ''));
+      
+      if (wargaAktif.length === 0) {
+        sel.innerHTML = '<option value="">-- Tidak ada warga aktif --</option>';
+        return;
+      }
+      
+      sel.innerHTML = '<option value="">-- Pilih Warga --</option>' + 
+        wargaAktif.map(w => {
+          const namaSuami = w['Nama Suami'] || 'Tanpa Nama';
+          const noRumah = w['No Rumah'] || '-';
+          return `<option value="${escHtml(w['ID Warga'])}">${escHtml(namaSuami)} (${escHtml(noRumah)})</option>`;
+        }).join('');
+      
+      // Set tahun default ke tahun sekarang
+      const tahunInput = document.getElementById('tung-tahun');
+      if (tahunInput) {
+        tahunInput.value = new Date().getFullYear();
+      }
       
       // Attach event listener untuk checkbox bulan
-      document.getElementById('bulan-container').addEventListener('change', () => {
-        window.ekas.pembayaran.updateTotalTunggakan();
-      });
+      const bulanContainer = document.getElementById('bulan-container');
+      if (bulanContainer) {
+        // Hapus listener lama jika ada
+        const newBulanContainer = bulanContainer.cloneNode(true);
+        bulanContainer.parentNode.replaceChild(newBulanContainer, bulanContainer);
+        
+        newBulanContainer.addEventListener('change', () => {
+          window.ekas.pembayaran.updateTotalTunggakan();
+        });
+      }
       
       // Hitung nominal awal
       window.ekas.pembayaran.hitungNominalTunggakan();
     });
-  },
+},
   
   hitungNominalTunggakan() {
     const wId = document.getElementById('tung-warga')?.value;
@@ -2113,33 +2200,54 @@ window.ekas.pembayaran = {
     }
   },
   
-  // ==================== HAPUS TUNGGAKAN ====================
-  openHapusTunggakanModal() {
-    if(!['superadmin','admin_suami'].includes(state.user.role)) return;
-    const list = state.data.tunggakan || [];
-    if(list.length === 0) {
-      showToast('Tidak ada data tunggakan', 'error');
+// ==================== HAPUS TUNGGAKAN ====================
+openHapusTunggakanModal() {
+    if (!['superadmin', 'admin_suami'].includes(state.user.role)) return;
+    
+    // ✅ Gunakan helper function
+    const wargaAktifIds = getWargaAktifIds();
+    
+    const list = (state.data.tunggakan || []).filter(t => wargaAktifIds.has(t['ID Warga']));
+    
+    if (list.length === 0) {
+      showToast('Tidak ada data tunggakan untuk warga aktif', 'error');
       return;
     }
     
     ModalHelper.open('tpl-modal-hapus-tunggakan', () => {
       const tbody = document.getElementById('table-hapus-tunggakan-body');
       tbody.innerHTML = list.map(t => {
-        const w = state.data.warga.find(x=>x['ID Warga']===t['ID Warga']);
-        const nama = w ? w['Nama Suami'] : t['ID Warga'];
-        return `<tr class="border-b border-gray-100 dark:border-gray-800">
-          <td class="p-2"><input type="checkbox" class="tung-hapus-cb rounded border-gray-300" value="${escHtml(t['ID Tunggakan'])}"></td>
-          <td class="p-2 text-xs">${escHtml(t['ID Tunggakan'])}</td>
-          <td class="p-2 font-medium">${escHtml(nama)}</td>
+        const w = state.data.warga.find(x => x['ID Warga'] === t['ID Warga']);
+        const nama = w ? (w['Nama Suami'] || w['Nama Istri'] || t['ID Warga']) : t['ID Warga'];
+        const noRumah = w ? w['No Rumah'] || '-' : '-';
+        
+        return `<tr class="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+          <td class="p-2">
+            <input type="checkbox" class="tung-hapus-cb rounded border-gray-300 text-primary focus:ring-primary" value="${escHtml(t['ID Tunggakan'])}">
+          </td>
+          <td class="p-2 text-xs font-mono">${escHtml(t['ID Tunggakan'] || '-')}</td>
+          <td class="p-2 font-medium">
+            <div>${escHtml(nama)}</div>
+            <div class="text-xs text-gray-500">${escHtml(noRumah)}</div>
+          </td>
           <td class="p-2">${escHtml(t['Bulan'])} ${escHtml(t['Tahun'])}</td>
-          <td class="p-2 text-right">${formatRupiah(Number(t['Iuran'])+Number(t['Arisan']))}</td>
+          <td class="p-2 text-right font-bold">${formatRupiah(Number(t['Iuran'] || 0) + Number(t['Arisan'] || 0))}</td>
         </tr>`;
       }).join('');
       
       // Select all checkbox
-      document.getElementById('pilih-semua').addEventListener('change', (e) => {
-        document.querySelectorAll('.tung-hapus-cb').forEach(cb => cb.checked = e.target.checked);
-      });
+      const pilihSemua = document.getElementById('pilih-semua');
+      if (pilihSemua) {
+        // Hapus event listener lama dengan clone
+        const newPilihSemua = pilihSemua.cloneNode(true);
+        pilihSemua.parentNode.replaceChild(newPilihSemua, pilihSemua);
+        
+        newPilihSemua.addEventListener('change', (e) => {
+          document.querySelectorAll('.tung-hapus-cb').forEach(cb => {
+            cb.checked = e.target.checked;
+          });
+        });
+      }
     });
   },
   
