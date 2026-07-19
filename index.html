@@ -1684,19 +1684,20 @@ function renderDashboardProfileCard_(myId, mySaldo, roleLabel, jumlahBulanMenung
 function renderDashboardTunggakanSection_(myId, tunggakanSaya) {
   const tunggakanContainer = document.getElementById('tunggakan-table-container');
   if (state.user.role !== 'superadmin') {
-    tunggakanContainer.innerHTML = tunggakanSaya.length > 0 ? `
+    if (tunggakanSaya.length > 0) {
+      const rows = tunggakanSaya.map(t => `<tr class="border-b border-gray-100 dark:border-gray-800"><td class="p-2 text-xs font-mono text-gray-500">${escHtml(t['ID Tunggakan']||'-')}</td><td class="p-2 font-medium">${escHtml(t['Bulan']||'-')}</td><td class="p-2">${escHtml(t['Tahun']||'-')}</td><td class="p-2 text-right text-success font-medium">${formatRupiah(t['Iuran'])}</td><td class="p-2 text-right text-primary font-medium">${formatRupiah(t['Arisan'])}</td></tr>`).join('');
+      tunggakanContainer.innerHTML = `
       <div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4 md:p-5 mt-4">
         <h3 class="font-bold text-gray-700 dark:text-gray-200 text-sm md:text-base mb-4 flex items-center gap-2"><i class="ph ph-clock-counter-clockwise text-warning text-lg" aria-hidden="true"></i> Data Tunggakan Saya</h3>
-        <div class="overflow-x-auto"><table class="w-full text-left text-xs md:text-sm whitespace-nowrap min-w-full md:min-w-[500px]"><thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700"><tr><th class="p-2 font-medium">ID</th><th class="p-2 font-medium">Bulan</th><th class="p-2 font-medium">Tahun</th><th class="p-2 font-medium text-right">Iuran</th><th class="p-2 font-medium text-right">Arisan</th></tr></thead><tbody>${tunggakanSaya.map(t => `<tr class="border-b border-gray-100 dark:border-gray-800"><td class="p-2 text-xs font-mono text-gray-500">${escHtml(t['ID Tunggakan']||'-')}</td><td class="p-2 font-medium">${escHtml(t['Bulan']||'-')}</td><td class="p-2">${escHtml(t['Tahun']||'-')}</td><td class="p-2 text-right text-success font-medium">${formatRupiah(t['Iuran'])}</td><td class="p-2 text-right text-primary font-medium">${formatRupiah(t['Arisan'])}</td></tr>`).join('')}</tbody></table></div></div>\` +
-      `
-
+        <div class="overflow-x-auto"><table class="w-full text-left text-xs md:text-sm whitespace-nowrap min-w-full md:min-w-[500px]"><thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700"><tr><th class="p-2 font-medium">ID</th><th class="p-2 font-medium">Bulan</th><th class="p-2 font-medium">Tahun</th><th class="p-2 font-medium text-right">Iuran</th><th class="p-2 font-medium text-right">Arisan</th></tr></thead><tbody>${rows}</tbody></table></div>
+      </div>
       <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-2xl p-4 mt-3 flex gap-3 items-start">
         <div class="flex-shrink-0 w-9 h-9 bg-green-500 rounded-xl flex items-center justify-center shadow-sm mt-0.5">
           <i class="ph ph-whatsapp-logo text-white text-xl" aria-hidden="true"></i>
         </div>
         <div class="flex-1 min-w-0">
           <p class="text-xs md:text-sm text-amber-900 dark:text-amber-200 leading-relaxed">
-            Pembayaran tunggakan dapat dilakukan secara <strong>cash</strong> ataupun <strong>transfer antar bank</strong>. 
+            Pembayaran tunggakan dapat dilakukan secara <strong>cash</strong> ataupun <strong>transfer antar bank</strong>.
             Untuk informasi lebih lanjut silahkan hubungi <strong>Bpk. Anteng Riadi</strong> selaku Bendahara RT 06/04 via WhatsApp:
           </p>
           <a href="https://wa.me/6282130719356" target="_blank" rel="noopener noreferrer"
@@ -1705,7 +1706,10 @@ function renderDashboardTunggakanSection_(myId, tunggakanSaya) {
             0821-3071-9356
           </a>
         </div>
-      </div>` : `<div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4 md:p-5 mt-4 text-center text-gray-500"><i class="ph ph-smiley text-2xl mb-2 text-success" aria-hidden="true"></i><p class="text-sm font-medium">Kamu tidak memiliki tunggakan. 👍</p></div>`;
+      </div>`;
+    } else {
+      tunggakanContainer.innerHTML = `<div class="bg-white dark:bg-darkcard rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-4 md:p-5 mt-4 text-center text-gray-500"><i class="ph ph-smiley text-2xl mb-2 text-success" aria-hidden="true"></i><p class="text-sm font-medium">Kamu tidak memiliki tunggakan. 👍</p></div>`;
+    }
     tunggakanContainer.classList.remove('hidden');
   } else tunggakanContainer.classList.add('hidden');
 }
